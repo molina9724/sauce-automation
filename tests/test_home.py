@@ -3,16 +3,15 @@ from playwright.sync_api import Locator, Page, expect
 
 from sauce_project.po.pages.base_page import BASE_URL
 from sauce_project.po.pages.inventory_page import InventoryPage
-from sauce_project.po.pages.login_page import (
-    EXPECTED_LOGIN_USERNAMES,
-    PASSWORD,
-    RANDOM_LOCKED_USER,
-    RANDOM_UNBLOCKED_USER,
-    SUCCESS_LOGIN_DATA,
-    UNLOCKED_USERS,
-    WRONG_PASSWORD,
-    LoginPage,
-)
+# fmt: off
+from sauce_project.po.pages.login_page import (EXPECTED_LOGIN_USERNAMES,
+                                               PASSWORD, RANDOM_LOCKED_USER,
+                                               RANDOM_UNBLOCKED_USER,
+                                               SUCCESS_LOGIN_DATA,
+                                               UNLOCKED_USERS, WRONG_PASSWORD,
+                                               LoginPage)
+
+# fmt: on
 
 
 @pytest.fixture(scope="function", autouse=True)
@@ -181,4 +180,6 @@ def test_17_error_clears_after_unsuccessful_login_with_locked_account(
 
 def test_18_password_field_masking(login_page: LoginPage) -> None:
     password_input: Locator = login_page._password
+    expect(password_input).to_have_attribute(name="type", value="password")
+    expect(password_input).to_have_attribute(name="type", value="password")
     expect(password_input).to_have_attribute(name="type", value="password")
