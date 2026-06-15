@@ -2,6 +2,8 @@ from playwright.sync_api import Locator, Page
 
 from .base_page import BasePage
 
+INVENTORY_URL = "https://www.saucedemo.com/inventory.html"
+
 
 class InventoryPage(BasePage):
     """

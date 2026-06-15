@@ -1,36 +1,18 @@
-import random
-
 import pytest
 from playwright.sync_api import Locator, Page, expect
 
+from sauce_project.po.pages.base_page import BASE_URL
 from sauce_project.po.pages.inventory_page import InventoryPage
-from sauce_project.po.pages.login_page import LoginPage
-
-BASE_URL = "https://www.saucedemo.com/"
-INVENTORY_URL = "https://www.saucedemo.com/inventory.html"
-
-PASSWORD = "secret_sauce"
-WRONG_PASSWORD = "wrong_password"
-
-UNLOCKED_USERS = (
-    "standard_user",
-    "problem_user",
-    "performance_glitch_user",
-    "error_user",
-    "visual_user",
+from sauce_project.po.pages.login_page import (
+    EXPECTED_LOGIN_USERNAMES,
+    PASSWORD,
+    RANDOM_LOCKED_USER,
+    RANDOM_UNBLOCKED_USER,
+    SUCCESS_LOGIN_DATA,
+    UNLOCKED_USERS,
+    WRONG_PASSWORD,
+    LoginPage,
 )
-SUCCESS_LOGIN_DATA = [(user, PASSWORD, INVENTORY_URL) for user in UNLOCKED_USERS]
-
-LOCKED_USERS = ("locked_out_user",)
-# place the locked user after the first unlocked user to match the
-# order shown on the demo page (was previously inserted at index 1
-# when using a mutable list)
-ALL_USERS = (UNLOCKED_USERS[0],) + LOCKED_USERS + UNLOCKED_USERS[1:]
-
-# explicit expected order for the login credentials block on the page
-EXPECTED_LOGIN_USERNAMES = list(ALL_USERS)
-RANDOM_UNBLOCKED_USER = random.choice(UNLOCKED_USERS)
-RANDOM_LOCKED_USER = random.choice(LOCKED_USERS)
 
 
 @pytest.fixture(scope="function", autouse=True)

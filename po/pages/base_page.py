@@ -3,6 +3,8 @@ from typing import Optional, Union
 from playwright.sync_api import Locator, Page
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 
+BASE_URL = "https://www.saucedemo.com/"
+
 
 class BasePage:
     """

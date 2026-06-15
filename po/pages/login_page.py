@@ -1,9 +1,31 @@
+import random
 from typing import Optional
 
 from playwright.sync_api import Locator, Page
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 
 from .base_page import BasePage
+from .inventory_page import INVENTORY_URL
+
+UNLOCKED_USERS = (
+    "standard_user",
+    "problem_user",
+    "performance_glitch_user",
+    "error_user",
+    "visual_user",
+)
+PASSWORD = "secret_sauce"
+SUCCESS_LOGIN_DATA = [(user, PASSWORD, INVENTORY_URL) for user in UNLOCKED_USERS]
+
+LOCKED_USERS = ("locked_out_user",)
+WRONG_PASSWORD = "wrong_password"
+
+ALL_USERS = (UNLOCKED_USERS[0],) + LOCKED_USERS + UNLOCKED_USERS[1:]
+
+EXPECTED_LOGIN_USERNAMES = list(ALL_USERS)
+
+RANDOM_UNBLOCKED_USER = random.choice(UNLOCKED_USERS)
+RANDOM_LOCKED_USER = random.choice(LOCKED_USERS)
 
 
 class LoginPage(BasePage):
