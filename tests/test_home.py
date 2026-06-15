@@ -3,6 +3,7 @@ import random
 import pytest
 from playwright.sync_api import Locator, Page, expect
 
+from sauce_project.po.pages.inventory_page import InventoryPage
 from sauce_project.po.pages.login_page import LoginPage
 
 BASE_URL = "https://www.saucedemo.com/"
@@ -41,6 +42,11 @@ def go_home(page: Page) -> Page:
 @pytest.fixture
 def login_page(page: Page) -> LoginPage:
     return LoginPage(page)
+
+
+@pytest.fixture
+def inventory_page(page: Page) -> InventoryPage:
+    return InventoryPage(page)
 
 
 def test_01_document_title(page: Page) -> None:
@@ -110,13 +116,13 @@ def test_09_password(login_page: LoginPage) -> None:
     "user, password, expected", argvalues=SUCCESS_LOGIN_DATA, ids=UNLOCKED_USERS
 )
 def test_10_successful_login_and_logout(
-    login_page: LoginPage, user, password, expected
+    login_page: LoginPage, inventory_page: InventoryPage, user, password, expected
 ):
     login_page.login(username=user, password=password)
     expect(login_page._page).to_have_url(expected)
 
-    login_page._hamburger_button.click()
-    login_page._logout_link.click()
+    inventory_page._hamburger_button.click()
+    inventory_page._logout_link.click()
     expect(login_page._page).to_have_url(BASE_URL)
 
 

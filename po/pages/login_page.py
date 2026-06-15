@@ -10,7 +10,9 @@ class LoginPage(BasePage):
     def __init__(self, page: Page, timeout: int = 10000) -> None:
         super().__init__(page, timeout)
         self._logo_heading: Locator = self.locator(".login_logo")
-        self._usernames_heading: Locator = self.locator(".login_credentials")
+        self._usernames_heading: Locator = page.get_by_role(
+            "heading", name="Accepted usernames are:"
+        )
         self._password_heading: Locator = page.get_by_role(
             "heading", name="Password for all users:"
         )
@@ -23,9 +25,6 @@ class LoginPage(BasePage):
         self._error_close_button: Locator = self.locator('[data-test="error-button"]')
         self._credentials_container: Locator = self.locator("#login_credentials")
         self._password_container: Locator = self.locator(".login_password")
-
-        self._hamburger_button: Locator = page.get_by_role("button", name="Open Menu")
-        self._logout_link: Locator = page.get_by_role("link", name="Logout")
 
     def login(
         self, username: str, password: str, timeout: Optional[int] = None

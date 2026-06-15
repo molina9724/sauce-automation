@@ -30,3 +30,6 @@ class InventoryPage(BasePage):
         """
         super().__init__(page, timeout)
         self._inventory_container: Locator = self.locator("#inventory_container")
+
+        self._hamburger_button: Locator = page.get_by_role("button", name="Open Menu")
+        self._logout_link: Locator = page.get_by_role("link", name="Logout")
