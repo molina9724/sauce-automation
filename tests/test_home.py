@@ -159,7 +159,7 @@ def test_16_error_dismissal_after_unsuccessful_login_with_locked_account(
     error: Locator = login_page._error_header
     expect(error).to_be_visible()
 
-    close_error_button: Locator = login_page._error_close_button
+    close_error_button: Locator = login_page._close_error_button
     expect(close_error_button).to_be_visible()
     close_error_button.click()
     expect(close_error_button).to_be_hidden()
@@ -172,7 +172,7 @@ def test_17_error_clears_after_unsuccessful_login_with_locked_account(
     error: Locator = login_page._error_header
     expect(error).to_be_visible()
 
-    close_error_button = login_page._error_close_button
+    close_error_button = login_page._close_error_button
     expect(close_error_button).to_be_visible()
     close_error_button.click()
     expect(close_error_button).to_be_hidden()
