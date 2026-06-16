@@ -3,7 +3,6 @@ from typing import Optional
 
 from playwright.sync_api import Locator, Page
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
-from playwright.sync_api import expect
 
 from .base_page import BasePage
 from .inventory_page import INVENTORY_URL, InventoryPage
@@ -140,7 +139,7 @@ class LoginPage(BasePage):
         self._credentials_container.wait_for(state="visible", timeout=timeout_ms)
         return self._credentials_container.inner_text()
 
-    def get_credentials_usernames(self, timeout: Optional[int] = None) -> list[str]:
+    def get_usernames(self, timeout: Optional[int] = None) -> list[str]:
         timeout_ms: int = self._timeout_ms(timeout)
         self._credentials_container.wait_for(state="visible", timeout=timeout_ms)
         text: str = self._credentials_container.inner_text()
@@ -149,3 +148,23 @@ class LoginPage(BasePage):
         if lines and lines[0].lower().startswith("accepted usernames"):
             return lines[1:]
         return lines
+
+    def is_password_usernames_heading_displayed(
+        self, timeout: Optional[int] = None
+    ) -> bool:
+        timeout_ms: int = self._timeout_ms(timeout)
+        self._usernames_heading.wait_for(state="visible", timeout=timeout_ms)
+        return self._usernames_heading.is_visible()
+
+    def get_password(self, timeout: Optional[int] = None) -> list[str]:
+        timeout_ms = self._timeout_ms(timeout)
+        self._credentials_container.wait_for(state="visible", timeout=timeout_ms)
+        container: Locator = self._password_container
+        text: str = container.inner_text()
+        lines: list[str] = [line.strip() for line in text.splitlines() if line.strip()]
+
+        if lines and lines[0].lower().startswith("password"):
+            password = lines[1:]
+        else:
+            password: list[str] = lines
+        return password

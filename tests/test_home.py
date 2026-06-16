@@ -55,40 +55,27 @@ def test_06_usernames_heading_is_displayed(login_page: LoginPage) -> None:
 
 
 def test_07_usernames(login_page: LoginPage) -> None:
-    usernames: list[str] = login_page.get_credentials_usernames()
+    usernames: list[str] = login_page.get_usernames()
     assert usernames == EXPECTED_LOGIN_USERNAMES
 
 
 def test_08_password_usernames_heading(login_page: LoginPage) -> None:
-    heading: Locator = login_page._password_heading
-    expect(heading).to_be_visible()
-    expect(heading).to_have_text("Password for all users:")
+    assert login_page.is_password_usernames_heading_displayed()
 
 
 def test_09_password(login_page: LoginPage) -> None:
-    container: Locator = login_page._password_container
-    text: str = container.inner_text()
-    lines: list[str] = [line.strip() for line in text.splitlines() if line.strip()]
-
-    if lines and lines[0].lower().startswith("password"):
-        password = lines[1:]
-    else:
-        password: list[str] = lines
-
-    assert password == ["secret_sauce"]
+    assert login_page.get_password() == ["secret_sauce"]
 
 
 @pytest.mark.parametrize(
     "user, password, expected", argvalues=SUCCESS_LOGIN_DATA, ids=UNLOCKED_USERS
 )
 def test_10_successful_login_and_logout(
-    login_page: LoginPage, inventory_page: InventoryPage, user, password, expected
+    login_page: LoginPage, user, password, expected
 ):
-    login_page.login(username=user, password=password)
+    inventory_page: InventoryPage = login_page.login(username=user, password=password)
     expect(login_page._page).to_have_url(expected)
-
-    inventory_page._hamburger_button.click()
-    inventory_page._logout_link.click()
+    inventory_page.logout()
     expect(login_page._page).to_have_url(BASE_URL)
 
 
