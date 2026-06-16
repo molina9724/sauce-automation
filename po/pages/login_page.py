@@ -3,6 +3,7 @@ from typing import Optional
 
 from playwright.sync_api import Locator, Page
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
+from playwright.sync_api import expect
 
 from .base_page import BasePage
 from .inventory_page import INVENTORY_URL, InventoryPage
@@ -99,3 +100,21 @@ class LoginPage(BasePage):
             raise RuntimeError(
                 f"Timed out waiting for error to dismiss (after {timeout_ms} ms)"
             )
+
+    def get_document_title(self, timeout: Optional[int] = None) -> str:
+        timeout_ms: int = timeout if timeout is not None else self._timeout
+        self._logo_heading.wait_for(state="visible", timeout=timeout_ms)
+        title: str = self._page.title().strip()
+        return title
+
+    def get_logo_text(self, timeout: Optional[int] = None) -> str:
+        timeout_ms: int = timeout if timeout is not None else self._timeout
+        self._logo_heading.wait_for(state="visible", timeout=timeout_ms)
+        logo_text: str = self._logo_heading.inner_text()
+        return logo_text
+
+    def is_username_visible(self, timeout: Optional[int] = None) -> bool:
+        timeout_ms: int = timeout if timeout is not None else self._timeout
+        self._username.wait_for(state="visible", timeout=timeout_ms)
+        username_is_displayed: bool = self._username.is_visible()
+        return username_is_displayed

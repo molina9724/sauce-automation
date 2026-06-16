@@ -30,19 +30,16 @@ def inventory_page(page: Page) -> InventoryPage:
     return InventoryPage(page)
 
 
-def test_01_document_title(page: Page) -> None:
-    expect(page).to_have_title("Swag Labs")
+def test_01_document_title(login_page: LoginPage) -> None:
+    assert login_page.get_document_title() == "Swag Labs"
 
 
 def test_02_page_title(login_page: LoginPage) -> None:
-    heading: Locator = login_page._logo_heading
-    expect(heading).to_be_visible()
-    expect(heading).to_have_text("Swag Labs")
+    assert login_page.get_logo_text() == "Swag Labs"
 
 
 def test_03_username_textbox_is_displayed(login_page: LoginPage) -> None:
-    login_input: Locator = login_page._username
-    expect(login_input).to_be_visible()
+    assert login_page.is_username_visible() == True
 
 
 def test_04_password_textbox_is_displayed(login_page: LoginPage) -> None:
