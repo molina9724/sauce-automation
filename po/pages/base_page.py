@@ -33,6 +33,15 @@ class BasePage:
         self._page: Page = page
         self._timeout: int = timeout
 
+    def _timeout_ms(self, timeout: Optional[int]) -> int:
+        """Resolve an optional timeout argument to an int (milliseconds).
+
+        This centralizes the common pattern of using an explicit timeout when
+        provided or falling back to the instance default. Use this from page
+        object methods instead of repeating the conditional everywhere.
+        """
+        return timeout if timeout is not None else self._timeout
+
     def locator(self, selector_or_locator: Union[str, Locator]) -> Locator:
         """
         Returns a Playwright Locator object for the given selector or locator.

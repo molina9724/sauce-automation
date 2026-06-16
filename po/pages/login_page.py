@@ -54,10 +54,14 @@ class LoginPage(BasePage):
         self._credentials_container: Locator = self.locator("#login_credentials")
         self._password_container: Locator = self.locator(".login_password")
 
+    # NOTE: timeout handling is centralized on BasePage._timeout_ms(timeout).
+    # Keep helpers like this on the page object rather than using pytest fixtures
+    # inside page classes.
+
     def login(
         self, username: str, password: str, timeout: Optional[int] = None
     ) -> InventoryPage:
-        timeout_ms: int = timeout if timeout is not None else self._timeout
+        timeout_ms: int = self._timeout_ms(timeout)
         if username == PERFORMANCE_GLITCHED_USER:
             timeout_ms = INCREASED_TIMEOUT
 
@@ -90,7 +94,7 @@ class LoginPage(BasePage):
             return None
 
     def dismiss_error(self, timeout: Optional[int] = None) -> None:
-        timeout_ms: int = timeout if timeout is not None else self._timeout
+        timeout_ms: int = self._timeout_ms(timeout)
         try:
             self._close_error_button.is_visible()
             self._close_error_button.click()
@@ -102,19 +106,46 @@ class LoginPage(BasePage):
             )
 
     def get_document_title(self, timeout: Optional[int] = None) -> str:
-        timeout_ms: int = timeout if timeout is not None else self._timeout
+        timeout_ms: int = self._timeout_ms(timeout)
         self._logo_heading.wait_for(state="visible", timeout=timeout_ms)
-        title: str = self._page.title().strip()
-        return title
+        return self._page.title().strip()
 
     def get_logo_text(self, timeout: Optional[int] = None) -> str:
-        timeout_ms: int = timeout if timeout is not None else self._timeout
+        timeout_ms: int = self._timeout_ms(timeout)
         self._logo_heading.wait_for(state="visible", timeout=timeout_ms)
-        logo_text: str = self._logo_heading.inner_text()
-        return logo_text
+        return self._logo_heading.inner_text().strip()
 
     def is_username_visible(self, timeout: Optional[int] = None) -> bool:
-        timeout_ms: int = timeout if timeout is not None else self._timeout
+        timeout_ms: int = self._timeout_ms(timeout)
         self._username.wait_for(state="visible", timeout=timeout_ms)
-        username_is_displayed: bool = self._username.is_visible()
-        return username_is_displayed
+        return self._username.is_visible()
+
+    def is_password_visible(self, timeout: Optional[int] = None) -> bool:
+        timeout_ms: int = self._timeout_ms(timeout)
+        self._password.wait_for(state="visible", timeout=timeout_ms)
+        return self._password.is_visible()
+
+    def is_login_button_visible(self, timeout: Optional[int] = None) -> bool:
+        timeout_ms: int = self._timeout_ms(timeout)
+        self._login_button.wait_for(state="visible", timeout=timeout_ms)
+        return self._login_button.is_visible()
+
+    def is_usernames_heading_visible(self, timeout: Optional[int] = None) -> bool:
+        timeout_ms: int = self._timeout_ms(timeout)
+        self._usernames_heading.wait_for(state="visible", timeout=timeout_ms)
+        return self._usernames_heading.is_visible()
+
+    def get_credentials_container_text(self, timeout: Optional[int] = None) -> str:
+        timeout_ms: int = self._timeout_ms(timeout)
+        self._credentials_container.wait_for(state="visible", timeout=timeout_ms)
+        return self._credentials_container.inner_text()
+
+    def get_credentials_usernames(self, timeout: Optional[int] = None) -> list[str]:
+        timeout_ms: int = self._timeout_ms(timeout)
+        self._credentials_container.wait_for(state="visible", timeout=timeout_ms)
+        text: str = self._credentials_container.inner_text()
+        lines: list[str] = [line.strip() for line in text.splitlines() if line.strip()]
+
+        if lines and lines[0].lower().startswith("accepted usernames"):
+            return lines[1:]
+        return lines

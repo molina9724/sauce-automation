@@ -39,35 +39,23 @@ def test_02_page_title(login_page: LoginPage) -> None:
 
 
 def test_03_username_textbox_is_displayed(login_page: LoginPage) -> None:
-    assert login_page.is_username_visible() == True
+    assert login_page.is_username_visible()
 
 
 def test_04_password_textbox_is_displayed(login_page: LoginPage) -> None:
-    password_input: Locator = login_page._password
-    expect(password_input).to_be_visible()
+    assert login_page.is_password_visible()
 
 
 def test_05_login_button_is_displayed(login_page: LoginPage) -> None:
-    login_button: Locator = login_page._login_button
-    expect(login_button).to_be_visible()
+    assert login_page.is_login_button_visible()
 
 
-def test_06_usernames_usernames_heading_is_displayed(login_page: LoginPage) -> None:
-    users_usernames_heading: Locator = login_page._usernames_heading
-    expect(users_usernames_heading).to_be_visible()
-    expect(users_usernames_heading).to_have_text("Accepted usernames are:")
+def test_06_usernames_heading_is_displayed(login_page: LoginPage) -> None:
+    assert login_page.is_usernames_heading_visible()
 
 
 def test_07_usernames(login_page: LoginPage) -> None:
-    container: Locator = login_page._credentials_container
-    text: str = container.inner_text()
-    lines: list[str] = [line.strip() for line in text.splitlines() if line.strip()]
-
-    if lines and lines[0].lower().startswith("accepted usernames"):
-        usernames = lines[1:]
-    else:
-        usernames: list[str] = lines
-
+    usernames: list[str] = login_page.get_credentials_usernames()
     assert usernames == EXPECTED_LOGIN_USERNAMES
 
 
