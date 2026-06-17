@@ -1,7 +1,7 @@
 import random
 
 import pytest
-from playwright.sync_api import Locator, Page, expect
+from playwright.sync_api import Page, expect
 
 from sauce_project.po.pages.base_page import BASE_URL, INVENTORY_URL, LOGIN_URL
 from sauce_project.po.pages.inventory_page import InventoryPage
@@ -35,11 +35,6 @@ def go_home(page: Page) -> Page:
 @pytest.fixture
 def login_page(page: Page) -> LoginPage:
     return LoginPage(page)
-
-
-@pytest.fixture
-def inventory_page(page: Page) -> InventoryPage:
-    return InventoryPage(page)
 
 
 def test_01_document_title(login_page: LoginPage) -> None:

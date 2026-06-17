@@ -3,7 +3,7 @@ from typing import Optional
 from playwright.sync_api import Locator, Page
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 
-from .base_page import BASE_URL, BasePage
+from .base_page import BASE_URL, INVENTORY_URL, BasePage
 
 
 class InventoryPage(BasePage):
@@ -57,3 +57,8 @@ class InventoryPage(BasePage):
             raise RuntimeError(
                 f"Timed out waiting for logout to reach {BASE_URL} after {timeout_ms} ms"
             ) from e
+
+    def get_url(self, timeout: Optional[int] = None):
+        timeout_ms = self._timeout_ms(timeout)
+        self.wait_for_url(INVENTORY_URL, timeout=timeout_ms)
+        return self._page.url

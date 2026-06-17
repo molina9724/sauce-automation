@@ -2,9 +2,8 @@ from typing import TYPE_CHECKING, Optional
 
 from playwright.sync_api import Locator, Page
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
-from playwright.sync_api import expect
 
-from .base_page import BASE_URL, INVENTORY_URL, BasePage
+from .base_page import INVENTORY_URL, BasePage
 
 if TYPE_CHECKING:
     from .inventory_page import InventoryPage
