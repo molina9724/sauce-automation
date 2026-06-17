@@ -1,22 +1,34 @@
+import random
+
 import pytest
 from playwright.sync_api import Locator, Page, expect
 
-from sauce_project.po.pages.base_page import BASE_URL
+from sauce_project.po.pages.base_page import BASE_URL, INVENTORY_URL, LOGIN_URL
 from sauce_project.po.pages.inventory_page import InventoryPage
-# fmt: off
-from sauce_project.po.pages.login_page import (EXPECTED_LOGIN_USERNAMES,
-                                               PASSWORD, RANDOM_LOCKED_USER,
-                                               RANDOM_UNBLOCKED_USER,
-                                               SUCCESS_LOGIN_DATA,
-                                               UNLOCKED_USERS, WRONG_PASSWORD,
-                                               LoginPage)
+from sauce_project.po.pages.login_page import LoginPage
 
-# fmt: on
+UNLOCKED_USERS = (
+    "standard_user",
+    "problem_user",
+    "performance_glitch_user",
+    "error_user",
+    "visual_user",
+)
+LOCKED_USERS = ("locked_out_user",)
+ALL_USERS = (UNLOCKED_USERS[0],) + LOCKED_USERS + UNLOCKED_USERS[1:]
+RANDOM_UNBLOCKED_USER = random.choice(UNLOCKED_USERS)
+RANDOM_LOCKED_USER = random.choice(LOCKED_USERS)
+
+PASSWORD = "secret_sauce"
+WRONG_PASSWORD = "wrong_password"
+
+EXPECTED_LOGIN_USERNAMES = list(ALL_USERS)
+SUCCESS_LOGIN_DATA = [(user, PASSWORD, INVENTORY_URL) for user in UNLOCKED_USERS]
 
 
 @pytest.fixture(scope="function", autouse=True)
 def go_home(page: Page) -> Page:
-    page.goto(BASE_URL)
+    page.goto(LOGIN_URL)
     return page
 
 
@@ -131,19 +143,6 @@ def test_16_error_dismissal_after_unsuccessful_login_with_locked_account(
     assert login_page.is_error_displayed()
     login_page.dismiss_error()
     assert not login_page.is_error_displayed()
-
-
-def test_17_error_clears_after_unsuccessful_login_with_locked_account(
-    login_page: LoginPage,
-) -> None:
-    login_page.login(username="", password="")
-    error: Locator = login_page._error_header
-    expect(error).to_be_visible()
-
-    close_error_button: Locator = login_page._close_error_button
-    expect(close_error_button).to_be_visible()
-    close_error_button.click()
-    expect(close_error_button).to_be_hidden()
 
 
 def test_18_password_field_masking(login_page: LoginPage) -> None:

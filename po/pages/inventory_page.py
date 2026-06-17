@@ -5,8 +5,6 @@ from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 
 from .base_page import BASE_URL, BasePage
 
-INVENTORY_URL = "https://www.saucedemo.com/inventory.html"
-
 
 class InventoryPage(BasePage):
     """
@@ -51,6 +49,7 @@ class InventoryPage(BasePage):
         self._logout_link.click()
         try:
             self.wait_for_url(BASE_URL, timeout=timeout_ms)
+            # local import to avoid circular import
             from .login_page import LoginPage
 
             return LoginPage(self._page)

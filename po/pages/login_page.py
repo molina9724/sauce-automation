@@ -1,36 +1,18 @@
-import random
-from typing import Optional
+from typing import TYPE_CHECKING, Optional
 
 from playwright.sync_api import Locator, Page
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 
-from .base_page import BasePage
-from .inventory_page import INVENTORY_URL, InventoryPage
+from .base_page import BASE_URL, INVENTORY_URL, BasePage
 
-UNLOCKED_USERS = (
-    "standard_user",
-    "problem_user",
-    "performance_glitch_user",
-    "error_user",
-    "visual_user",
-)
-PASSWORD = "secret_sauce"
-SUCCESS_LOGIN_DATA = [(user, PASSWORD, INVENTORY_URL) for user in UNLOCKED_USERS]
+if TYPE_CHECKING:
+    from .inventory_page import InventoryPage
 
-LOCKED_USERS = ("locked_out_user",)
-PERFORMANCE_GLITCHED_USER = "performance_glitch_user"
-
-WRONG_PASSWORD = "wrong_password"
 
 INCREASED_TIMEOUT = 20000
 SHORT_TIMEOUT = 600
 
-ALL_USERS = (UNLOCKED_USERS[0],) + LOCKED_USERS + UNLOCKED_USERS[1:]
-
-EXPECTED_LOGIN_USERNAMES = list(ALL_USERS)
-
-RANDOM_UNBLOCKED_USER = random.choice(UNLOCKED_USERS)
-RANDOM_LOCKED_USER = random.choice(LOCKED_USERS)
+PERFORMANCE_GLITCHED_USER = "performance_glitch_user"
 
 
 class LoginPage(BasePage):
@@ -53,14 +35,11 @@ class LoginPage(BasePage):
         self._credentials_container: Locator = self.locator("#login_credentials")
         self._password_container: Locator = self.locator(".login_password")
 
-    # NOTE: timeout handling is centralized on BasePage._timeout_ms(timeout).
-    # Keep helpers like this on the page object rather than using pytest fixtures
-    # inside page classes.
-
     def login(
         self, username: str, password: str, timeout: Optional[int] = None
-    ) -> InventoryPage:
+    ) -> "InventoryPage":  # keep as a string to avoid runtime evaluation
         timeout_ms: int = self._timeout_ms(timeout)
+
         if username == PERFORMANCE_GLITCHED_USER:
             timeout_ms = INCREASED_TIMEOUT
 
@@ -77,6 +56,8 @@ class LoginPage(BasePage):
 
         try:
             self.wait_for_url(INVENTORY_URL, timeout=timeout_ms)
+            from .inventory_page import InventoryPage
+
             return InventoryPage(self._page)
         except PlaywrightTimeoutError:
             error_message = self.get_error_text()

@@ -4,6 +4,8 @@ from playwright.sync_api import Locator, Page
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 
 BASE_URL = "https://www.saucedemo.com/"
+LOGIN_URL = BASE_URL
+INVENTORY_URL = BASE_URL + "inventory.html"
 
 
 class BasePage:
@@ -116,7 +118,6 @@ class BasePage:
         """
         timeout_ms: int = self._timeout if timeout is None else timeout
         try:
-            # Playwright's page.wait_for_url supports strings or patterns
             self._page.wait_for_url(expected_url, timeout=timeout_ms)
         except PlaywrightTimeoutError as e:
             raise RuntimeError(
