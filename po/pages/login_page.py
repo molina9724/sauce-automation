@@ -80,7 +80,7 @@ class LoginPage(BasePage):
         try:
             self._error_header.wait_for(state="visible", timeout=timeout_ms)
             return True
-        except PlaywrightTimeoutError:
+        except RuntimeError:
             return False
 
     def dismiss_error(self, timeout: Optional[int] = None) -> None:
@@ -90,7 +90,7 @@ class LoginPage(BasePage):
             self._close_error_button.click()
             self._error_header.wait_for(state="hidden", timeout=timeout_ms)
             return None
-        except PlaywrightTimeoutError:
+        except RuntimeError:
             raise RuntimeError(
                 f"Timed out waiting for error to dismiss (after {timeout_ms} ms)"
             )
@@ -144,11 +144,11 @@ class LoginPage(BasePage):
         self, timeout: Optional[int] = None
     ) -> bool:
         timeout_ms: int = self._timeout_ms(timeout)
-        self._usernames_heading.wait_for(state="visible", timeout=timeout_ms)
+        self._password_heading.wait_for(state="visible", timeout=timeout_ms)
         return self._usernames_heading.is_visible()
 
     def get_password(self, timeout: Optional[int] = None) -> list[str]:
-        timeout_ms = self._timeout_ms(timeout)
+        timeout_ms: int = self._timeout_ms(timeout)
         self._credentials_container.wait_for(state="visible", timeout=timeout_ms)
         container: Locator = self._password_container
         text: str = container.inner_text()

@@ -38,7 +38,7 @@ class InventoryPage(BasePage):
         self._logout_link: Locator = page.get_by_role("link", name="Logout")
 
     def get_hamburger_button(self, timeout: Optional[int] = None) -> Locator:
-        timeout_ms = self._timeout_ms(timeout)
+        timeout_ms: int = self._timeout_ms(timeout)
         self._hamburger_button.wait_for(state="visible", timeout=timeout_ms)
         return self._hamburger_button
 
