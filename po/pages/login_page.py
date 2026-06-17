@@ -81,19 +81,23 @@ class LoginPage(BasePage):
         try:
             self._error_header.wait_for(state="visible", timeout=timeout_ms)
             return True
-        except RuntimeError:
+        except PlaywrightTimeoutError:
             return False
 
     def dismiss_error(self, timeout: Optional[int] = None) -> None:
         timeout_ms: int = self._timeout_ms(timeout)
-        try:
-            self._close_error_button.is_visible()
-            self._close_error_button.click()
-            self._error_header.wait_for(state="hidden", timeout=timeout_ms)
-            return None
-        except RuntimeError:
+        if self._close_error_button.is_visible():
+            try:
+                self._close_error_button.click()
+                self._error_header.wait_for(state="hidden", timeout=timeout_ms)
+                return None
+            except PlaywrightTimeoutError:
+                raise RuntimeError(
+                    f"Timed out waiting for error to dismiss (after {timeout_ms} ms)"
+                )
+        else:
             raise RuntimeError(
-                f"Timed out waiting for error to dismiss (after {timeout_ms} ms)"
+                f"Close error button was not displayed (after {timeout_ms} ms)"
             )
 
     def get_document_title(self, timeout: Optional[int] = None) -> str:

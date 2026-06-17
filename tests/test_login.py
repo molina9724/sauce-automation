@@ -146,4 +146,4 @@ def test_16_error_dismissal_after_unsuccessful_login_with_locked_account(
 
 
 def test_18_password_field_masking(login_page: LoginPage) -> None:
-    login_page.is_password_masked()
+    assert login_page.is_password_masked()
