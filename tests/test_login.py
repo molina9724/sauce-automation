@@ -146,7 +146,4 @@ def test_16_error_dismissal_after_unsuccessful_login_with_locked_account(
 
 
 def test_18_password_field_masking(login_page: LoginPage) -> None:
-    password_input: Locator = login_page._password
-    expect(password_input).to_have_attribute(name="type", value="password")
-    expect(password_input).to_have_attribute(name="type", value="password")
-    expect(password_input).to_have_attribute(name="type", value="password")
+    login_page.is_password_masked()

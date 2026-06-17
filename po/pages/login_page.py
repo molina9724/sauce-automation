@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING, Optional
 
 from playwright.sync_api import Locator, Page
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
+from playwright.sync_api import expect
 
 from .base_page import BASE_URL, INVENTORY_URL, BasePage
 
@@ -59,7 +60,7 @@ class LoginPage(BasePage):
             from .inventory_page import InventoryPage
 
             return InventoryPage(self._page)
-        except PlaywrightTimeoutError:
+        except RuntimeError:
             error_message = self.get_error_text()
             if error_message:
                 raise RuntimeError(error_message)
@@ -145,7 +146,7 @@ class LoginPage(BasePage):
     ) -> bool:
         timeout_ms: int = self._timeout_ms(timeout)
         self._password_heading.wait_for(state="visible", timeout=timeout_ms)
-        return self._usernames_heading.is_visible()
+        return self._password_heading.is_visible()
 
     def get_password(self, timeout: Optional[int] = None) -> list[str]:
         timeout_ms: int = self._timeout_ms(timeout)
@@ -159,3 +160,11 @@ class LoginPage(BasePage):
         else:
             password: list[str] = lines
         return password
+
+    def is_password_masked(self, timeout: Optional[int] = None) -> bool:
+        timeout_ms: int = self._timeout_ms(timeout)
+        if self.is_password_visible(timeout_ms):
+            password_masked: str | None = self._password.get_attribute("type")
+            if password_masked == "password":
+                return True
+        return False
