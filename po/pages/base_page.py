@@ -114,11 +114,11 @@ class BasePage:
 
         Raises RuntimeError on timeout to keep behavior consistent with other waits.
         """
-        t: int = self._timeout if timeout is None else timeout
+        timeout_ms: int = self._timeout if timeout is None else timeout
         try:
             # Playwright's page.wait_for_url supports strings or patterns
-            self._page.wait_for_url(expected_url, timeout=t)
+            self._page.wait_for_url(expected_url, timeout=timeout_ms)
         except PlaywrightTimeoutError as e:
             raise RuntimeError(
-                f"Timed out waiting for URL {expected_url} after {t} ms"
+                f"Timed out waiting for URL {expected_url} after {timeout_ms} ms"
             ) from e

@@ -82,59 +82,55 @@ def test_10_successful_login_and_logout(
 def test_11_unsuccessful_login_empty_username_and_empty_password(
     login_page: LoginPage,
 ) -> None:
-    login_page.login(username="", password="")
-    error: Locator = login_page._error_header
-    expect(error).to_be_visible()
-    expect(error).to_have_text("Epic sadface: Username is required")
+    with pytest.raises(RuntimeError) as exception_information:
+        login_page.login(username="", password="")
+    assert "Epic sadface: Username is required" in str(exception_information.value)
 
 
 def test_12_unsuccessful_login_username_and_empty_password(
     login_page: LoginPage,
 ) -> None:
-    login_page.login(username=RANDOM_UNBLOCKED_USER, password="")
-    error: Locator = login_page._error_header
-    expect(error).to_be_visible()
-    expect(error).to_have_text("Epic sadface: Password is required")
+    with pytest.raises(RuntimeError) as exception_information:
+        login_page.login(username=RANDOM_UNBLOCKED_USER, password="")
+    assert "Epic sadface: Password is required" in str(exception_information.value)
 
 
 def test_13_unsuccessful_login_empty_username_and_non_empty_password(
     login_page: LoginPage,
 ) -> None:
-    login_page.login(username="", password=PASSWORD)
-    error: Locator = login_page._error_header
-    expect(error).to_be_visible()
-    expect(error).to_have_text("Epic sadface: Username is required")
+    with pytest.raises(RuntimeError) as exception_information:
+        login_page.login(username="", password=PASSWORD)
+    assert "Epic sadface: Username is required" in str(exception_information.value)
 
 
-def test_14_unsuccessful_login_right_username_but_wrong_password(login_page: LoginPage):
-    login_page.login(username=RANDOM_UNBLOCKED_USER, password=WRONG_PASSWORD)
-    error: Locator = login_page._error_header
-    expect(error).to_be_visible()
-    expect(error).to_have_text(
-        expected="Epic sadface: Username and password do not match any user in this service"
+def test_14_unsuccessful_login_right_username_but_wrong_password(
+    login_page: LoginPage,
+) -> None:
+    with pytest.raises(RuntimeError) as exception_information:
+        login_page.login(username=RANDOM_UNBLOCKED_USER, password=WRONG_PASSWORD)
+    assert (
+        "Epic sadface: Username and password do not match any user in this service"
+        in str(exception_information.value)
     )
 
 
 def test_15_unsuccessful_login_with_locked_account(login_page: LoginPage) -> None:
-    login_page.login(username=RANDOM_LOCKED_USER, password=PASSWORD)
-    error: Locator = login_page._error_header
-    expect(error).to_be_visible()
-    expect(error).to_have_text(
-        expected="Epic sadface: Sorry, this user has been locked out."
+    with pytest.raises(RuntimeError) as exception_information:
+        login_page.login(username=RANDOM_LOCKED_USER, password=PASSWORD)
+    assert "Epic sadface: Sorry, this user has been locked out" in str(
+        exception_information.value
     )
 
 
 def test_16_error_dismissal_after_unsuccessful_login_with_locked_account(
     login_page: LoginPage,
-):
-    login_page.login(username="", password="")
-    error: Locator = login_page._error_header
-    expect(error).to_be_visible()
-
-    close_error_button: Locator = login_page._close_error_button
-    expect(close_error_button).to_be_visible()
-    close_error_button.click()
-    expect(close_error_button).to_be_hidden()
+) -> None:
+    with pytest.raises(RuntimeError) as exception_information:
+        login_page.login(username="", password="")
+    assert "Epic sadface: Username is required" in str(exception_information.value)
+    assert login_page.is_error_displayed()
+    login_page.dismiss_error()
+    assert not login_page.is_error_displayed()
 
 
 def test_17_error_clears_after_unsuccessful_login_with_locked_account(
@@ -144,7 +140,7 @@ def test_17_error_clears_after_unsuccessful_login_with_locked_account(
     error: Locator = login_page._error_header
     expect(error).to_be_visible()
 
-    close_error_button = login_page._close_error_button
+    close_error_button: Locator = login_page._close_error_button
     expect(close_error_button).to_be_visible()
     close_error_button.click()
     expect(close_error_button).to_be_hidden()

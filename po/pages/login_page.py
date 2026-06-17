@@ -92,6 +92,16 @@ class LoginPage(BasePage):
         else:
             return None
 
+    def is_error_displayed(self, timeout: Optional[int] = None) -> bool:
+        if timeout is None:
+            return self._error_header.is_visible()
+        timeout_ms: int = self._timeout_ms(timeout)
+        try:
+            self._error_header.wait_for(state="visible", timeout=timeout_ms)
+            return True
+        except PlaywrightTimeoutError:
+            return False
+
     def dismiss_error(self, timeout: Optional[int] = None) -> None:
         timeout_ms: int = self._timeout_ms(timeout)
         try:
