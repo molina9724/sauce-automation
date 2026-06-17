@@ -53,7 +53,7 @@ class InventoryPage(BasePage):
             from .login_page import LoginPage
 
             return LoginPage(self._page)
-        except PlaywrightTimeoutError as e:
+        except RuntimeError as e:
             raise RuntimeError(
                 f"Timed out waiting for logout to reach {BASE_URL} after {timeout_ms} ms"
             ) from e
