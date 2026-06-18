@@ -43,6 +43,8 @@ class InventoryPage(BasePage):
         self._logout_link: Locator = page.get_by_role("link", name="Logout")
         self._all_items: Locator = page.locator(".bm-menu-wrap .menu-item")
 
+        self._products_title: Locator = page.locator(".title")
+
     def get_hamburger_button(self, timeout: Optional[int] = None) -> Locator:
         timeout_ms: int = self._timeout_ms(timeout)
         self._hamburger_button.wait_for(state="visible", timeout=timeout_ms)
@@ -87,16 +89,21 @@ class InventoryPage(BasePage):
             ) from e
 
     def get_url(self, timeout: Optional[int] = None) -> str:
-        timeout_ms = self._timeout_ms(timeout)
+        timeout_ms: int = self._timeout_ms(timeout)
         self.wait_for_url(INVENTORY_URL, timeout=timeout_ms)
         return self._page.url
 
     def get_document_title(self, timeout: Optional[int] = None) -> str:
-        timeout_ms = self._timeout_ms(timeout)
+        timeout_ms: int = self._timeout_ms(timeout)
         self._inventory_logo.wait_for(state="visible", timeout=timeout_ms)
         return self._page.title().strip()
 
     def get_logo_text(self, timeout: Optional[int] = None) -> str:
-        timeout_ms = self._timeout_ms(timeout)
+        timeout_ms: int = self._timeout_ms(timeout)
         self._inventory_logo.wait_for(state="visible", timeout=timeout_ms)
         return self._inventory_logo.inner_text().strip()
+
+    def get_products_title(self, timeout: Optional[int] = None) -> str:
+        timeout_ms: int = self._timeout_ms(timeout)
+        self._products_title.wait_for(state="visible", timeout=timeout_ms)
+        return self._products_title.inner_text().strip()
