@@ -1,9 +1,12 @@
-from typing import Optional
+from typing import TYPE_CHECKING, List, Optional
 
 from playwright.sync_api import Locator, Page
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 
 from .base_page import BASE_URL, INVENTORY_URL, BasePage
+
+if TYPE_CHECKING:
+    from .login_page import LoginPage
 
 
 class InventoryPage(BasePage):
@@ -33,16 +36,41 @@ class InventoryPage(BasePage):
         """
         super().__init__(page, timeout)
         self._inventory_container: Locator = self.locator("#inventory_container")
+        self._inventory_logo: Locator = self.locator(".app_logo")
 
         self._hamburger_button: Locator = page.get_by_role("button", name="Open Menu")
+        self._left_menu: Locator = page.locator(".bm-menu")
         self._logout_link: Locator = page.get_by_role("link", name="Logout")
+        self._all_items: Locator = page.locator(".bm-menu-wrap .menu-item")
 
     def get_hamburger_button(self, timeout: Optional[int] = None) -> Locator:
         timeout_ms: int = self._timeout_ms(timeout)
         self._hamburger_button.wait_for(state="visible", timeout=timeout_ms)
         return self._hamburger_button
 
-    def logout(self, timeout: Optional[int] = None):
+    def open_hamburger_button(self, timeout: Optional[int] = None) -> None:
+        timeout_ms: int = self._timeout_ms(timeout)
+        self.get_hamburger_button(timeout_ms).click()
+
+    def is_left_menu_displayed(self, timeout: Optional[int] = None) -> bool:
+        timeout_ms: int = self._timeout_ms(timeout)
+        self._left_menu.wait_for(state="visible", timeout=timeout_ms)
+        return self._left_menu.is_visible()
+
+    def get_left_menu_elements(self, timeout: Optional[int] = None) -> list[str]:
+        timeout_ms: int = self._timeout_ms(timeout)
+        if self.is_left_menu_displayed(timeout_ms):
+            try:
+                all_items: List[Locator] = self._all_items.all()
+                return [item.inner_text().strip() for item in all_items]
+            except PlaywrightTimeoutError:
+                raise RuntimeError(
+                    f"Timed out waiting for left menu (after {timeout_ms} ms)"
+                )
+        else:
+            raise RuntimeError(f"Left menu was not displayed (after {timeout_ms} ms)")
+
+    def logout(self, timeout: Optional[int] = None) -> "LoginPage":
         timeout_ms: int = self._timeout_ms(timeout)
         self.get_hamburger_button(timeout_ms).click()
         self._logout_link.wait_for(state="visible", timeout=timeout_ms)
@@ -58,7 +86,17 @@ class InventoryPage(BasePage):
                 f"Timed out waiting for logout to reach {BASE_URL} after {timeout_ms} ms"
             ) from e
 
-    def get_url(self, timeout: Optional[int] = None):
+    def get_url(self, timeout: Optional[int] = None) -> str:
         timeout_ms = self._timeout_ms(timeout)
         self.wait_for_url(INVENTORY_URL, timeout=timeout_ms)
         return self._page.url
+
+    def get_document_title(self, timeout: Optional[int] = None) -> str:
+        timeout_ms = self._timeout_ms(timeout)
+        self._inventory_logo.wait_for(state="visible", timeout=timeout_ms)
+        return self._page.title().strip()
+
+    def get_logo_text(self, timeout: Optional[int] = None) -> str:
+        timeout_ms = self._timeout_ms(timeout)
+        self._inventory_logo.wait_for(state="visible", timeout=timeout_ms)
+        return self._inventory_logo.inner_text().strip()
