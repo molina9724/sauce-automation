@@ -44,6 +44,7 @@ class InventoryPage(BasePage):
         self._all_items: Locator = page.locator(".bm-menu-wrap .menu-item")
 
         self._products_title: Locator = page.locator(".title")
+        self._products_filter: Locator = page.get_by_role("combobox")
 
     def get_hamburger_button(self, timeout: Optional[int] = None) -> Locator:
         timeout_ms: int = self._timeout_ms(timeout)
@@ -107,3 +108,34 @@ class InventoryPage(BasePage):
         timeout_ms: int = self._timeout_ms(timeout)
         self._products_title.wait_for(state="visible", timeout=timeout_ms)
         return self._products_title.inner_text().strip()
+
+    def is_products_filter_displayed(self, timeout: Optional[int] = None) -> bool:
+        timeout_ms: int = self._timeout_ms(timeout)
+        self._products_filter.wait_for(state="visible", timeout=timeout_ms)
+        return self._products_filter.is_visible()
+
+    def get_products_filter_object(self, timeout: Optional[int] = None) -> Locator:
+        timeout_ms: int = self._timeout_ms(timeout)
+        if self.is_products_filter_displayed(timeout=timeout_ms):
+            return self._products_filter
+        raise RuntimeError(
+            f"Timed out waiting for products filter to be displayed (after {timeout_ms} ms)"
+        )
+
+    def get_products_filter_options(self, timeout: Optional[int] = None) -> List[str]:
+        timeout_ms: int = self._timeout_ms(timeout)
+        filter_options: List[Locator] = (
+            self.get_products_filter_object(timeout=timeout_ms).locator("option").all()
+        )
+        all_prices_filter_options: List[str] = [
+            filter.inner_text().strip()
+            for filter in filter_options
+            if filter.inner_text().strip()
+        ]
+        return all_prices_filter_options
+
+    def get_products_filter_selected_option(self) -> str:
+        return self._page.locator(".active_option").inner_text().strip()
+
+    def set_products_filter(self, option: str) -> None:
+        self.get_products_filter_object().select_option(option)
