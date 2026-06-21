@@ -8,6 +8,9 @@ from .base_page import BASE_URL, INVENTORY_URL, BasePage
 if TYPE_CHECKING:
     from .login_page import LoginPage
 
+ADD_TO_CART_BUTTON_TEXT = "Add to cart"
+REMOVE_FROM_CART_BUTTON_TEXT = "Remove"
+
 
 class InventoryPage(BasePage):
     """
@@ -41,10 +44,22 @@ class InventoryPage(BasePage):
         self._hamburger_button: Locator = page.get_by_role("button", name="Open Menu")
         self._left_menu: Locator = page.locator(".bm-menu")
         self._logout_link: Locator = page.get_by_role("link", name="Logout")
-        self._all_items: Locator = page.locator(".bm-menu-wrap .menu-item")
+        self._all_left_menu_items: Locator = page.locator(".bm-menu-wrap .menu-item")
 
         self._products_title: Locator = page.locator(".title")
         self._products_filter: Locator = page.get_by_role("combobox")
+
+        self._all_items_container: Locator = page.locator(".inventory_list")
+        self._inventory_item_object: Locator = page.locator(".inventory_item")
+        self._inventory_item_name: Locator = page.locator(".inventory_item_name")
+        self._inventory_item_description: Locator = page.locator(".inventory_item_desc")
+        self._inventory_item_price: Locator = page.locator(".inventory_item_price")
+        self._inventory_item_add_to_cart_button: Locator = page.get_by_role(
+            "button", name=ADD_TO_CART_BUTTON_TEXT
+        )
+        self._inventory_item_remove_from_cart_button: Locator = page.get_by_role(
+            "button", name=REMOVE_FROM_CART_BUTTON_TEXT
+        )
 
     def get_hamburger_button(self, timeout: Optional[int] = None) -> Locator:
         timeout_ms: int = self._timeout_ms(timeout)
@@ -64,7 +79,7 @@ class InventoryPage(BasePage):
         timeout_ms: int = self._timeout_ms(timeout)
         if self.is_left_menu_displayed(timeout_ms):
             try:
-                all_items: List[Locator] = self._all_items.all()
+                all_items: List[Locator] = self._all_left_menu_items.all()
                 return [item.inner_text().strip() for item in all_items]
             except PlaywrightTimeoutError:
                 raise RuntimeError(
@@ -139,3 +154,70 @@ class InventoryPage(BasePage):
 
     def set_products_filter(self, option: str) -> None:
         self.get_products_filter_object().select_option(option)
+
+    def is_all_items_container_displayed(self, timeout: Optional[int] = None) -> bool:
+        timeout_ms: int = self._timeout_ms(timeout)
+        self._all_items_container.wait_for(state="visible", timeout=timeout_ms)
+        return self._all_items_container.is_visible()
+
+    def get_all_products_names(self, timeout: Optional[int] = None) -> List[str]:
+        timeout_ms: int = self._timeout_ms(timeout)
+        if self.is_all_items_container_displayed(timeout=timeout_ms):
+            all_products_names: List[str] = [
+                item.inner_text().strip() for item in self._inventory_item_name.all()
+            ]
+            return all_products_names
+        raise RuntimeError(
+            f"Timed out waiting for all container items to be displayed (after {timeout_ms} ms)"
+        )
+
+    def get_all_products_description(self, timeout: Optional[int] = None) -> List[str]:
+        timeout_ms: int = self._timeout_ms(timeout)
+        if self.is_all_items_container_displayed(timeout=timeout_ms):
+            all_products_descriptions: List[str] = [
+                item.inner_text().strip()
+                for item in self._inventory_item_description.all()
+            ]
+            return all_products_descriptions
+        raise RuntimeError(
+            f"Timed out waiting for all container items to be displayed (after {timeout_ms} ms)"
+        )
+
+    def get_all_products_price(self, timeout: Optional[int] = None) -> List[str]:
+        timeout_ms: int = self._timeout_ms(timeout)
+        if self.is_all_items_container_displayed(timeout=timeout_ms):
+            all_products_price: List[str] = [
+                item.inner_text().strip() for item in self._inventory_item_price.all()
+            ]
+            return all_products_price
+        raise RuntimeError(
+            f"Timed out waiting for all container items to be displayed (after {timeout_ms} ms)"
+        )
+
+    def get_all_products_information(
+        self, timeout: Optional[int] = None
+    ) -> dict[str, dict[str, str]]:
+        timeout_ms: int = self._timeout_ms(timeout)
+        all_inventory_items_names: List[str] = self.get_all_products_names(timeout_ms)
+        all_inventory_items_descriptions: List[str] = self.get_all_products_description(
+            timeout_ms
+        )
+        all_inventory_items_prices: List[str] = self.get_all_products_price(timeout_ms)
+
+        inventory_items_data: dict[str, dict[str, str]] = dict()
+        try:
+            for name, description, price in zip(
+                all_inventory_items_names,
+                all_inventory_items_descriptions,
+                all_inventory_items_prices,
+                strict=True,
+            ):
+                inventory_items_data[name] = {
+                    "description": description,
+                    "price": price,
+                }
+            return inventory_items_data
+        except ValueError as exception:
+            raise RuntimeError(
+                "The arguments (name, description, and price) for zip have different lengths, this means that some inventory items have missing properties."
+            ) from exception

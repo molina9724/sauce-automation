@@ -106,10 +106,10 @@ class BasePage:
         try:
             self._page.wait_for_load_state("networkidle", timeout=timeout_ms)
             selector.wait_for(state="visible", timeout=timeout_ms)
-        except PlaywrightTimeoutError as e:
+        except PlaywrightTimeoutError as exception:
             raise RuntimeError(
                 f"Timed out waiting for '{label}' to be visible after navigating to {url} (after {timeout_ms} ms)"
-            ) from e
+            ) from exception
 
     def wait_for_url(self, expected_url: str, timeout: Optional[int] = None) -> None:
         """Wait until the page URL matches expected_url within timeout.
