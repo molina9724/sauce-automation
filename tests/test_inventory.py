@@ -45,6 +45,12 @@ INVENTORY_ITEMS_DATA: dict[str, dict[str, str]] = {
 }
 
 
+def get_price_value(item: tuple[str, dict[str, str]]) -> float:
+    _, data = item
+    price_text = data["price"]
+    return float(price_text[1:])
+
+
 @pytest.fixture(scope="function", autouse=True)
 def login(page: Page) -> InventoryPage:
     page.goto(BASE_URL)
@@ -103,5 +109,29 @@ def test_07_verify_z_to_a_filter(inventory_page: InventoryPage):
     actual: List[tuple[str, dict[str, str]]] = list(z_to_a_ordered_results.items())
     expected: List[tuple[str, dict[str, str]]] = sorted(
         INVENTORY_ITEMS_DATA.items(), reverse=True
+    )
+    assert actual == expected
+
+
+def test_08_verify_low_to_high_filter(inventory_page: InventoryPage) -> None:
+    inventory_page.set_products_filter("Price (low to high)")
+    low_to_high_ordered_results = inventory_page.get_all_products_information()
+
+    actual: List[tuple[str, dict[str, str]]] = list(low_to_high_ordered_results.items())
+    expected: List[tuple[str, dict[str, str]]] = sorted(
+        INVENTORY_ITEMS_DATA.items(), key=get_price_value
+    )
+    assert actual == expected
+
+
+def test_09_high_to_low_filter(inventory_page: InventoryPage):
+    inventory_page.set_products_filter("Price (high to low)")
+    high_to_low_ordered_results: dict[str, dict[str, str]] = (
+        inventory_page.get_all_products_information()
+    )
+
+    actual: List[tuple[str, dict[str, str]]] = list(high_to_low_ordered_results.items())
+    expected: List[tuple[str, dict[str, str]]] = sorted(
+        INVENTORY_ITEMS_DATA.items(), key=get_price_value, reverse=True
     )
     assert actual == expected
