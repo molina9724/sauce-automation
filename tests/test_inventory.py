@@ -1,7 +1,7 @@
 from typing import List
 
 import pytest
-from playwright.sync_api import Page
+from playwright.sync_api import Locator, Page, expect
 
 from sauce_project.po.pages.base_page import BASE_URL
 from sauce_project.po.pages.inventory_page import InventoryPage
@@ -143,3 +143,12 @@ def test_10_verify_exception_when_trying_to_access_inventory_page_without_login(
         "Epic sadface: You can only access '/inventory.html' when you are logged in."
         == str(exception_information.value)
     )
+
+
+def test_11_verify_items_images_are_displayed(inventory_page: InventoryPage) -> None:
+    assert inventory_page.are_items_images_displayed()
+
+
+def test_12_verify_user_can_add_item_to_cart(inventory_page: InventoryPage) -> None:
+    inventory_page.add_item_to_cart(0)
+    assert inventory_page.get_cart_counter() == 1

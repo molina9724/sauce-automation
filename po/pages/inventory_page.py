@@ -57,8 +57,16 @@ class InventoryPage(BasePage):
         self._inventory_item_add_to_cart_button: Locator = page.get_by_role(
             "button", name=ADD_TO_CART_BUTTON_TEXT
         )
-        self._inventory_item_remove_from_cart_button: Locator = page.get_by_role(
+        self._inventory_item_remove_button: Locator = page.get_by_role(
             "button", name=REMOVE_FROM_CART_BUTTON_TEXT
+        )
+
+        self._cart_button = page.locator(".shopping_cart_link")
+        self._add_to_cart_button = page.get_by_role(
+            "button", name=ADD_TO_CART_BUTTON_TEXT
+        )
+        self._shopping_cart_counter: Locator = self._page.locator(
+            ".shopping_cart_badge"
         )
 
     def get_hamburger_button(self, timeout: Optional[int] = None) -> Locator:
@@ -221,3 +229,48 @@ class InventoryPage(BasePage):
             raise RuntimeError(
                 "The arguments (name, description, and price) for zip have different lengths, this means that some inventory items have missing properties."
             ) from exception
+
+    def are_items_images_displayed(self, timeout: Optional[int] = None) -> bool:
+        timeout_ms = self._timeout_ms(timeout)
+
+        is_item_image_displayed = list()
+        if self.is_all_items_container_displayed(timeout_ms):
+            items_names: List[str] = self.get_all_products_names()
+            for name in items_names:
+                visibility_flag = False
+                try:
+                    image: Locator = self._page.get_by_role("img", name=name)
+                    image.wait_for(state="visible", timeout=timeout_ms)
+                except PlaywrightTimeoutError:
+                    visibility_flag = False
+                else:
+                    visibility_flag: bool = True
+                finally:
+                    is_item_image_displayed.append(visibility_flag)
+        return all(is_item_image_displayed)
+
+    def get_cart_button(self, timeout: Optional[int] = None) -> Locator:
+        timeout_ms: int = self._timeout_ms(timeout)
+        self._cart_button.wait_for(state="visible", timeout=timeout_ms)
+        return self._cart_button
+
+    def add_item_to_cart(self, item_index, timeout: Optional[int] = None) -> None:
+        timeout_ms = self._timeout_ms(timeout)
+        if self.is_all_items_container_displayed(timeout=timeout_ms):
+            try:
+                self._add_to_cart_button.nth(item_index).click(timeout=timeout_ms)
+            except PlaywrightTimeoutError:
+                raise RuntimeError(
+                    f"Timed out waiting for item #{item_index} to be displayed (after {timeout_ms} ms)"
+                )
+
+    def get_cart_counter(self, timeout: Optional[int] = None) -> int:
+        timeout_ms: int = self._timeout_ms(timeout)
+        self._shopping_cart_counter.wait_for(state="visible", timeout=timeout_ms)
+        cart_counter: str = self._shopping_cart_counter.inner_text().strip()
+        try:
+            return int(cart_counter)
+        except ValueError:
+            raise RuntimeError(
+                "Your cart counter is returning a value that cannot be converted to int"
+            )
