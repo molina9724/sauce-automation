@@ -51,18 +51,15 @@ def get_price_value(item: tuple[str, dict[str, str]]) -> float:
     return float(price_text[1:])
 
 
-@pytest.fixture(scope="function", autouse=True)
-def login(page: Page) -> InventoryPage:
+@pytest.fixture
+def inventory_page(page: Page) -> InventoryPage:
     page.goto(BASE_URL)
-    inventory_page: InventoryPage = LoginPage(page).login(
-        username="standard_user", password="secret_sauce"
-    )
-    return inventory_page
+    return LoginPage(page).login(username="standard_user", password="secret_sauce")
 
 
 @pytest.fixture
-def inventory_page(page: Page) -> InventoryPage:
-    return InventoryPage(page)
+def login_page(page: Page) -> LoginPage:
+    return LoginPage(page)
 
 
 def test_00_verify__inventory_url(inventory_page: InventoryPage) -> None:
@@ -135,3 +132,14 @@ def test_09_high_to_low_filter(inventory_page: InventoryPage):
         INVENTORY_ITEMS_DATA.items(), key=get_price_value, reverse=True
     )
     assert actual == expected
+
+
+def test_10_verify_exception_when_trying_to_access_inventory_page_without_login(
+    login_page: LoginPage,
+) -> None:
+    with pytest.raises(RuntimeError) as exception_information:
+        login_page.attempt_access_unauthenticated()
+    assert (
+        "Epic sadface: You can only access '/inventory.html' when you are logged in."
+        == str(exception_information.value)
+    )

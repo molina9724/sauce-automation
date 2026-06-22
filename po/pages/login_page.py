@@ -171,3 +171,15 @@ class LoginPage(BasePage):
             if password_masked == "password":
                 return True
         return False
+
+    def attempt_access_unauthenticated(self, timeout: Optional[int] = None) -> None:
+        timeout_ms: int = self._timeout_ms(timeout)
+        self._page.goto(INVENTORY_URL)
+        try:
+            self._error_header.wait_for(state="visible", timeout=timeout_ms)
+            error_message = self.get_error_text()
+            raise RuntimeError(error_message)
+        except PlaywrightTimeoutError:
+            raise RuntimeError(
+                f"No error displayed after accessing {INVENTORY_URL} without authenticating."
+            )
