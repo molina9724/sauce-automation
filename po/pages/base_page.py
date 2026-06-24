@@ -6,6 +6,7 @@ from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 BASE_URL = "https://www.saucedemo.com/"
 LOGIN_URL = BASE_URL
 INVENTORY_URL = BASE_URL + "inventory.html"
+CART_URL = BASE_URL + "cart.html"
 
 
 class BasePage:
@@ -123,3 +124,6 @@ class BasePage:
             raise RuntimeError(
                 f"Timed out waiting for URL {expected_url} after {timeout_ms} ms"
             ) from e
+
+    def get_url(self) -> str:
+        return self._page.url

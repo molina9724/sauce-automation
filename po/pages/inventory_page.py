@@ -3,9 +3,10 @@ from typing import TYPE_CHECKING, List, Optional
 from playwright.sync_api import Locator, Page
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 
-from .base_page import BASE_URL, INVENTORY_URL, BasePage
+from .base_page import BASE_URL, CART_URL, BasePage
 
 if TYPE_CHECKING:
+    from .cart_page import CartPage
     from .login_page import LoginPage
 
 ADD_TO_CART_BUTTON_TEXT = "Add to cart"
@@ -111,11 +112,6 @@ class InventoryPage(BasePage):
             raise RuntimeError(
                 f"Timed out waiting for logout to reach {BASE_URL} after {timeout_ms} ms"
             ) from e
-
-    def get_url(self, timeout: Optional[int] = None) -> str:
-        timeout_ms: int = self._timeout_ms(timeout)
-        self.wait_for_url(INVENTORY_URL, timeout=timeout_ms)
-        return self._page.url
 
     def get_document_title(self, timeout: Optional[int] = None) -> str:
         timeout_ms: int = self._timeout_ms(timeout)
@@ -249,10 +245,19 @@ class InventoryPage(BasePage):
                     is_item_image_displayed.append(visibility_flag)
         return all(is_item_image_displayed)
 
-    def get_cart_button(self, timeout: Optional[int] = None) -> Locator:
+    def get_cart_page(self, timeout: Optional[int] = None) -> "CartPage":
         timeout_ms: int = self._timeout_ms(timeout)
-        self._cart_button.wait_for(state="visible", timeout=timeout_ms)
-        return self._cart_button
+        try:
+            self._cart_button.wait_for(state="visible", timeout=timeout_ms)
+            self._cart_button.click()
+
+            from .cart_page import CartPage
+
+            return CartPage(self._page)
+        except PlaywrightTimeoutError:
+            raise RuntimeError(
+                f"Timed out waiting for inventory to reach {CART_URL} after {timeout_ms} ms"
+            )
 
     def add_item_to_cart(self, item_index, timeout: Optional[int] = None) -> None:
         timeout_ms: int = self._timeout_ms(timeout)

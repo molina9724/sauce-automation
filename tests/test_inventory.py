@@ -1,9 +1,9 @@
 from typing import List
 
 import pytest
-from playwright.sync_api import Locator, Page, expect
+from playwright.sync_api import Page
 
-from sauce_project.po.pages.base_page import BASE_URL
+from sauce_project.po.pages.base_page import BASE_URL, INVENTORY_URL
 from sauce_project.po.pages.inventory_page import InventoryPage
 from sauce_project.po.pages.login_page import LoginPage
 
