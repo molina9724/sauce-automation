@@ -152,3 +152,7 @@ def test_11_verify_items_images_are_displayed(inventory_page: InventoryPage) -> 
 def test_12_verify_user_can_add_item_to_cart(inventory_page: InventoryPage) -> None:
     inventory_page.add_item_to_cart(0)
     assert inventory_page.get_cart_counter() == 1
+
+
+def test_13_verify_cart_is_empty_by_default(inventory_page: InventoryPage) -> None:
+    assert inventory_page.is_cart_empty()

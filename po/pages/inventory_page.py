@@ -274,3 +274,11 @@ class InventoryPage(BasePage):
             raise RuntimeError(
                 "Your cart counter is returning a value that cannot be converted to int"
             )
+
+    def is_cart_empty(self, timeout: Optional[int] = None) -> bool:
+        timeout_ms: int = self._timeout_ms(timeout)
+        try:
+            self._shopping_cart_counter.wait_for(state="hidden", timeout=timeout_ms)
+            return True
+        except PlaywrightTimeoutError:
+            return False
