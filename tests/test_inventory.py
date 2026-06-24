@@ -1,9 +1,9 @@
 from typing import List
 
 import pytest
-from playwright.sync_api import Page
+from playwright.sync_api import Page, expect
 
-from sauce_project.po.pages.base_page import BASE_URL, INVENTORY_URL
+from sauce_project.po.pages.base_page import BASE_URL
 from sauce_project.po.pages.inventory_page import InventoryPage
 from sauce_project.po.pages.login_page import LoginPage
 
@@ -53,19 +53,8 @@ def get_price_value(item: tuple[str, dict[str, str]]) -> float:
     return float(price_text[1:])
 
 
-@pytest.fixture
-def inventory_page(page: Page) -> InventoryPage:
-    page.goto(BASE_URL)
-    return LoginPage(page).login(username="standard_user", password="secret_sauce")
-
-
-@pytest.fixture
-def login_page(page: Page) -> LoginPage:
-    return LoginPage(page)
-
-
 def test_00_verify__inventory_url(inventory_page: InventoryPage) -> None:
-    assert inventory_page.get_url() == "https://www.saucedemo.com/inventory.html"
+    expect(inventory_page._page).to_have_url("https://www.saucedemo.com/inventory.html")
 
 
 def test_01_verify_document_title(inventory_page: InventoryPage) -> None:
