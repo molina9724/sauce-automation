@@ -255,13 +255,25 @@ class InventoryPage(BasePage):
         return self._cart_button
 
     def add_item_to_cart(self, item_index, timeout: Optional[int] = None) -> None:
-        timeout_ms = self._timeout_ms(timeout)
+        timeout_ms: int = self._timeout_ms(timeout)
         if self.is_all_items_container_displayed(timeout=timeout_ms):
             try:
                 self._add_to_cart_button.nth(item_index).click(timeout=timeout_ms)
             except PlaywrightTimeoutError:
                 raise RuntimeError(
                     f"Timed out waiting for item #{item_index} to be displayed (after {timeout_ms} ms)"
+                )
+
+    def remove_item_from_cart(self, item_index, timeout: Optional[int] = None) -> None:
+        timeout_ms: int = self._timeout_ms(timeout)
+        if self.is_all_items_container_displayed(timeout=timeout_ms):
+            try:
+                self._inventory_item_remove_button.nth(item_index).click(
+                    timeout=timeout_ms
+                )
+            except PlaywrightTimeoutError:
+                raise RuntimeError(
+                    f"Timed out waiting for item #{item_index} to display the remove button (after {timeout_ms} ms)"
                 )
 
     def get_cart_counter(self, timeout: Optional[int] = None) -> int:

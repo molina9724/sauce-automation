@@ -44,6 +44,8 @@ INVENTORY_ITEMS_DATA: dict[str, dict[str, str]] = {
     },
 }
 
+ITEM_INDEX: int = 0
+
 
 def get_price_value(item: tuple[str, dict[str, str]]) -> float:
     _, data = item
@@ -150,9 +152,18 @@ def test_11_verify_items_images_are_displayed(inventory_page: InventoryPage) -> 
 
 
 def test_12_verify_user_can_add_item_to_cart(inventory_page: InventoryPage) -> None:
-    inventory_page.add_item_to_cart(0)
+    inventory_page.add_item_to_cart(ITEM_INDEX)
     assert inventory_page.get_cart_counter() == 1
 
 
 def test_13_verify_cart_is_empty_by_default(inventory_page: InventoryPage) -> None:
+    assert inventory_page.is_cart_empty()
+
+
+def test_14_verify_cart_is_empty_after_adding_item_and_removing_it(
+    inventory_page: InventoryPage,
+) -> None:
+    inventory_page.add_item_to_cart(ITEM_INDEX)
+    assert inventory_page.get_cart_counter() == 1
+    inventory_page.remove_item_from_cart(ITEM_INDEX)
     assert inventory_page.is_cart_empty()
