@@ -55,20 +55,15 @@ class InventoryPage(BasePage):
         self._inventory_item_name: Locator = self.locator(".inventory_item_name")
         self._inventory_item_description: Locator = self.locator(".inventory_item_desc")
         self._inventory_item_price: Locator = self.locator(".inventory_item_price")
-        self._inventory_item_add_to_cart_button: Locator = page.get_by_role(
-            "button", name=ADD_TO_CART_BUTTON_TEXT
+        self._inventory_item_add_to_cart_button: Locator = page.locator(
+            ".btn_inventory"
         )
         self._inventory_item_remove_button: Locator = page.get_by_role(
             "button", name=REMOVE_FROM_CART_BUTTON_TEXT
         )
 
-        self._cart_button = page.locator(".shopping_cart_link")
-        self._add_to_cart_button = page.get_by_role(
-            "button", name=ADD_TO_CART_BUTTON_TEXT
-        )
-        self._shopping_cart_counter: Locator = self._page.locator(
-            ".shopping_cart_badge"
-        )
+        self._cart_button: Locator = self.locator(".shopping_cart_link")
+        self._cart_counter: Locator = self._page.locator(".shopping_cart_badge")
 
     def get_hamburger_button(self, timeout: Optional[int] = None) -> Locator:
         timeout_ms: int = self._timeout_ms(timeout)
@@ -263,7 +258,9 @@ class InventoryPage(BasePage):
         timeout_ms: int = self._timeout_ms(timeout)
         if self.is_all_items_container_displayed(timeout=timeout_ms):
             try:
-                self._add_to_cart_button.nth(item_index).click(timeout=timeout_ms)
+                self._inventory_item_object.nth(item_index).locator(
+                    ".btn_inventory"
+                ).click()
             except PlaywrightTimeoutError:
                 raise RuntimeError(
                     f"Timed out waiting for item #{item_index} to be displayed (after {timeout_ms} ms)"
@@ -283,8 +280,8 @@ class InventoryPage(BasePage):
 
     def get_cart_counter(self, timeout: Optional[int] = None) -> int:
         timeout_ms: int = self._timeout_ms(timeout)
-        self._shopping_cart_counter.wait_for(state="visible", timeout=timeout_ms)
-        cart_counter: str = self._shopping_cart_counter.inner_text().strip()
+        self._cart_counter.wait_for(state="visible", timeout=timeout_ms)
+        cart_counter: str = self._cart_counter.inner_text().strip()
         try:
             return int(cart_counter)
         except ValueError:
@@ -295,7 +292,7 @@ class InventoryPage(BasePage):
     def is_cart_empty(self, timeout: Optional[int] = None) -> bool:
         timeout_ms: int = self._timeout_ms(timeout)
         try:
-            self._shopping_cart_counter.wait_for(state="hidden", timeout=timeout_ms)
+            self._cart_counter.wait_for(state="hidden", timeout=timeout_ms)
             return True
         except PlaywrightTimeoutError:
             return False
