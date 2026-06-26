@@ -43,18 +43,18 @@ class InventoryPage(BasePage):
         self._inventory_logo: Locator = self.locator(".app_logo")
 
         self._hamburger_button: Locator = page.get_by_role("button", name="Open Menu")
-        self._left_menu: Locator = page.locator(".bm-menu")
+        self._left_menu: Locator = self.locator(".bm-menu")
         self._logout_link: Locator = page.get_by_role("link", name="Logout")
-        self._all_left_menu_items: Locator = page.locator(".bm-menu-wrap .menu-item")
+        self._all_left_menu_items: Locator = self.locator(".bm-menu-wrap .menu-item")
 
-        self._products_title: Locator = page.locator(".title")
+        self._products_title: Locator = self.locator(".title")
         self._products_filter: Locator = page.get_by_role("combobox")
 
-        self._all_items_container: Locator = page.locator(".inventory_list")
-        self._inventory_item_object: Locator = page.locator(".inventory_item")
-        self._inventory_item_name: Locator = page.locator(".inventory_item_name")
-        self._inventory_item_description: Locator = page.locator(".inventory_item_desc")
-        self._inventory_item_price: Locator = page.locator(".inventory_item_price")
+        self._all_items_container: Locator = self.locator(".inventory_list")
+        self._inventory_item_object: Locator = self.locator(".inventory_item")
+        self._inventory_item_name: Locator = self.locator(".inventory_item_name")
+        self._inventory_item_description: Locator = self.locator(".inventory_item_desc")
+        self._inventory_item_price: Locator = self.locator(".inventory_item_price")
         self._inventory_item_add_to_cart_button: Locator = page.get_by_role(
             "button", name=ADD_TO_CART_BUTTON_TEXT
         )
@@ -108,10 +108,10 @@ class InventoryPage(BasePage):
             from .login_page import LoginPage
 
             return LoginPage(self._page)
-        except RuntimeError as e:
+        except RuntimeError as exception:
             raise RuntimeError(
                 f"Timed out waiting for logout to reach {BASE_URL} after {timeout_ms} ms"
-            ) from e
+            ) from exception
 
     def get_document_title(self, timeout: Optional[int] = None) -> str:
         timeout_ms: int = self._timeout_ms(timeout)
@@ -175,7 +175,7 @@ class InventoryPage(BasePage):
             f"Timed out waiting for all container items to be displayed (after {timeout_ms} ms)"
         )
 
-    def get_all_products_description(self, timeout: Optional[int] = None) -> List[str]:
+    def get_all_products_descriptions(self, timeout: Optional[int] = None) -> List[str]:
         timeout_ms: int = self._timeout_ms(timeout)
         if self.is_all_items_container_displayed(timeout=timeout_ms):
             all_products_descriptions: List[str] = [
@@ -187,7 +187,7 @@ class InventoryPage(BasePage):
             f"Timed out waiting for all container items to be displayed (after {timeout_ms} ms)"
         )
 
-    def get_all_products_price(self, timeout: Optional[int] = None) -> List[str]:
+    def get_all_products_prices(self, timeout: Optional[int] = None) -> List[str]:
         timeout_ms: int = self._timeout_ms(timeout)
         if self.is_all_items_container_displayed(timeout=timeout_ms):
             all_products_price: List[str] = [
@@ -203,10 +203,10 @@ class InventoryPage(BasePage):
     ) -> dict[str, dict[str, str]]:
         timeout_ms: int = self._timeout_ms(timeout)
         all_inventory_items_names: List[str] = self.get_all_products_names(timeout_ms)
-        all_inventory_items_descriptions: List[str] = self.get_all_products_description(
-            timeout_ms
+        all_inventory_items_descriptions: List[str] = (
+            self.get_all_products_descriptions(timeout_ms)
         )
-        all_inventory_items_prices: List[str] = self.get_all_products_price(timeout_ms)
+        all_inventory_items_prices: List[str] = self.get_all_products_prices(timeout_ms)
 
         inventory_items_data: dict[str, dict[str, str]] = dict()
         try:
