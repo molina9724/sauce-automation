@@ -124,8 +124,8 @@ class CartPage(BasePage):
 
     def get_amount_of_items_in_cart(self, timeout: Optional[int] = None) -> int:
         timeout_ms: int = self._timeout_ms(timeout)
-        index = 0
         if self.is_cart_list_container_displayed(timeout_ms):
+            index = 0
             try:
                 all_items: List[Locator] = self._item_object.all()
                 for index, item in enumerate(all_items):
