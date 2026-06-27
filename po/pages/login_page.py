@@ -3,16 +3,15 @@ from typing import TYPE_CHECKING, Optional
 from playwright.sync_api import Locator, Page
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 
+from sauce_project.data.products import PERFORMANCE_GLITCHED_USER
+
 from .base_page import INVENTORY_URL, BasePage
 
 if TYPE_CHECKING:
     from .inventory_page import InventoryPage
 
-
 INCREASED_TIMEOUT = 20000
 SHORT_TIMEOUT = 600
-
-PERFORMANCE_GLITCHED_USER = "performance_glitch_user"
 
 
 class LoginPage(BasePage):

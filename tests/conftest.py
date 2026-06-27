@@ -1,7 +1,7 @@
 import pytest
 from playwright.sync_api import Page
 
-from sauce_project.tests.test_cart import ALL_ITEMS_INDEX, ITEM_INDEX
+from sauce_project.data.products import ALL_ITEMS_INDEX, ITEM_INDEX
 
 from ..po.pages.base_page import LOGIN_URL
 from ..po.pages.cart_page import CartPage

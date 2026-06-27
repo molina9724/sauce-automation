@@ -1,29 +1,18 @@
-import random
-
 import pytest
 from playwright.sync_api import expect
 
-from sauce_project.po.pages.base_page import BASE_URL, INVENTORY_URL
+from sauce_project.data.products import (
+    DEFAULT_BLOCKED_USER,
+    DEFAULT_UNLOCKED_USER,
+    EXPECTED_LOGIN_USERNAMES,
+    PASSWORD,
+    SUCCESS_LOGIN_DATA,
+    UNLOCKED_USERS,
+    WRONG_PASSWORD,
+)
+from sauce_project.po.pages.base_page import BASE_URL
 from sauce_project.po.pages.inventory_page import InventoryPage
 from sauce_project.po.pages.login_page import LoginPage
-
-UNLOCKED_USERS = (
-    "standard_user",
-    "problem_user",
-    "performance_glitch_user",
-    "error_user",
-    "visual_user",
-)
-LOCKED_USERS = ("locked_out_user",)
-ALL_USERS = (UNLOCKED_USERS[0],) + LOCKED_USERS + UNLOCKED_USERS[1:]
-RANDOM_UNBLOCKED_USER = random.choice(UNLOCKED_USERS)
-RANDOM_LOCKED_USER = random.choice(LOCKED_USERS)
-
-PASSWORD = "secret_sauce"
-WRONG_PASSWORD = "wrong_password"
-
-EXPECTED_LOGIN_USERNAMES = list(ALL_USERS)
-SUCCESS_LOGIN_DATA = [(user, PASSWORD, INVENTORY_URL) for user in UNLOCKED_USERS]
 
 
 def test_01_document_title(login_page: LoginPage) -> None:
@@ -87,7 +76,7 @@ def test_12_unsuccessful_login_username_and_empty_password(
     login_page: LoginPage,
 ) -> None:
     with pytest.raises(RuntimeError) as exception_information:
-        login_page.login(username=RANDOM_UNBLOCKED_USER, password="")
+        login_page.login(username=DEFAULT_UNLOCKED_USER, password="")
     assert "Epic sadface: Password is required" in str(exception_information.value)
 
 
@@ -103,7 +92,7 @@ def test_14_unsuccessful_login_right_username_but_wrong_password(
     login_page: LoginPage,
 ) -> None:
     with pytest.raises(RuntimeError) as exception_information:
-        login_page.login(username=RANDOM_UNBLOCKED_USER, password=WRONG_PASSWORD)
+        login_page.login(username=DEFAULT_UNLOCKED_USER, password=WRONG_PASSWORD)
     assert (
         "Epic sadface: Username and password do not match any user in this service"
         in str(exception_information.value)
@@ -112,7 +101,7 @@ def test_14_unsuccessful_login_right_username_but_wrong_password(
 
 def test_15_unsuccessful_login_with_locked_account(login_page: LoginPage) -> None:
     with pytest.raises(RuntimeError) as exception_information:
-        login_page.login(username=RANDOM_LOCKED_USER, password=PASSWORD)
+        login_page.login(username=DEFAULT_BLOCKED_USER, password=PASSWORD)
     assert "Epic sadface: Sorry, this user has been locked out" in str(
         exception_information.value
     )
