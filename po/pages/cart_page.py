@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import TYPE_CHECKING, List, Optional
 
 from playwright.sync_api import Locator, Page
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
@@ -6,8 +6,12 @@ from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 from .base_page import BasePage
 from .inventory_page import InventoryPage
 
+if TYPE_CHECKING:
+    from .checkout_step_1 import CheckoutStepOnePage
+
 REMOVE_BUTTON_NAME = "Remove"
 CONTINUE_SHOPPING_BUTTON_NAME = "Continue Shopping"
+CHECKOUT_BUTTON_NAME = "Checkout"
 
 
 class CartPage(BasePage):
@@ -26,6 +30,9 @@ class CartPage(BasePage):
 
         self._continue_shopping_button: Locator = page.get_by_role(
             "button", name=CONTINUE_SHOPPING_BUTTON_NAME
+        )
+        self._checkout_button: Locator = page.get_by_role(
+            "button", name=CHECKOUT_BUTTON_NAME
         )
 
     def is_cart_list_container_displayed(self, timeout: Optional[int] = None) -> bool:
@@ -159,4 +166,21 @@ class CartPage(BasePage):
         except PlaywrightTimeoutError:
             raise RuntimeError(
                 f"Timed out waiting for {CONTINUE_SHOPPING_BUTTON_NAME} button to be clicked (after {timeout_ms} ms)"
+            )
+
+    def is_checkout_button_displayed(self, timeout: Optional[int] = None) -> bool:
+        timeout_ms: int = self._timeout_ms(timeout)
+        self._checkout_button.wait_for(state="visible", timeout=timeout_ms)
+        return self._checkout_button.is_visible()
+
+    def get_checkout_step_1_page(
+        self, timeout: Optional[int] = None
+    ) -> "CheckoutStepOnePage":
+        timeout_ms: int = self._timeout_ms(timeout)
+        try:
+            self._checkout_button.click(timeout=timeout_ms)
+            return CheckoutStepOnePage(self._page)
+        except PlaywrightTimeoutError:
+            raise RuntimeError(
+                f"Timed out waiting for {CHECKOUT_BUTTON_NAME} button to be clicked (after {timeout_ms} ms)"
             )
