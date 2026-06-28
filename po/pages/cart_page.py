@@ -37,8 +37,11 @@ class CartPage(BasePage):
 
     def is_cart_list_container_displayed(self, timeout: Optional[int] = None) -> bool:
         timeout_ms: int = self._timeout_ms(timeout)
-        self._cart_list.wait_for(state="visible", timeout=timeout_ms)
-        return self._cart_list.is_visible()
+        try:
+            self._cart_list.wait_for(state="visible", timeout=timeout_ms)
+            return True
+        except PlaywrightTimeoutError:
+            return False
 
     def is_cart_empty(self, timeout: Optional[int] = None) -> bool:
         timeout_ms: int = self._timeout_ms(timeout)
@@ -155,8 +158,11 @@ class CartPage(BasePage):
         self, timeout: Optional[int] = None
     ) -> bool:
         timeout_ms: int = self._timeout_ms(timeout)
-        self._continue_shopping_button.wait_for(state="visible", timeout=timeout_ms)
-        return self._continue_shopping_button.is_visible()
+        try:
+            self._continue_shopping_button.wait_for(state="visible", timeout=timeout_ms)
+            return True
+        except PlaywrightTimeoutError:
+            return False
 
     def get_inventory_page(self, timeout: Optional[int] = None) -> InventoryPage:
         timeout_ms: int = self._timeout_ms(timeout)
@@ -170,8 +176,11 @@ class CartPage(BasePage):
 
     def is_checkout_button_displayed(self, timeout: Optional[int] = None) -> bool:
         timeout_ms: int = self._timeout_ms(timeout)
-        self._checkout_button.wait_for(state="visible", timeout=timeout_ms)
-        return self._checkout_button.is_visible()
+        try:
+            self._checkout_button.wait_for(state="visible", timeout=timeout_ms)
+            return True
+        except PlaywrightTimeoutError:
+            return False
 
     def get_checkout_step_1_page(
         self, timeout: Optional[int] = None
@@ -179,6 +188,8 @@ class CartPage(BasePage):
         timeout_ms: int = self._timeout_ms(timeout)
         try:
             self._checkout_button.click(timeout=timeout_ms)
+            from .checkout_step_1 import CheckoutStepOnePage
+
             return CheckoutStepOnePage(self._page)
         except PlaywrightTimeoutError:
             raise RuntimeError(

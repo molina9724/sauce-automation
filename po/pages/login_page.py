@@ -108,25 +108,37 @@ class LoginPage(BasePage):
         self._logo_heading.wait_for(state="visible", timeout=timeout_ms)
         return self._logo_heading.inner_text().strip()
 
-    def is_username_visible(self, timeout: Optional[int] = None) -> bool:
+    def is_username_displayed(self, timeout: Optional[int] = None) -> bool:
         timeout_ms: int = self._timeout_ms(timeout)
-        self._username.wait_for(state="visible", timeout=timeout_ms)
-        return self._username.is_visible()
+        try:
+            self._username.wait_for(state="visible", timeout=timeout_ms)
+            return True
+        except PlaywrightTimeoutError:
+            return False
 
-    def is_password_visible(self, timeout: Optional[int] = None) -> bool:
+    def is_password_displayed(self, timeout: Optional[int] = None) -> bool:
         timeout_ms: int = self._timeout_ms(timeout)
-        self._password.wait_for(state="visible", timeout=timeout_ms)
-        return self._password.is_visible()
+        try:
+            self._password.wait_for(state="visible", timeout=timeout_ms)
+            return True
+        except PlaywrightTimeoutError:
+            return False
 
-    def is_login_button_visible(self, timeout: Optional[int] = None) -> bool:
+    def is_login_button_displayed(self, timeout: Optional[int] = None) -> bool:
         timeout_ms: int = self._timeout_ms(timeout)
-        self._login_button.wait_for(state="visible", timeout=timeout_ms)
-        return self._login_button.is_visible()
+        try:
+            self._login_button.wait_for(state="visible", timeout=timeout_ms)
+            return True
+        except PlaywrightTimeoutError:
+            return False
 
-    def is_usernames_heading_visible(self, timeout: Optional[int] = None) -> bool:
+    def is_usernames_heading_displayed(self, timeout: Optional[int] = None) -> bool:
         timeout_ms: int = self._timeout_ms(timeout)
-        self._usernames_heading.wait_for(state="visible", timeout=timeout_ms)
-        return self._usernames_heading.is_visible()
+        try:
+            self._usernames_heading.wait_for(state="visible", timeout=timeout_ms)
+            return True
+        except PlaywrightTimeoutError:
+            return False
 
     def get_credentials_container_text(self, timeout: Optional[int] = None) -> str:
         timeout_ms: int = self._timeout_ms(timeout)
@@ -147,8 +159,11 @@ class LoginPage(BasePage):
         self, timeout: Optional[int] = None
     ) -> bool:
         timeout_ms: int = self._timeout_ms(timeout)
-        self._password_heading.wait_for(state="visible", timeout=timeout_ms)
-        return self._password_heading.is_visible()
+        try:
+            self._password_heading.wait_for(state="visible", timeout=timeout_ms)
+            return True
+        except PlaywrightTimeoutError:
+            return False
 
     def get_password(self, timeout: Optional[int] = None) -> list[str]:
         timeout_ms: int = self._timeout_ms(timeout)
@@ -165,7 +180,7 @@ class LoginPage(BasePage):
 
     def is_password_masked(self, timeout: Optional[int] = None) -> bool:
         timeout_ms: int = self._timeout_ms(timeout)
-        if self.is_password_visible(timeout_ms):
+        if self.is_password_displayed(timeout_ms):
             password_masked: str | None = self._password.get_attribute("type")
             if password_masked == "password":
                 return True

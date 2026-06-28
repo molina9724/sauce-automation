@@ -24,19 +24,19 @@ def test_02_page_title(login_page: LoginPage) -> None:
 
 
 def test_03_username_textbox_is_displayed(login_page: LoginPage) -> None:
-    assert login_page.is_username_visible()
+    assert login_page.is_username_displayed()
 
 
 def test_04_password_textbox_is_displayed(login_page: LoginPage) -> None:
-    assert login_page.is_password_visible()
+    assert login_page.is_password_displayed()
 
 
 def test_05_login_button_is_displayed(login_page: LoginPage) -> None:
-    assert login_page.is_login_button_visible()
+    assert login_page.is_login_button_displayed()
 
 
 def test_06_usernames_heading_is_displayed(login_page: LoginPage) -> None:
-    assert login_page.is_usernames_heading_visible()
+    assert login_page.is_usernames_heading_displayed()
 
 
 def test_07_usernames(login_page: LoginPage) -> None:

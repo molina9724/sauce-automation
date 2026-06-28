@@ -76,8 +76,11 @@ class InventoryPage(BasePage):
 
     def is_left_menu_displayed(self, timeout: Optional[int] = None) -> bool:
         timeout_ms: int = self._timeout_ms(timeout)
-        self._left_menu.wait_for(state="visible", timeout=timeout_ms)
-        return self._left_menu.is_visible()
+        try:
+            self._left_menu.wait_for(state="visible", timeout=timeout_ms)
+            return True
+        except PlaywrightTimeoutError:
+            return False
 
     def get_left_menu_elements(self, timeout: Optional[int] = None) -> list[str]:
         timeout_ms: int = self._timeout_ms(timeout)
@@ -125,8 +128,11 @@ class InventoryPage(BasePage):
 
     def is_products_filter_displayed(self, timeout: Optional[int] = None) -> bool:
         timeout_ms: int = self._timeout_ms(timeout)
-        self._products_filter.wait_for(state="visible", timeout=timeout_ms)
-        return self._products_filter.is_visible()
+        try:
+            self._products_filter.wait_for(state="visible", timeout=timeout_ms)
+            return True
+        except PlaywrightTimeoutError:
+            return False
 
     def get_products_filter_object(self, timeout: Optional[int] = None) -> Locator:
         timeout_ms: int = self._timeout_ms(timeout)
@@ -156,8 +162,11 @@ class InventoryPage(BasePage):
 
     def is_all_items_container_displayed(self, timeout: Optional[int] = None) -> bool:
         timeout_ms: int = self._timeout_ms(timeout)
-        self._all_items_container.wait_for(state="visible", timeout=timeout_ms)
-        return self._all_items_container.is_visible()
+        try:
+            self._all_items_container.wait_for(state="visible", timeout=timeout_ms)
+            return True
+        except PlaywrightTimeoutError:
+            return False
 
     def get_all_products_names(self, timeout: Optional[int] = None) -> List[str]:
         timeout_ms: int = self._timeout_ms(timeout)
