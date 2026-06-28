@@ -4,8 +4,10 @@ from playwright.sync_api import Locator, Page
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 
 from .base_page import BasePage
+from .inventory_page import InventoryPage
 
 REMOVE_BUTTON_NAME = "Remove"
+CONTINUE_SHOPPING_BUTTON_NAME = "Continue Shopping"
 
 
 class CartPage(BasePage):
@@ -20,6 +22,10 @@ class CartPage(BasePage):
         self._item_price: Locator = self.locator(".inventory_item_price")
         self._remove_item_button: Locator = page.get_by_role(
             "button", name=REMOVE_BUTTON_NAME
+        )
+
+        self._continue_shopping_button: Locator = page.get_by_role(
+            "button", name=CONTINUE_SHOPPING_BUTTON_NAME
         )
 
     def is_cart_list_container_displayed(self, timeout: Optional[int] = None) -> bool:
@@ -137,3 +143,20 @@ class CartPage(BasePage):
             else:
                 return len(all_items)
         return 0
+
+    def is_continue_shopping_button_displayed(
+        self, timeout: Optional[int] = None
+    ) -> bool:
+        timeout_ms: int = self._timeout_ms(timeout)
+        self._continue_shopping_button.wait_for(state="visible", timeout=timeout_ms)
+        return self._continue_shopping_button.is_visible()
+
+    def get_inventory_page(self, timeout: Optional[int] = None) -> InventoryPage:
+        timeout_ms: int = self._timeout_ms(timeout)
+        try:
+            self._continue_shopping_button.click(timeout=timeout_ms)
+            return InventoryPage(self._page)
+        except PlaywrightTimeoutError:
+            raise RuntimeError(
+                f"Timed out waiting for {CONTINUE_SHOPPING_BUTTON_NAME} button to be clicked (after {timeout_ms} ms)"
+            )

@@ -10,13 +10,14 @@ from sauce_project.data.products import (
     ITEM_INDEX,
     LEFT_MENU_COMPONENTS,
 )
+from sauce_project.po.pages.cart_page import CartPage
 from sauce_project.po.pages.inventory_page import InventoryPage
 from sauce_project.po.pages.login_page import LoginPage
 
 
 def get_price_value(item: tuple[str, dict[str, str]]) -> float:
     _, data = item
-    price_text = data["price"]
+    price_text: str = data["price"]
     return float(price_text[1:])
 
 
@@ -123,3 +124,8 @@ def test_14_verify_cart_is_empty_after_adding_item_and_removing_it(
     assert inventory_page.get_cart_counter() == 1
     inventory_page.remove_item_from_cart(ITEM_INDEX)
     assert inventory_page.is_cart_empty()
+
+
+def test_15_go_back_to_continue_shopping(cart_page_with_item: CartPage) -> None:
+    inventory_page: InventoryPage = cart_page_with_item.get_inventory_page()
+    assert inventory_page.get_cart_counter() == 1
