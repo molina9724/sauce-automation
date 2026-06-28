@@ -7,7 +7,7 @@ from .base_page import BasePage
 from .inventory_page import InventoryPage
 
 if TYPE_CHECKING:
-    from .checkout_step_1 import CheckoutStepOnePage
+    from .checkout_step_1_page import CheckoutStepOnePage
 
 REMOVE_BUTTON_NAME = "Remove"
 CONTINUE_SHOPPING_BUTTON_NAME = "Continue Shopping"
@@ -188,7 +188,7 @@ class CartPage(BasePage):
         timeout_ms: int = self._timeout_ms(timeout)
         try:
             self._checkout_button.click(timeout=timeout_ms)
-            from .checkout_step_1 import CheckoutStepOnePage
+            from .checkout_step_1_page import CheckoutStepOnePage
 
             return CheckoutStepOnePage(self._page)
         except PlaywrightTimeoutError:
