@@ -99,5 +99,5 @@ class CheckoutStepOnePage(BasePage):
                     f"Timed out waiting for checkout to reach {CART_URL} after {timeout_ms} ms"
                 )
         raise RuntimeError(
-            f"Timed out waiting for {CANCEL_BUTTON_TEXT} to be a displayed after {timeout_ms} ms"
+            f"Timed out waiting for {CANCEL_BUTTON_TEXT} to be displayed after {timeout_ms} ms"
         )
