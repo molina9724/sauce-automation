@@ -1,5 +1,8 @@
 import pytest
+from playwright.sync_api import expect
 
+from sauce_project.po.pages.base_page import CART_URL
+from sauce_project.po.pages.cart_page import CartPage
 from sauce_project.po.pages.checkout_step_1_page import CheckoutStepOnePage
 
 FIRST_NAME = "test_name"
@@ -35,3 +38,10 @@ def test_03_verify_checkout_error_with_empty_zip_code(
             first_name=FIRST_NAME, last_name=LAST_NAME, zip_code=""
         )
     assert "Error: Postal Code is required" == str(exception_information.value)
+
+
+def test_04_verify_cancel_button_takes_user_back_to_cart_page(
+    checkout_step_1_with_item: CheckoutStepOnePage,
+) -> None:
+    cart_page: CartPage = checkout_step_1_with_item.get_cart_page()
+    expect(cart_page._page).to_have_url("https://www.saucedemo.com/cart.html")

@@ -3,7 +3,8 @@ from typing import TYPE_CHECKING, Optional
 from playwright.sync_api import Locator, Page
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 
-from sauce_project.po.pages.base_page import CHECKOUT_STEP_2_URL, BasePage
+from sauce_project.po.pages.base_page import CART_URL, CHECKOUT_STEP_2_URL, BasePage
+from sauce_project.po.pages.cart_page import CartPage
 
 if TYPE_CHECKING:
     from .checkout_step_2_page import CheckoutStepTwoPage
@@ -77,3 +78,26 @@ class CheckoutStepOnePage(BasePage):
             raise RuntimeError(
                 f"Timed out waiting for checkout to reach {CHECKOUT_STEP_2_URL} after {timeout_ms} ms"
             )
+
+    def is_cancel_button_displayed(self, timeout: Optional[int] = None) -> bool:
+        timeout_ms: int = self._timeout_ms(timeout)
+        try:
+            self._cancel_button.wait_for(state="visible", timeout=timeout_ms)
+            return True
+        except PlaywrightTimeoutError:
+            return False
+
+    def get_cart_page(self, timeout: Optional[int] = None) -> CartPage:
+        timeout_ms: int = self._timeout_ms(timeout)
+        if self.is_cancel_button_displayed(timeout=timeout_ms):
+            try:
+                self._cancel_button.click()
+                self.wait_for_url(CART_URL, timeout_ms)
+                return CartPage(self._page)
+            except RuntimeError:
+                raise RuntimeError(
+                    f"Timed out waiting for checkout to reach {CART_URL} after {timeout_ms} ms"
+                )
+        raise RuntimeError(
+            f"Timed out waiting for {CANCEL_BUTTON_TEXT} to be displayed after {timeout_ms} ms"
+        )
