@@ -1,19 +1,20 @@
-from math import exp
-
 import pytest
 from playwright.sync_api import expect
 
+# fmt: off
 from sauce_project.data.checkout_step_1_data import (
-    EMPTY_FIRST_NAME_ERROR,
-    EMPTY_LAST_NAME_ERROR,
-    EMPTY_ZIP_CODE_ERROR,
-    FIRST_NAME,
-    LAST_NAME,
-    ZIP_CODE,
+    ACCESS_CHECKOUT_STEP_1_PAGE_WITHOUT_LOGIN_ERROR, EMPTY_FIRST_NAME_ERROR,
+    EMPTY_LAST_NAME_ERROR, EMPTY_ZIP_CODE_ERROR, FIRST_NAME, LAST_NAME,
+    ZIP_CODE)
+# fmt: on
+from sauce_project.po.pages.base_page import (
+    CART_URL,
+    CHECKOUT_STEP_1_URL,
+    CHECKOUT_STEP_2_URL,
 )
-from sauce_project.po.pages.base_page import CART_URL, CHECKOUT_STEP_2_URL
 from sauce_project.po.pages.cart_page import CartPage
 from sauce_project.po.pages.checkout_step_1_page import CheckoutStepOnePage
+from sauce_project.tests.conftest import LoginPage
 
 
 def test_01_verify_checkout_error_with_empty_first_name(
@@ -60,3 +61,11 @@ def test_05_verify_user_is_taken_to_checkout_step_2_after_successfully_filling_d
         first_name=FIRST_NAME, last_name=LAST_NAME, zip_code=ZIP_CODE
     )
     expect(checkout_step_1_with_item._page).to_have_url(CHECKOUT_STEP_2_URL)
+
+
+def test_06_verify_exception_when_accessing_checkout_step_1_page_error_without_login(
+    login_page: LoginPage,
+) -> None:
+    with pytest.raises(RuntimeError) as exception:
+        login_page.attempt_access_unauthenticated(CHECKOUT_STEP_1_URL)
+    assert ACCESS_CHECKOUT_STEP_1_PAGE_WITHOUT_LOGIN_ERROR == str(exception.value)

@@ -2,8 +2,10 @@ import pytest
 from playwright.sync_api import Page
 
 from sauce_project.data.cart_data import ALL_ITEMS_INDEX
+from sauce_project.data.checkout_step_1_data import FIRST_NAME, LAST_NAME, ZIP_CODE
 from sauce_project.data.global_data import ITEM_INDEX
 from sauce_project.data.login_data import DEFAULT_UNLOCKED_USER, PASSWORD
+from sauce_project.po.pages.checkout_step_2_page import CheckoutStepTwoPage
 
 from ..po.pages.base_page import LOGIN_URL
 from ..po.pages.cart_page import CartPage
@@ -50,3 +52,13 @@ def checkout_step_1_with_item(cart_page_with_item: CartPage) -> CheckoutStepOneP
         cart_page_with_item.get_checkout_step_1_page()
     )
     return checkout_step_1_page_with_item
+
+
+@pytest.fixture
+def checkout_step_2_with_item(checkout_step_1_with_item: CheckoutStepOnePage):
+    checkout_step_2_with_item: CheckoutStepTwoPage = (
+        checkout_step_1_with_item.fill_in_checkout_information(
+            first_name=FIRST_NAME, last_name=LAST_NAME, zip_code=ZIP_CODE
+        )
+    )
+    return checkout_step_2_with_item

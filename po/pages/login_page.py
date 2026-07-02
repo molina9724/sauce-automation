@@ -186,12 +186,14 @@ class LoginPage(BasePage):
                 return True
         return False
 
-    def attempt_access_unauthenticated(self, timeout: Optional[int] = None) -> None:
+    def attempt_access_unauthenticated(
+        self, url: str, timeout: Optional[int] = None
+    ) -> None:
         timeout_ms: int = self._timeout_ms(timeout)
-        self._page.goto(INVENTORY_URL)
+        self._page.goto(url)
         try:
             self._error_header.wait_for(state="visible", timeout=timeout_ms)
-            error_message = self.get_error_text()
+            error_message: str | None = self.get_error_text()
             raise RuntimeError(error_message)
         except PlaywrightTimeoutError:
             raise RuntimeError(

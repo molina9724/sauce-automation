@@ -1,15 +1,13 @@
 import pytest
 from playwright.sync_api import expect
 
-from sauce_project.data.login_data import (
-    DEFAULT_BLOCKED_USER,
-    DEFAULT_UNLOCKED_USER,
-    EXPECTED_LOGIN_USERNAMES,
-    PASSWORD,
-    SUCCESS_LOGIN_DATA,
-    UNLOCKED_USERS,
-    WRONG_PASSWORD,
-)
+# fmt: off
+from sauce_project.data.login_data import (DEFAULT_BLOCKED_USER,
+                                           DEFAULT_UNLOCKED_USER,
+                                           EXPECTED_LOGIN_USERNAMES, PASSWORD,
+                                           SUCCESS_LOGIN_DATA, UNLOCKED_USERS,
+                                           WRONG_PASSWORD)
+# fmt: on
 from sauce_project.po.pages.base_page import BASE_URL
 from sauce_project.po.pages.inventory_page import InventoryPage
 from sauce_project.po.pages.login_page import LoginPage

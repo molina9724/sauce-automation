@@ -1,8 +1,14 @@
+import pytest
 from playwright.sync_api import expect
 
-from sauce_project.data.cart_data import CART_ITEM_DATA
+# fmt: off
+from sauce_project.data.cart_data import (ACCESS_CART_PAGE_WITHOUT_LOGIN_ERROR,
+                                          CART_ITEM_DATA)
+# fmt: on
+from sauce_project.po.pages.base_page import CART_URL
 from sauce_project.po.pages.cart_page import CartPage
 from sauce_project.po.pages.checkout_step_1_page import CheckoutStepOnePage
+from sauce_project.po.pages.login_page import LoginPage
 
 
 def test_00_verify__cart_url(empty_cart_page: CartPage) -> None:
@@ -32,3 +38,11 @@ def test_05_verify_items_remain_in_cart_after_pressing_cancel_in_checkout_step_o
 ) -> None:
     cart_page: CartPage = checkout_step_1_with_item.get_cart_page()
     assert cart_page.get_all_products_information() == CART_ITEM_DATA
+
+
+def test_06_verify_exception_when_accessing_checkout_step_1_page_error_without_login(
+    login_page: LoginPage,
+) -> None:
+    with pytest.raises(RuntimeError) as exception:
+        login_page.attempt_access_unauthenticated(CART_URL)
+    assert ACCESS_CART_PAGE_WITHOUT_LOGIN_ERROR == str(exception.value)

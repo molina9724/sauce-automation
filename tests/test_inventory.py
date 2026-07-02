@@ -5,11 +5,12 @@ from playwright.sync_api import expect
 
 from sauce_project.data.cart_data import INVENTORY_ITEMS_DATA
 from sauce_project.data.global_data import ITEM_INDEX
-from sauce_project.data.inventory_data import (
-    ALL_PRICES_FILTER_OPTIONS,
-    DEFAULT_FILTER_VALUE,
-    LEFT_MENU_COMPONENTS,
-)
+# fmt: off
+from sauce_project.data.inventory_data import (ALL_PRICES_FILTER_OPTIONS,
+                                               DEFAULT_FILTER_VALUE,
+                                               LEFT_MENU_COMPONENTS)
+# fmt: on
+from sauce_project.po.pages.base_page import INVENTORY_URL
 from sauce_project.po.pages.cart_page import CartPage
 from sauce_project.po.pages.checkout_step_1_page import CheckoutStepOnePage
 from sauce_project.po.pages.inventory_page import InventoryPage
@@ -98,7 +99,7 @@ def test_10_verify_exception_when_trying_to_access_inventory_page_without_login(
     login_page: LoginPage,
 ) -> None:
     with pytest.raises(RuntimeError) as exception_information:
-        login_page.attempt_access_unauthenticated()
+        login_page.attempt_access_unauthenticated(INVENTORY_URL)
     assert (
         "Epic sadface: You can only access '/inventory.html' when you are logged in."
         == str(exception_information.value)
