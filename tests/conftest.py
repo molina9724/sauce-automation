@@ -1,12 +1,9 @@
 import pytest
 from playwright.sync_api import Page
 
-from sauce_project.data.products import (
-    ALL_ITEMS_INDEX,
-    DEFAULT_UNLOCKED_USER,
-    ITEM_INDEX,
-    PASSWORD,
-)
+from sauce_project.data.cart_data import ALL_ITEMS_INDEX
+from sauce_project.data.global_data import ITEM_INDEX
+from sauce_project.data.login_data import DEFAULT_UNLOCKED_USER, PASSWORD
 
 from ..po.pages.base_page import LOGIN_URL
 from ..po.pages.cart_page import CartPage

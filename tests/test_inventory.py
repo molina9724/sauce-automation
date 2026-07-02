@@ -3,14 +3,15 @@ from typing import List
 import pytest
 from playwright.sync_api import expect
 
-from sauce_project.data.products import (
+from sauce_project.data.cart_data import INVENTORY_ITEMS_DATA
+from sauce_project.data.global_data import ITEM_INDEX
+from sauce_project.data.inventory_data import (
     ALL_PRICES_FILTER_OPTIONS,
     DEFAULT_FILTER_VALUE,
-    INVENTORY_ITEMS_DATA,
-    ITEM_INDEX,
     LEFT_MENU_COMPONENTS,
 )
 from sauce_project.po.pages.cart_page import CartPage
+from sauce_project.po.pages.checkout_step_1_page import CheckoutStepOnePage
 from sauce_project.po.pages.inventory_page import InventoryPage
 from sauce_project.po.pages.login_page import LoginPage
 
@@ -128,4 +129,12 @@ def test_14_verify_cart_is_empty_after_adding_item_and_removing_it(
 
 def test_15_go_back_to_continue_shopping(cart_page_with_item: CartPage) -> None:
     inventory_page: InventoryPage = cart_page_with_item.get_inventory_page()
+    assert inventory_page.get_cart_counter() == 1
+
+
+def test_16_verify_item_remain_in_cart_after_pressing_cancel_in_checkout_step_one_page(
+    checkout_step_1_with_item: CheckoutStepOnePage,
+) -> None:
+    cart_page: CartPage = checkout_step_1_with_item.get_cart_page()
+    inventory_page: InventoryPage = cart_page.get_inventory_page()
     assert inventory_page.get_cart_counter() == 1

@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Optional
 from playwright.sync_api import Locator, Page
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 
-from sauce_project.data.products import PERFORMANCE_GLITCHED_USER
+from sauce_project.data.login_data import PERFORMANCE_GLITCHED_USER
 
 from .base_page import INVENTORY_URL, BasePage
 

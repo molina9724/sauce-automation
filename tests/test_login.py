@@ -1,7 +1,7 @@
 import pytest
 from playwright.sync_api import expect
 
-from sauce_project.data.products import (
+from sauce_project.data.login_data import (
     DEFAULT_BLOCKED_USER,
     DEFAULT_UNLOCKED_USER,
     EXPECTED_LOGIN_USERNAMES,
