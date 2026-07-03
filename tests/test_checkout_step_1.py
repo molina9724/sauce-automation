@@ -6,15 +6,13 @@ from sauce_project.data.checkout_step_1_data import (
     ACCESS_CHECKOUT_STEP_1_PAGE_WITHOUT_LOGIN_ERROR, EMPTY_FIRST_NAME_ERROR,
     EMPTY_LAST_NAME_ERROR, EMPTY_ZIP_CODE_ERROR, FIRST_NAME, LAST_NAME,
     ZIP_CODE)
-# fmt: on
-from sauce_project.po.pages.base_page import (
-    CART_URL,
-    CHECKOUT_STEP_1_URL,
-    CHECKOUT_STEP_2_URL,
-)
+from sauce_project.po.pages.base_page import (CART_URL, CHECKOUT_STEP_1_URL,
+                                              CHECKOUT_STEP_2_URL)
 from sauce_project.po.pages.cart_page import CartPage
 from sauce_project.po.pages.checkout_step_1_page import CheckoutStepOnePage
-from sauce_project.tests.conftest import LoginPage
+from sauce_project.po.pages.login_page import LoginPage
+
+# fmt: on
 
 
 def test_01_verify_checkout_error_with_empty_first_name(

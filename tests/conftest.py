@@ -55,9 +55,33 @@ def checkout_step_1_with_item(cart_page_with_item: CartPage) -> CheckoutStepOneP
 
 
 @pytest.fixture
-def checkout_step_2_with_item(checkout_step_1_with_item: CheckoutStepOnePage):
+def checkout_step_1_with_all_items(
+    cart_page_with_all_items: CartPage,
+) -> CheckoutStepOnePage:
+    checkout_step_1_page_with_item: CheckoutStepOnePage = (
+        cart_page_with_all_items.get_checkout_step_1_page()
+    )
+    return checkout_step_1_page_with_item
+
+
+@pytest.fixture
+def checkout_step_2_with_item(
+    checkout_step_1_with_item: CheckoutStepOnePage,
+) -> CheckoutStepTwoPage:
     checkout_step_2_with_item: CheckoutStepTwoPage = (
         checkout_step_1_with_item.fill_in_checkout_information(
+            first_name=FIRST_NAME, last_name=LAST_NAME, zip_code=ZIP_CODE
+        )
+    )
+    return checkout_step_2_with_item
+
+
+@pytest.fixture
+def checkout_step_2_with_all_items(
+    checkout_step_1_with_all_items: CheckoutStepOnePage,
+) -> CheckoutStepTwoPage:
+    checkout_step_2_with_item: CheckoutStepTwoPage = (
+        checkout_step_1_with_all_items.fill_in_checkout_information(
             first_name=FIRST_NAME, last_name=LAST_NAME, zip_code=ZIP_CODE
         )
     )

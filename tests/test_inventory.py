@@ -3,11 +3,11 @@ from typing import List
 import pytest
 from playwright.sync_api import expect
 
-from sauce_project.data.cart_data import INVENTORY_ITEMS_DATA
 from sauce_project.data.global_data import ITEM_INDEX
 # fmt: off
 from sauce_project.data.inventory_data import (ALL_PRICES_FILTER_OPTIONS,
                                                DEFAULT_FILTER_VALUE,
+                                               INVENTORY_ITEMS_DATA,
                                                LEFT_MENU_COMPONENTS)
 # fmt: on
 from sauce_project.po.pages.base_page import INVENTORY_URL
