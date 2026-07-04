@@ -7,7 +7,7 @@ from sauce_project.po.pages.checkout_step_2_page import CURRENCY, TAXES
 TOTAL_ITEM_VALUE: str = INVENTORY_ITEMS_DATA[FIRST_ITEM_KEY]["price"]
 
 
-def add_all_prices(items: dict[str, dict[str, str]]) -> str:
+def calculate_subtotal(items: dict[str, dict[str, str]]) -> str:
     all_prices: list[str] = list()
     for internal_dict in items.values():
         all_prices.append(internal_dict["price"])
@@ -20,7 +20,7 @@ def add_all_prices(items: dict[str, dict[str, str]]) -> str:
 
 
 def calculate_taxes(items: dict[str, dict[str, str]]) -> str:
-    total: str = add_all_prices(items)
+    total: str = calculate_subtotal(items)
     total_without_currency = Decimal(total[1:])
 
     taxes: Decimal = round(total_without_currency * TAXES, 2)

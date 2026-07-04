@@ -1,5 +1,5 @@
 from decimal import Decimal
-from typing import List, Optional
+from typing import Optional
 
 from playwright.sync_api import Locator, Page
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
@@ -8,6 +8,10 @@ from sauce_project.po.pages.base_page import BasePage
 
 TAXES: Decimal = Decimal("0.08")
 CURRENCY = "$"
+
+SUBTOTAL: str = "Subtotal"
+TAX: str = "Tax"
+TOTAL: str = "Total"
 
 
 class CheckoutStepTwoPage(BasePage):
@@ -21,7 +25,11 @@ class CheckoutStepTwoPage(BasePage):
         self._item_description: Locator = self.locator(".inventory_item_desc")
         self._item_price: Locator = self.locator(".inventory_item_price")
 
-    def is_cart_list_visible(self, timeout: Optional[int] = None) -> bool:
+        self._subtotal: Locator = self.locator(".summary_subtotal_label")
+        self._tax: Locator = self.locator(".summary_tax_label")
+        self._total: Locator = self.locator(".summary_total_label")
+
+    def is_cart_list_displayed(self, timeout: Optional[int] = None) -> bool:
         timeout_ms: int = self._timeout_ms(timeout)
         try:
             self._cart_list.wait_for(state="visible", timeout=timeout_ms)
@@ -29,28 +37,46 @@ class CheckoutStepTwoPage(BasePage):
         except PlaywrightTimeoutError:
             return False
 
-    def calculate_item_total(self, timeout: Optional[int] = None) -> str:
+    def _extract_currency_value(self, locator: Locator, label: str) -> str:
+        value: str = locator.inner_text().strip()
+        currency_index: int = value.find(CURRENCY)
+
+        if currency_index != -1:
+            cleaned_value: str = value[currency_index:]
+            return cleaned_value
+        else:
+            raise RuntimeError(f"{label} doesn't have a currency")
+
+    def _is_item_displayed(
+        self, locator: Locator, timeout: Optional[int] = None
+    ) -> bool:
         timeout_ms: int = self._timeout_ms(timeout)
-        if self.is_cart_list_visible(timeout=timeout_ms):
-            all_products_price: List[str] = [
-                item.inner_text().strip() for item in self._item_price.all()
-            ]
-            all_products_price_without_currency: List[Decimal] = [
-                Decimal(price[1:]) for price in all_products_price
-            ]
-            total: Decimal = sum(all_products_price_without_currency, Decimal("0"))
-            return f"{CURRENCY}{total:.2f}"
+        try:
+            locator.wait_for(state="visible", timeout=timeout_ms)
+            return True
+        except PlaywrightTimeoutError:
+            return False
+
+    def get_subtotal(self, timeout: Optional[int] = None) -> str:
+        timeout_ms: int = self._timeout_ms(timeout)
+        if self._is_item_displayed(self._subtotal, timeout_ms):
+            return self._extract_currency_value(self._subtotal, SUBTOTAL)
         raise RuntimeError(
-            f"Timed out waiting for car list container to be displayed (after {timeout_ms} ms)"
+            f"Timed out waiting for {SUBTOTAL} to be displayed after {timeout_ms} ms"
         )
 
-    def calculate_taxes(self, timeout: Optional[int] = None) -> str:
+    def get_tax(self, timeout: Optional[int] = None) -> str:
         timeout_ms: int = self._timeout_ms(timeout)
-        if self.is_cart_list_visible(timeout=timeout_ms):
-            total: str = self.calculate_item_total()
-            total_without_currency = Decimal(total[1:])
-            taxes: Decimal = round(total_without_currency * TAXES, 2)
-            return f"{CURRENCY}{taxes:.2f}"
+        if self._is_item_displayed(self._tax, timeout_ms):
+            return self._extract_currency_value(self._tax, TAX)
         raise RuntimeError(
-            f"Timed out waiting for car list container to be displayed (after {timeout_ms} ms)"
+            f"Timed out waiting for {TAX} to be displayed after {timeout_ms} ms"
+        )
+
+    def get_total(self, timeout: Optional[int] = None) -> str:
+        timeout_ms: int = self._timeout_ms(timeout)
+        if self._is_item_displayed(self._total, timeout_ms):
+            return self._extract_currency_value(self._total, TOTAL)
+        raise RuntimeError(
+            f"Timed out waiting for {TOTAL} to be displayed after {timeout_ms} ms"
         )
