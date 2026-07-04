@@ -2,7 +2,10 @@ import pytest
 from playwright.sync_api import Page
 
 from sauce_project.data.cart_data import ALL_ITEMS_INDEX
-from sauce_project.data.checkout_step_1_data import FIRST_NAME, LAST_NAME, ZIP_CODE
+# fmt: off
+from sauce_project.data.checkout_step_1_data import (FIRST_NAME, LAST_NAME,
+                                                     ZIP_CODE)
+# fmt: on
 from sauce_project.data.global_data import ITEM_INDEX
 from sauce_project.data.login_data import DEFAULT_UNLOCKED_USER, PASSWORD
 from sauce_project.po.pages.checkout_step_2_page import CheckoutStepTwoPage

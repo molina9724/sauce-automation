@@ -2,7 +2,7 @@ from decimal import Decimal
 
 from sauce_project.data.cart_data import FIRST_ITEM_KEY
 from sauce_project.data.inventory_data import INVENTORY_ITEMS_DATA
-from sauce_project.po.pages.checkout_step_2_page import CURRENCY
+from sauce_project.po.pages.checkout_step_2_page import CURRENCY, TAXES
 
 TOTAL_ITEM_VALUE: str = INVENTORY_ITEMS_DATA[FIRST_ITEM_KEY]["price"]
 
@@ -17,3 +17,11 @@ def add_all_prices(items: dict[str, dict[str, str]]) -> str:
     ]
     total: Decimal = sum(all_prices_with_no_currency_sign, Decimal("0"))
     return f"{CURRENCY}{total:.2f}"
+
+
+def calculate_taxes(items: dict[str, dict[str, str]]) -> str:
+    total: str = add_all_prices(items)
+    total_without_currency = Decimal(total[1:])
+
+    taxes: Decimal = round(total_without_currency * TAXES, 2)
+    return f"{CURRENCY}{taxes:.2f}"

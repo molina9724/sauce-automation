@@ -3,7 +3,10 @@ from typing import TYPE_CHECKING, Optional
 from playwright.sync_api import Locator, Page
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 
-from sauce_project.po.pages.base_page import CART_URL, CHECKOUT_STEP_2_URL, BasePage
+# fmt: off
+from sauce_project.po.pages.base_page import (CART_URL, CHECKOUT_STEP_2_URL,
+                                              BasePage)
+# fmt: on
 from sauce_project.po.pages.cart_page import CartPage
 
 if TYPE_CHECKING:
@@ -36,9 +39,17 @@ class CheckoutStepOnePage(BasePage):
             "button", name=CONTINUE_BUTTON_TEXT
         )
 
+    def is_error_heading_visible(self, timeout: Optional[int] = None):
+        timeout_ms: int = self._timeout_ms(timeout)
+        try:
+            self._error_heading.wait_for(state="visible", timeout=timeout_ms)
+            return True
+        except PlaywrightTimeoutError:
+            return False
+
     def get_error_text(self, timeout: Optional[int] = None) -> str | None:
-        timeout_ms = self._timeout_ms(timeout)
-        if self._error_heading.is_visible(timeout=timeout_ms):
+        timeout_ms: int = self._timeout_ms(timeout)
+        if self.is_error_heading_visible(timeout=timeout_ms):
             return self._error_heading.inner_text().strip()
         else:
             return None
