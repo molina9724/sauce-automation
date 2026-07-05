@@ -42,8 +42,8 @@ def test_07_usernames(login_page: LoginPage) -> None:
     assert usernames == EXPECTED_LOGIN_USERNAMES
 
 
-def test_08_password_usernames_heading(login_page: LoginPage) -> None:
-    assert login_page.is_password_usernames_heading_displayed()
+def test_08_password_heading(login_page: LoginPage) -> None:
+    assert login_page.is_password_heading_displayed()
 
 
 def test_09_password(login_page: LoginPage) -> None:

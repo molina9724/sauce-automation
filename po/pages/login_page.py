@@ -10,8 +10,16 @@ from .base_page import INVENTORY_URL, BasePage
 if TYPE_CHECKING:
     from .inventory_page import InventoryPage
 
+# Extra timeouts
 INCREASED_TIMEOUT = 20000
 SHORT_TIMEOUT = 600
+
+# Labels
+CLOSE_ERROR_BUTTON: str = "Close error button"
+DOCUMENT_TITLE: str = "Document Title"
+LOGO: str = "Logo"
+CREDENTIALS = "Credentials Container"
+PASSWORD: str = "Password"
 
 
 class LoginPage(BasePage):
@@ -31,8 +39,8 @@ class LoginPage(BasePage):
 
         self._error_header: Locator = self.locator('[data-test="error"]')
         self._close_error_button: Locator = self.locator('[data-test="error-button"]')
-        self._credentials_container: Locator = self.locator("#login_credentials")
-        self._password_container: Locator = self.locator(".login_password")
+        self._usernames_container: Locator = self.locator("#login_credentials")
+        self._passwords_container: Locator = self.locator(".login_password")
 
     def login(
         self, username: str, password: str, timeout: Optional[int] = None
@@ -66,110 +74,78 @@ class LoginPage(BasePage):
                 f"Timed out waiting for login to reach {INVENTORY_URL} after {timeout_ms} ms"
             )
 
-    def get_error_text(self) -> str | None:
-        if self._error_header.is_visible():
-            return self._error_header.inner_text().strip()
-        else:
-            return None
-
     def is_error_displayed(self, timeout: Optional[int] = None) -> bool:
         if timeout is None:
             return self._error_header.is_visible()
         timeout_ms: int = self._timeout_ms(timeout)
-        try:
-            self._error_header.wait_for(state="visible", timeout=timeout_ms)
-            return True
-        except PlaywrightTimeoutError:
-            return False
+        return self._is_item_displayed(self._error_header, timeout_ms)
+
+    def get_error_text(self) -> str | None:
+        if self._is_item_displayed(self._error_header):
+            return self._error_header.inner_text().strip()
+        else:
+            return None
 
     def dismiss_error(self, timeout: Optional[int] = None) -> None:
         timeout_ms: int = self._timeout_ms(timeout)
-        if self._close_error_button.is_visible():
-            try:
-                self._close_error_button.click()
-                self._error_header.wait_for(state="hidden", timeout=timeout_ms)
-                return None
-            except PlaywrightTimeoutError:
-                raise RuntimeError(
-                    f"Timed out waiting for error to dismiss (after {timeout_ms} ms)"
-                )
-        else:
+        self.get_element(self._close_error_button, CLOSE_ERROR_BUTTON, timeout_ms)
+        try:
+            self._close_error_button.click()
+            self._error_header.wait_for(state="hidden", timeout=timeout_ms)
+            return None
+        except PlaywrightTimeoutError:
             raise RuntimeError(
-                f"Close error button was not displayed (after {timeout_ms} ms)"
+                f"Timed out waiting for error to dismiss (after {timeout_ms} ms)"
             )
 
     def get_document_title(self, timeout: Optional[int] = None) -> str:
         timeout_ms: int = self._timeout_ms(timeout)
-        self._logo_heading.wait_for(state="visible", timeout=timeout_ms)
+        self.get_element(self._logo_heading, DOCUMENT_TITLE, timeout_ms)
         return self._page.title().strip()
 
     def get_logo_text(self, timeout: Optional[int] = None) -> str:
         timeout_ms: int = self._timeout_ms(timeout)
-        self._logo_heading.wait_for(state="visible", timeout=timeout_ms)
+        self.get_element(self._logo_heading, LOGO, timeout_ms)
         return self._logo_heading.inner_text().strip()
 
     def is_username_displayed(self, timeout: Optional[int] = None) -> bool:
         timeout_ms: int = self._timeout_ms(timeout)
-        try:
-            self._username.wait_for(state="visible", timeout=timeout_ms)
-            return True
-        except PlaywrightTimeoutError:
-            return False
+        return self._is_item_displayed(self._username, timeout_ms)
 
     def is_password_displayed(self, timeout: Optional[int] = None) -> bool:
         timeout_ms: int = self._timeout_ms(timeout)
-        try:
-            self._password.wait_for(state="visible", timeout=timeout_ms)
-            return True
-        except PlaywrightTimeoutError:
-            return False
+        return self._is_item_displayed(self._password, timeout_ms)
 
     def is_login_button_displayed(self, timeout: Optional[int] = None) -> bool:
         timeout_ms: int = self._timeout_ms(timeout)
-        try:
-            self._login_button.wait_for(state="visible", timeout=timeout_ms)
-            return True
-        except PlaywrightTimeoutError:
-            return False
+        return self._is_item_displayed(self._login_button, timeout_ms)
 
     def is_usernames_heading_displayed(self, timeout: Optional[int] = None) -> bool:
         timeout_ms: int = self._timeout_ms(timeout)
-        try:
-            self._usernames_heading.wait_for(state="visible", timeout=timeout_ms)
-            return True
-        except PlaywrightTimeoutError:
-            return False
-
-    def get_credentials_container_text(self, timeout: Optional[int] = None) -> str:
-        timeout_ms: int = self._timeout_ms(timeout)
-        self._credentials_container.wait_for(state="visible", timeout=timeout_ms)
-        return self._credentials_container.inner_text()
+        return self._is_item_displayed(self._usernames_heading, timeout_ms)
 
     def get_usernames(self, timeout: Optional[int] = None) -> list[str]:
         timeout_ms: int = self._timeout_ms(timeout)
-        self._credentials_container.wait_for(state="visible", timeout=timeout_ms)
-        text: str = self._credentials_container.inner_text()
+        usernames_container: Locator = self.get_element(
+            self._usernames_container, CREDENTIALS, timeout_ms
+        )
+        text: str = usernames_container.inner_text()
         lines: list[str] = [line.strip() for line in text.splitlines() if line.strip()]
 
         if lines and lines[0].lower().startswith("accepted usernames"):
             return lines[1:]
         return lines
 
-    def is_password_usernames_heading_displayed(
-        self, timeout: Optional[int] = None
-    ) -> bool:
+    def is_password_heading_displayed(self, timeout: Optional[int] = None) -> bool:
         timeout_ms: int = self._timeout_ms(timeout)
-        try:
-            self._password_heading.wait_for(state="visible", timeout=timeout_ms)
-            return True
-        except PlaywrightTimeoutError:
-            return False
+        return self._is_item_displayed(self._password_heading, timeout_ms)
 
     def get_password(self, timeout: Optional[int] = None) -> list[str]:
         timeout_ms: int = self._timeout_ms(timeout)
-        self._credentials_container.wait_for(state="visible", timeout=timeout_ms)
-        container: Locator = self._password_container
-        text: str = container.inner_text()
+        password_container: Locator = self.get_element(
+            self._passwords_container, CREDENTIALS, timeout_ms
+        )
+        text: str = password_container.inner_text()
         lines: list[str] = [line.strip() for line in text.splitlines() if line.strip()]
 
         if lines and lines[0].lower().startswith("password"):
@@ -180,10 +156,10 @@ class LoginPage(BasePage):
 
     def is_password_masked(self, timeout: Optional[int] = None) -> bool:
         timeout_ms: int = self._timeout_ms(timeout)
-        if self.is_password_displayed(timeout_ms):
-            password_masked: str | None = self._password.get_attribute("type")
-            if password_masked == "password":
-                return True
+        password: Locator = self.get_element(self._password, PASSWORD, timeout_ms)
+        field_type: str | None = password.get_attribute("type")
+        if field_type == "password":
+            return True
         return False
 
     def attempt_access_unauthenticated(
@@ -197,5 +173,5 @@ class LoginPage(BasePage):
             raise RuntimeError(error_message)
         except PlaywrightTimeoutError:
             raise RuntimeError(
-                f"No error displayed after accessing {INVENTORY_URL} without authenticating."
+                f"No error displayed after accessing {url} without authenticating."
             )

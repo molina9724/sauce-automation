@@ -13,6 +13,7 @@ CHECKOUT_STEP_2_URL = BASE_URL + "checkout-step-two.html"
 
 class BasePage:
     """
+
     A base class for page objects in UI automation frameworks.
 
     This class provides common functionality for interacting with web pages,
@@ -129,3 +130,23 @@ class BasePage:
 
     def get_url(self) -> str:
         return self._page.url
+
+    def _is_item_displayed(
+        self, locator: Locator, timeout: Optional[int] = None
+    ) -> bool:
+        timeout_ms: int = self._timeout_ms(timeout)
+        try:
+            locator.wait_for(state="visible", timeout=timeout_ms)
+            return True
+        except PlaywrightTimeoutError:
+            return False
+
+    def get_element(
+        self, locator: Locator, label: str, timeout: Optional[int] = None
+    ) -> Locator:
+        timeout_ms: int = self._timeout_ms(timeout)
+        if self._is_item_displayed(locator, timeout_ms):
+            return locator
+        raise RuntimeError(
+            f"Timed out waiting for {label} to be displayed after {timeout_ms} ms"
+        )

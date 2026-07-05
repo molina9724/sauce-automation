@@ -47,23 +47,28 @@ class CheckoutStepTwoPage(BasePage):
         else:
             raise RuntimeError(f"{label} doesn't have a currency")
 
-    def _is_item_displayed(
-        self, locator: Locator, timeout: Optional[int] = None
-    ) -> bool:
-        timeout_ms: int = self._timeout_ms(timeout)
-        try:
-            locator.wait_for(state="visible", timeout=timeout_ms)
-            return True
-        except PlaywrightTimeoutError:
-            return False
+    # def get_subtotal(self, timeout: Optional[int] = None) -> str:
+    #     timeout_ms: int = self._timeout_ms(timeout)
+    #     if self._is_item_displayed(self._subtotal, timeout_ms):
+    #         return self._extract_currency_value(self._subtotal, SUBTOTAL)
+    #     raise RuntimeError(
+    #         f"Timed out waiting for {SUBTOTAL} to be displayed after {timeout_ms} ms"
+    #     )
 
     def get_subtotal(self, timeout: Optional[int] = None) -> str:
         timeout_ms: int = self._timeout_ms(timeout)
-        if self._is_item_displayed(self._subtotal, timeout_ms):
-            return self._extract_currency_value(self._subtotal, SUBTOTAL)
-        raise RuntimeError(
-            f"Timed out waiting for {SUBTOTAL} to be displayed after {timeout_ms} ms"
-        )
+        self.get_element(self._subtotal, SUBTOTAL, timeout_ms)
+        return self._extract_currency_value(self._subtotal, SUBTOTAL)
+
+    # def get_element(
+    #     self, locator: Union[Locator, str], label: str, timeout: Optional[int] = None
+    # ) -> Locator:
+    #     timeout_ms: int = self._timeout_ms(timeout)
+    #     if self._is_item_displayed(self.locator(locator), timeout_ms):
+    #         return self.locator(locator)
+    #     raise RuntimeError(
+    #         f"Timed out waiting for {label} to be displayed after {timeout_ms} ms"
+    #     )
 
     def get_tax(self, timeout: Optional[int] = None) -> str:
         timeout_ms: int = self._timeout_ms(timeout)
