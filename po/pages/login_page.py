@@ -158,9 +158,7 @@ class LoginPage(BasePage):
         timeout_ms: int = self._timeout_ms(timeout)
         password: Locator = self.get_element(self._password, PASSWORD, timeout_ms)
         field_type: str | None = password.get_attribute("type")
-        if field_type == "password":
-            return True
-        return False
+        return field_type == "password"
 
     def attempt_access_unauthenticated(
         self, url: str, timeout: Optional[int] = None

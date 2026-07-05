@@ -19,8 +19,9 @@ from ..po.pages.login_page import LoginPage
 
 @pytest.fixture
 def login_page(page: Page) -> LoginPage:
-    page.goto(LOGIN_URL)
-    return LoginPage(page)
+    login = LoginPage(page)
+    login.goto(LOGIN_URL)
+    return login
 
 
 @pytest.fixture

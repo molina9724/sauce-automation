@@ -3,17 +3,18 @@ from typing import Optional, Union
 from playwright.sync_api import Locator, Page
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 
-BASE_URL = "https://www.saucedemo.com/"
-LOGIN_URL = BASE_URL
-INVENTORY_URL = BASE_URL + "inventory.html"
-CART_URL = BASE_URL + "cart.html"
-CHECKOUT_STEP_1_URL = BASE_URL + "checkout-step-one.html"
-CHECKOUT_STEP_2_URL = BASE_URL + "checkout-step-two.html"
+BASE_URL: str = "https://www.saucedemo.com/"
+LOGIN_URL: str = BASE_URL
+INVENTORY_URL: str = BASE_URL + "inventory.html"
+CART_URL: str = BASE_URL + "cart.html"
+CHECKOUT_STEP_1_URL: str = BASE_URL + "checkout-step-one.html"
+CHECKOUT_STEP_2_URL: str = BASE_URL + "checkout-step-two.html"
+
+READY_SELECTOR: str = 'input[name="user-name"]'
 
 
 class BasePage:
     """
-
     A base class for page objects in UI automation frameworks.
 
     This class provides common functionality for interacting with web pages,
@@ -66,7 +67,7 @@ class BasePage:
     def goto(
         self,
         url: str,
-        ready_selector: Optional[Union[Locator, str]] = None,
+        ready_selector: Optional[Locator] = None,
         timeout: Optional[int] = None,
     ) -> None:
         """
@@ -74,31 +75,23 @@ class BasePage:
 
         This method loads the given URL, waits for the network to be idle, and then waits for
         a specified selector or locator to be visible on the page. If no selector is provided,
-        it defaults to waiting for an input field with the name 'user-name'.
+        it defaults to waiting for an input field READY_SELECTOR.
 
         Args:
             url (str): The URL to navigate to.
             ready_selector (Optional[Union[Locator, str]], optional): The selector or Locator to wait for visibility.
-                If not provided, defaults to 'input[name="user-name"]'.
+                If not provided, defaults to READY_SELECTOR.
             timeout (Optional[int], optional): Maximum time to wait for navigation and element visibility, in milliseconds.
                 If not provided, uses the instance's default timeout.
 
         Raises:
             RuntimeError: If the specified element does not become visible within the timeout period.
         """
-        timeout_ms = timeout if timeout is not None else self._timeout
+        timeout_ms: int = self._timeout_ms(timeout)
         if ready_selector is not None:
             selector = self.locator(ready_selector)
         else:
-            selector: Locator = self.locator('input[name="user-name"]')
-
-        label: str = ""
-        if isinstance(ready_selector, str):
-            label = ready_selector
-        elif isinstance(ready_selector, Locator):
-            label = "<Locator>"
-        else:
-            label = 'input[name="user-name"]'
+            selector: Locator = self.locator(READY_SELECTOR)
 
         try:
             self._page.goto(url, timeout=timeout_ms)
@@ -107,12 +100,13 @@ class BasePage:
                 f"Navigation to {url} timed out after {timeout_ms} ms"
             ) from e
 
+        label = str(selector)
         try:
             self._page.wait_for_load_state("networkidle", timeout=timeout_ms)
             selector.wait_for(state="visible", timeout=timeout_ms)
         except PlaywrightTimeoutError as exception:
             raise RuntimeError(
-                f"Timed out waiting for '{label}' to be visible after navigating to {url} (after {timeout_ms} ms)"
+                f"Timed out waiting for selector {label} to be visible after navigating to {url} (after {timeout_ms} ms)"
             ) from exception
 
     def wait_for_url(self, expected_url: str, timeout: Optional[int] = None) -> None:
@@ -120,7 +114,7 @@ class BasePage:
 
         Raises RuntimeError on timeout to keep behavior consistent with other waits.
         """
-        timeout_ms: int = self._timeout if timeout is None else timeout
+        timeout_ms: int = self._timeout_ms(timeout)
         try:
             self._page.wait_for_url(expected_url, timeout=timeout_ms)
         except PlaywrightTimeoutError as e:
