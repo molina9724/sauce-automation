@@ -9,8 +9,8 @@ if TYPE_CHECKING:
     from .cart_page import CartPage
     from .login_page import LoginPage
 
-ADD_TO_CART_BUTTON_TEXT = "Add to cart"
-REMOVE_FROM_CART_BUTTON_TEXT = "Remove"
+# Buttons names
+REMOVE_FROM_CART = "Remove"
 
 
 class InventoryPage(BasePage):
@@ -21,7 +21,6 @@ class InventoryPage(BasePage):
     such as accessing the inventory container element.
 
     Attributes:
-        _inventory_container (Locator): Locator for the inventory container element.
 
     Args:
         page (Page): The Playwright Page object to interact with.
@@ -39,30 +38,35 @@ class InventoryPage(BasePage):
             timeout (int, optional): Default timeout for actions, in milliseconds. Defaults to 10000.
         """
         super().__init__(page, timeout)
-        self._inventory_container: Locator = self.locator("#inventory_container")
-        self._inventory_logo: Locator = self.locator(".app_logo")
+        self._inventory_logo: Locator = self._page.locator(".app_logo")
 
-        self._hamburger_button: Locator = page.get_by_role("button", name="Open Menu")
-        self._left_menu: Locator = self.locator(".bm-menu")
-        self._logout_link: Locator = page.get_by_role("link", name="Logout")
-        self._all_left_menu_items: Locator = self.locator(".bm-menu-wrap .menu-item")
+        self._hamburger_button: Locator = self._page.get_by_role(
+            "button", name="Open Menu"
+        )
+        self._left_menu: Locator = self._page.locator(".bm-menu")
+        self._logout_link: Locator = self._page.get_by_role("link", name="Logout")
+        self._left_menu_item: Locator = self._page.locator(".menu-item")
 
-        self._products_title: Locator = self.locator(".title")
-        self._products_filter: Locator = page.get_by_role("combobox")
+        self._products_title: Locator = self._page.locator(".title")
+        self._products_filter: Locator = self._page.get_by_role("combobox")
 
-        self._all_items_container: Locator = self.locator(".inventory_list")
-        self._inventory_item_object: Locator = self.locator(".inventory_item")
-        self._inventory_item_name: Locator = self.locator(".inventory_item_name")
-        self._inventory_item_description: Locator = self.locator(".inventory_item_desc")
-        self._inventory_item_price: Locator = self.locator(".inventory_item_price")
-        self._inventory_item_add_to_cart_button: Locator = page.locator(
+        self._all_items_container: Locator = self._page.locator(".inventory_list")
+        self._inventory_item: Locator = self._page.locator(".inventory_item")
+        self._item_name: Locator = self._page.locator(".inventory_item_name")
+        self._inventory_item_description: Locator = self._page.locator(
+            ".inventory_item_desc"
+        )
+        self._inventory_item_price: Locator = self._page.locator(
+            ".inventory_item_price"
+        )
+        self._inventory_item_add_to_cart_button: Locator = self._page.locator(
             ".btn_inventory"
         )
-        self._inventory_item_remove_button: Locator = page.get_by_role(
-            "button", name=REMOVE_FROM_CART_BUTTON_TEXT
+        self._inventory_item_remove_button: Locator = self._page.get_by_role(
+            "button", name=REMOVE_FROM_CART
         )
 
-        self._cart_button: Locator = self.locator(".shopping_cart_link")
+        self._cart_button: Locator = self._page.locator(".shopping_cart_link")
         self._cart_counter: Locator = self._page.locator(".shopping_cart_badge")
 
     def get_hamburger_button(self, timeout: Optional[int] = None) -> Locator:
@@ -86,7 +90,7 @@ class InventoryPage(BasePage):
         timeout_ms: int = self._timeout_ms(timeout)
         if self.is_left_menu_displayed(timeout_ms):
             try:
-                all_items: List[Locator] = self._all_left_menu_items.all()
+                all_items: List[Locator] = self._left_menu_item.all()
                 return [item.inner_text().strip() for item in all_items]
             except PlaywrightTimeoutError:
                 raise RuntimeError(
@@ -172,7 +176,7 @@ class InventoryPage(BasePage):
         timeout_ms: int = self._timeout_ms(timeout)
         if self.is_all_items_container_displayed(timeout=timeout_ms):
             all_products_names: List[str] = [
-                item.inner_text().strip() for item in self._inventory_item_name.all()
+                item.inner_text().strip() for item in self._item_name.all()
             ]
             return all_products_names
         raise RuntimeError(
@@ -267,9 +271,7 @@ class InventoryPage(BasePage):
         timeout_ms: int = self._timeout_ms(timeout)
         if self.is_all_items_container_displayed(timeout=timeout_ms):
             try:
-                self._inventory_item_object.nth(item_index).locator(
-                    ".btn_inventory"
-                ).click()
+                self._inventory_item.nth(item_index).locator(".btn_inventory").click()
             except PlaywrightTimeoutError:
                 raise RuntimeError(
                     f"Timed out waiting for item #{item_index} to be displayed (after {timeout_ms} ms)"

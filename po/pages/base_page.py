@@ -89,9 +89,9 @@ class BasePage:
         """
         timeout_ms: int = self._timeout_ms(timeout)
         if ready_selector is not None:
-            selector = self.locator(ready_selector)
+            selector: Locator = self.locator(ready_selector)
         else:
-            selector: Locator = self.locator(READY_SELECTOR)
+            selector = self.locator(READY_SELECTOR)
 
         try:
             self._page.goto(url, timeout=timeout_ms)
