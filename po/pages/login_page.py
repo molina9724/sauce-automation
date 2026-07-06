@@ -25,22 +25,24 @@ PASSWORD: str = "Password"
 class LoginPage(BasePage):
     def __init__(self, page: Page, timeout: int = 10000) -> None:
         super().__init__(page=page, timeout=timeout)
-        self._logo_heading: Locator = self.locator(".login_logo")
-        self._usernames_heading: Locator = page.get_by_role(
+        self._logo_heading: Locator = self._page.locator(".login_logo")
+        self._usernames_heading: Locator = self._page.get_by_role(
             "heading", name="Accepted usernames are:"
         )
-        self._password_heading: Locator = page.get_by_role(
+        self._password_heading: Locator = self._page.get_by_role(
             "heading", name="Password for all users:"
         )
 
-        self._username: Locator = page.get_by_role("textbox", name="Username")
-        self._password: Locator = page.get_by_role("textbox", name="Password")
-        self._login_button: Locator = page.get_by_role("button", name="Login")
+        self._username: Locator = self._page.get_by_role("textbox", name="Username")
+        self._password: Locator = self._page.get_by_role("textbox", name="Password")
+        self._login_button: Locator = self._page.get_by_role("button", name="Login")
 
-        self._error_header: Locator = self.locator('[data-test="error"]')
-        self._close_error_button: Locator = self.locator('[data-test="error-button"]')
-        self._usernames_container: Locator = self.locator("#login_credentials")
-        self._passwords_container: Locator = self.locator(".login_password")
+        self._error_header: Locator = self._page.locator('[data-test="error"]')
+        self._close_error_button: Locator = self._page.locator(
+            '[data-test="error-button"]'
+        )
+        self._usernames_container: Locator = self._page.locator("#login_credentials")
+        self._passwords_container: Locator = self._page.locator(".login_password")
 
     def login(
         self, username: str, password: str, timeout: Optional[int] = None
