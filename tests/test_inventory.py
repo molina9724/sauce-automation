@@ -8,19 +8,17 @@ from sauce_project.data.global_data import ITEM_INDEX
 from sauce_project.data.inventory_data import (ALL_PRICES_FILTER_OPTIONS,
                                                DEFAULT_FILTER_VALUE,
                                                INVENTORY_ITEMS_DATA,
-                                               LEFT_MENU_COMPONENTS)
+                                               LEFT_MENU_COMPONENTS,
+                                               get_price_value)
 # fmt: on
 from sauce_project.po.pages.base_page import INVENTORY_URL
 from sauce_project.po.pages.cart_page import CartPage
-from sauce_project.po.pages.checkout_step_1_page import CheckoutStepOnePage
+from sauce_project.po.pages.checkout_step_1_page import (
+    CheckoutStepOnePage,
+    CheckoutStepTwoPage,
+)
 from sauce_project.po.pages.inventory_page import InventoryPage
 from sauce_project.po.pages.login_page import LoginPage
-
-
-def get_price_value(item: tuple[str, dict[str, str]]) -> float:
-    _, data = item
-    price_text: str = data["price"]
-    return float(price_text[1:])
 
 
 def test_00_verify__inventory_url(inventory_page: InventoryPage) -> None:
@@ -82,7 +80,7 @@ def test_08_verify_low_to_high_filter(inventory_page: InventoryPage) -> None:
     assert actual == expected
 
 
-def test_09_high_to_low_filter(inventory_page: InventoryPage):
+def test_09_high_to_low_filter(inventory_page: InventoryPage) -> None:
     inventory_page.set_products_filter("Price (high to low)")
     high_to_low_ordered_results: dict[str, dict[str, str]] = (
         inventory_page.get_all_products_information()

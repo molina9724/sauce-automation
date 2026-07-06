@@ -1,5 +1,8 @@
 from sauce_project.po.pages.base_page import INVENTORY_URL
 
+DOCUMENT_TITLE: str = "Swag Labs"
+LOGO_TEXT: str = "Swag Labs"
+
 PERFORMANCE_GLITCHED_USER = "performance_glitch_user"
 
 UNLOCKED_USERS = (
@@ -20,3 +23,10 @@ WRONG_PASSWORD = "wrong_password"
 
 EXPECTED_LOGIN_USERNAMES = list(ALL_USERS)
 SUCCESS_LOGIN_DATA = [(user, PASSWORD, INVENTORY_URL) for user in UNLOCKED_USERS]
+
+EMPTY_USERNAME_ERROR: str = "Epic sadface: Username is required"
+EMPTY_PASSWORD_ERROR: str = "Epic sadface: Password is required"
+WRONG_CREDENTIALS_ERROR: str = (
+    "Epic sadface: Username and password do not match any user in this service"
+)
+LOCKED_ACCOUNT_ERROR: str = "Epic sadface: Sorry, this user has been locked out."

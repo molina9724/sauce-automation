@@ -142,7 +142,7 @@ class LoginPage(BasePage):
         timeout_ms: int = self._timeout_ms(timeout)
         return self._is_item_displayed(self._password_heading, timeout_ms)
 
-    def get_password(self, timeout: Optional[int] = None) -> list[str]:
+    def get_password(self, timeout: Optional[int] = None) -> str:
         timeout_ms: int = self._timeout_ms(timeout)
         password_container: Locator = self.get_element(
             self._passwords_container, CREDENTIALS, timeout_ms
@@ -154,7 +154,7 @@ class LoginPage(BasePage):
             password = lines[1:]
         else:
             password: list[str] = lines
-        return password
+        return password[0]
 
     def is_password_masked(self, timeout: Optional[int] = None) -> bool:
         timeout_ms: int = self._timeout_ms(timeout)

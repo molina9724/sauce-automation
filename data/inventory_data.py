@@ -36,3 +36,9 @@ INVENTORY_ITEMS_DATA: dict[str, dict[str, str]] = {
         "price": "$15.99",
     },
 }
+
+
+def get_price_value(item: tuple[str, dict[str, str]]) -> float:
+    _, data = item
+    price_text: str = data["price"]
+    return float(price_text[1:])
