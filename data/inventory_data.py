@@ -1,13 +1,19 @@
 from typing import List
 
 LEFT_MENU_COMPONENTS: List[str] = ["All Items", "About", "Logout", "Reset App State"]
-ALL_PRICES_FILTER_OPTIONS: List[str] = [
-    "Name (A to Z)",
-    "Name (Z to A)",
-    "Price (low to high)",
-    "Price (high to low)",
+
+# Filter options
+A_TO_Z = "Name (A to Z)"
+Z_TO_A = "Name (Z to A)"
+LOW_TO_HIGH = "Price (low to high)"
+HIGH_TO_LOW = "Price (high to low)"
+FILTER_OPTIONS: List[str] = [
+    A_TO_Z,
+    Z_TO_A,
+    LOW_TO_HIGH,
+    HIGH_TO_LOW,
 ]
-DEFAULT_FILTER_VALUE: str = ALL_PRICES_FILTER_OPTIONS[0]
+DEFAULT_FILTER_VALUE: str = FILTER_OPTIONS[0]
 
 # Sorted by Name (A to Z) by default
 INVENTORY_ITEMS_DATA: dict[str, dict[str, str]] = {
@@ -36,6 +42,14 @@ INVENTORY_ITEMS_DATA: dict[str, dict[str, str]] = {
         "price": "$15.99",
     },
 }
+
+DOCUMENT_TITLE: str = "Swag Labs"
+PRODUCTS_TITLE: str = "Products"
+LOGO_TEXT: str = "Swag Labs"
+
+ACCESS_INVENTORY_PAGE_ERROR_WITHOUT_LOGIN: str = (
+    "Epic sadface: You can only access '/inventory.html' when you are logged in."
+)
 
 
 def get_price_value(item: tuple[str, dict[str, str]]) -> float:

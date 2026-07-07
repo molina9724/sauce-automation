@@ -5,32 +5,29 @@ from playwright.sync_api import expect
 
 from sauce_project.data.global_data import ITEM_INDEX
 # fmt: off
-from sauce_project.data.inventory_data import (ALL_PRICES_FILTER_OPTIONS,
-                                               DEFAULT_FILTER_VALUE,
-                                               INVENTORY_ITEMS_DATA,
-                                               LEFT_MENU_COMPONENTS,
-                                               get_price_value)
+from sauce_project.data.inventory_data import (
+    ACCESS_INVENTORY_PAGE_ERROR_WITHOUT_LOGIN, DEFAULT_FILTER_VALUE,
+    DOCUMENT_TITLE, FILTER_OPTIONS, HIGH_TO_LOW, INVENTORY_ITEMS_DATA,
+    LEFT_MENU_COMPONENTS, LOGO_TEXT, LOW_TO_HIGH, PRODUCTS_TITLE, Z_TO_A,
+    get_price_value)
 # fmt: on
 from sauce_project.po.pages.base_page import INVENTORY_URL
 from sauce_project.po.pages.cart_page import CartPage
-from sauce_project.po.pages.checkout_step_1_page import (
-    CheckoutStepOnePage,
-    CheckoutStepTwoPage,
-)
+from sauce_project.po.pages.checkout_step_1_page import CheckoutStepOnePage
 from sauce_project.po.pages.inventory_page import InventoryPage
 from sauce_project.po.pages.login_page import LoginPage
 
 
 def test_00_verify__inventory_url(inventory_page: InventoryPage) -> None:
-    expect(inventory_page._page).to_have_url("https://www.saucedemo.com/inventory.html")
+    expect(inventory_page._page).to_have_url(INVENTORY_URL)
 
 
 def test_01_verify_document_title(inventory_page: InventoryPage) -> None:
-    assert inventory_page.get_document_title() == "Swag Labs"
+    assert inventory_page.get_document_title() == DOCUMENT_TITLE
 
 
 def test_02_verify_page_title(inventory_page: InventoryPage) -> None:
-    assert inventory_page.get_logo_text() == "Swag Labs"
+    assert inventory_page.get_logo_text() == LOGO_TEXT
 
 
 def test_03_verify_left_menu_components(inventory_page: InventoryPage) -> None:
@@ -41,7 +38,7 @@ def test_03_verify_left_menu_components(inventory_page: InventoryPage) -> None:
 
 
 def test_04_verify_products_title(inventory_page: InventoryPage) -> None:
-    assert inventory_page.get_products_title() == "Products"
+    assert inventory_page.get_products_title() == PRODUCTS_TITLE
 
 
 def test_05_verify_default_product_filter_options(
@@ -53,11 +50,11 @@ def test_05_verify_default_product_filter_options(
 def test_06_verify_all_product_filter_options(
     inventory_page: InventoryPage,
 ) -> None:
-    assert inventory_page.get_products_filter_options() == ALL_PRICES_FILTER_OPTIONS
+    assert inventory_page.get_products_filter_options() == FILTER_OPTIONS
 
 
 def test_07_verify_z_to_a_filter(inventory_page: InventoryPage) -> None:
-    inventory_page.set_products_filter("Name (Z to A)")
+    inventory_page.set_products_filter(Z_TO_A)
     z_to_a_ordered_results: dict[str, dict[str, str]] = (
         inventory_page.get_all_products_information()
     )
@@ -70,7 +67,7 @@ def test_07_verify_z_to_a_filter(inventory_page: InventoryPage) -> None:
 
 
 def test_08_verify_low_to_high_filter(inventory_page: InventoryPage) -> None:
-    inventory_page.set_products_filter("Price (low to high)")
+    inventory_page.set_products_filter(LOW_TO_HIGH)
     low_to_high_ordered_results = inventory_page.get_all_products_information()
 
     actual: List[tuple[str, dict[str, str]]] = list(low_to_high_ordered_results.items())
@@ -80,8 +77,8 @@ def test_08_verify_low_to_high_filter(inventory_page: InventoryPage) -> None:
     assert actual == expected
 
 
-def test_09_high_to_low_filter(inventory_page: InventoryPage) -> None:
-    inventory_page.set_products_filter("Price (high to low)")
+def test_09_verify_high_to_low_filter(inventory_page: InventoryPage) -> None:
+    inventory_page.set_products_filter(HIGH_TO_LOW)
     high_to_low_ordered_results: dict[str, dict[str, str]] = (
         inventory_page.get_all_products_information()
     )
@@ -98,10 +95,7 @@ def test_10_verify_exception_when_trying_to_access_inventory_page_without_login(
 ) -> None:
     with pytest.raises(RuntimeError) as exception_information:
         login_page.attempt_access_unauthenticated(INVENTORY_URL)
-    assert (
-        "Epic sadface: You can only access '/inventory.html' when you are logged in."
-        == str(exception_information.value)
-    )
+    assert ACCESS_INVENTORY_PAGE_ERROR_WITHOUT_LOGIN == str(exception_information.value)
 
 
 def test_11_verify_items_images_are_displayed(inventory_page: InventoryPage) -> None:
