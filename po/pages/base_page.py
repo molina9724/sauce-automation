@@ -12,6 +12,8 @@ CHECKOUT_STEP_2_URL: str = BASE_URL + "checkout-step-two.html"
 
 READY_SELECTOR: str = 'input[name="user-name"]'
 
+ITEM: str = "Item #"
+
 
 class BasePage:
     """

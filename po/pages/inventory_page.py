@@ -3,11 +3,21 @@ from typing import TYPE_CHECKING, List, Optional
 from playwright.sync_api import Locator, Page
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 
-from .base_page import BASE_URL, CART_URL, BasePage
+from .base_page import BASE_URL, CART_URL, ITEM, BasePage
 
 if TYPE_CHECKING:
     from .cart_page import CartPage
     from .login_page import LoginPage
+
+
+# Selectors
+ADD_BUTTON: str = ".btn_inventory"
+REMOVE_BUTTON: str = ADD_BUTTON
+CART_BUTTON: str = ".shopping_cart_link"
+CART_COUNTER_BADGE: str = ".shopping_cart_badge"
+
+# Labels
+CART_COUNTER: str = "Cart Counter"
 
 # Buttons names
 REMOVE_FROM_CART = "Remove"
@@ -44,30 +54,22 @@ class InventoryPage(BasePage):
             "button", name="Open Menu"
         )
         self._left_menu: Locator = self._page.locator(".bm-menu")
-        self._logout_link: Locator = self._page.get_by_role("link", name="Logout")
-        self._left_menu_item: Locator = self._page.locator(".menu-item")
+        self._left_menu_item: Locator = self._left_menu.locator(".menu-item")
+        self._logout_link: Locator = self._left_menu.get_by_role("link", name="Logout")
 
         self._products_title: Locator = self._page.locator(".title")
         self._products_filter: Locator = self._page.get_by_role("combobox")
 
         self._all_items_container: Locator = self._page.locator(".inventory_list")
-        self._inventory_item: Locator = self._page.locator(".inventory_item")
+        self._item: Locator = self._page.locator(".inventory_item")
         self._item_name: Locator = self._page.locator(".inventory_item_name")
-        self._inventory_item_description: Locator = self._page.locator(
-            ".inventory_item_desc"
-        )
-        self._inventory_item_price: Locator = self._page.locator(
-            ".inventory_item_price"
-        )
-        self._inventory_item_add_to_cart_button: Locator = self._page.locator(
-            ".btn_inventory"
-        )
-        self._inventory_item_remove_button: Locator = self._page.get_by_role(
-            "button", name=REMOVE_FROM_CART
-        )
+        self._item_description: Locator = self._page.locator(".inventory_item_desc")
+        self._item_price: Locator = self._page.locator(".inventory_item_price")
+        self._add_to_cart_button: Locator = self._page.locator(ADD_BUTTON)
+        self._remove_button: Locator = self._page.locator(REMOVE_BUTTON)
 
-        self._cart_button: Locator = self._page.locator(".shopping_cart_link")
-        self._cart_counter: Locator = self._page.locator(".shopping_cart_badge")
+        self._cart_button: Locator = self._page.locator(CART_BUTTON)
+        self._cart_counter: Locator = self._cart_button.locator(CART_COUNTER_BADGE)
 
     def get_hamburger_button(self, timeout: Optional[int] = None) -> Locator:
         timeout_ms: int = self._timeout_ms(timeout)
@@ -187,8 +189,7 @@ class InventoryPage(BasePage):
         timeout_ms: int = self._timeout_ms(timeout)
         if self.is_all_items_container_displayed(timeout=timeout_ms):
             all_products_descriptions: List[str] = [
-                item.inner_text().strip()
-                for item in self._inventory_item_description.all()
+                item.inner_text().strip() for item in self._item_description.all()
             ]
             return all_products_descriptions
         raise RuntimeError(
@@ -199,7 +200,7 @@ class InventoryPage(BasePage):
         timeout_ms: int = self._timeout_ms(timeout)
         if self.is_all_items_container_displayed(timeout=timeout_ms):
             all_products_price: List[str] = [
-                item.inner_text().strip() for item in self._inventory_item_price.all()
+                item.inner_text().strip() for item in self._item_price.all()
             ]
             return all_products_price
         raise RuntimeError(
@@ -267,37 +268,31 @@ class InventoryPage(BasePage):
                 f"Timed out waiting for inventory to reach {CART_URL} after {timeout_ms} ms"
             )
 
-    def add_item_to_cart(self, item_index, timeout: Optional[int] = None) -> None:
+    def add_item_to_cart(self, index, timeout: Optional[int] = None) -> None:
         timeout_ms: int = self._timeout_ms(timeout)
-        if self.is_all_items_container_displayed(timeout=timeout_ms):
-            try:
-                self._inventory_item.nth(item_index).locator(".btn_inventory").click()
-            except PlaywrightTimeoutError:
-                raise RuntimeError(
-                    f"Timed out waiting for item #{item_index} to be displayed (after {timeout_ms} ms)"
-                )
+        item: Locator = self.get_element(
+            self._item.nth(index), f"{ITEM}{index}", timeout_ms
+        )
+        item.locator(ADD_BUTTON).click(timeout=timeout_ms)
 
-    def remove_item_from_cart(self, item_index, timeout: Optional[int] = None) -> None:
+    def remove_item_from_cart(self, index, timeout: Optional[int] = None) -> None:
         timeout_ms: int = self._timeout_ms(timeout)
-        if self.is_all_items_container_displayed(timeout=timeout_ms):
-            try:
-                self._inventory_item_remove_button.nth(item_index).click(
-                    timeout=timeout_ms
-                )
-            except PlaywrightTimeoutError:
-                raise RuntimeError(
-                    f"Timed out waiting for item #{item_index} to display the remove button (after {timeout_ms} ms)"
-                )
+        item: Locator = self.get_element(
+            self._item.nth(index), f"{ITEM}{index}", timeout_ms
+        )
+        item.locator(REMOVE_BUTTON).click(timeout=timeout_ms)
 
     def get_cart_counter(self, timeout: Optional[int] = None) -> int:
         timeout_ms: int = self._timeout_ms(timeout)
-        self._cart_counter.wait_for(state="visible", timeout=timeout_ms)
-        cart_counter: str = self._cart_counter.inner_text().strip()
+        cart_counter: Locator = self.get_element(
+            self._cart_counter, CART_COUNTER, timeout_ms
+        )
+        counter: str = cart_counter.inner_text().strip()
         try:
-            return int(cart_counter)
+            return int(counter)
         except ValueError:
             raise RuntimeError(
-                "Your cart counter is returning a value that cannot be converted to int"
+                f"{CART_COUNTER} is returning a value that cannot be converted to int"
             )
 
     def is_cart_empty(self, timeout: Optional[int] = None) -> bool:
