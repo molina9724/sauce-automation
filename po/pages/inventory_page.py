@@ -16,6 +16,9 @@ REMOVE_BUTTON: str = ADD_BUTTON
 CART_BUTTON: str = ".shopping_cart_link"
 CART_COUNTER_BADGE: str = ".shopping_cart_badge"
 LEFT_MENU_ITEM: str = ".menu-item"
+ITEM_PRICE: str = ".inventory_item_price"
+ITEM_DESCRIPTION: str = ".inventory_item_desc"
+ITEM_NAME: str = ".inventory_item_name"
 
 # Labels
 CART_COUNTER: str = "Cart Counter"
@@ -71,9 +74,9 @@ class InventoryPage(BasePage):
 
         self._all_items_container: Locator = self._page.locator(".inventory_list")
         self._item: Locator = self._page.locator(".inventory_item")
-        self._item_name: Locator = self._item.locator(".inventory_item_name")
-        self._item_description: Locator = self._item.locator(".inventory_item_desc")
-        self._item_price: Locator = self._item.locator(".inventory_item_price")
+        self._item_name: Locator = self._item.locator(ITEM_NAME)
+        self._item_description: Locator = self._item.locator(ITEM_DESCRIPTION)
+        self._item_price: Locator = self._item.locator(ITEM_PRICE)
         self._item_image: Locator = self._item.locator(
             "img[class='inventory_item_img']"
         )
@@ -178,18 +181,37 @@ class InventoryPage(BasePage):
 
     def get_all_products_names(self, timeout: Optional[int] = None) -> List[str]:
         timeout_ms: int = self._timeout_ms(timeout)
-        self.get_element(self._all_items_container, ITEMS_CONTAINER, timeout_ms)
-        return [name.inner_text().strip() for name in self._item_name.all()]
+        names: List[str] = []
+        for index, item in enumerate(self._item.all()):
+            name: Locator = self.get_element(
+                item.locator(ITEM_NAME),
+                f"{ITEM_NAME} for {ITEM}{index}",
+                timeout_ms,
+            )
+            names.append(name.inner_text().strip())
+        return names
 
     def get_all_products_descriptions(self, timeout: Optional[int] = None) -> List[str]:
         timeout_ms: int = self._timeout_ms(timeout)
-        self.get_element(self._all_items_container, ITEMS_CONTAINER, timeout_ms)
-        return [item.inner_text().strip() for item in self._item_description.all()]
+        descriptions: List[str] = []
+        for index, item in enumerate(self._item.all()):
+            description: Locator = self.get_element(
+                item.locator(ITEM_DESCRIPTION),
+                f"{ITEM_DESCRIPTION} for {ITEM}{index}",
+                timeout_ms,
+            )
+            descriptions.append(description.inner_text().strip())
+        return descriptions
 
     def get_all_products_prices(self, timeout: Optional[int] = None) -> List[str]:
         timeout_ms: int = self._timeout_ms(timeout)
-        self.get_element(self._all_items_container, ITEMS_CONTAINER, timeout_ms)
-        return [item.inner_text().strip() for item in self._item_price.all()]
+        prices: List[str] = []
+        for index, item in enumerate(self._item.all()):
+            price: Locator = self.get_element(
+                item.locator(ITEM_PRICE), f"{ITEM_PRICE} for {ITEM}{index}", timeout_ms
+            )
+            prices.append(price.inner_text().strip())
+        return prices
 
     # TODO: This method should include images and add/remove buttons to consistently test the whole item object
     # TODO: Investigate how to to test images properly

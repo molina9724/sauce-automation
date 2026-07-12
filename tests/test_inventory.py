@@ -33,7 +33,7 @@ def test_02_verify_page_title(inventory_page: InventoryPage) -> None:
 def test_03_verify_left_menu_components(inventory_page: InventoryPage) -> None:
     inventory_page.open_hamburger_button()
     assert inventory_page.is_left_menu_displayed()
-    left_menu_items = inventory_page.get_left_menu_elements()
+    left_menu_items: List[str] = inventory_page.get_left_menu_elements()
     assert left_menu_items == LEFT_MENU_COMPONENTS
 
 
@@ -68,7 +68,9 @@ def test_07_verify_z_to_a_filter(inventory_page: InventoryPage) -> None:
 
 def test_08_verify_low_to_high_filter(inventory_page: InventoryPage) -> None:
     inventory_page.set_products_filter(LOW_TO_HIGH)
-    low_to_high_ordered_results = inventory_page.get_all_products_information()
+    low_to_high_ordered_results: dict[str, dict[str, str]] = (
+        inventory_page.get_all_products_information()
+    )
 
     actual: List[tuple[str, dict[str, str]]] = list(low_to_high_ordered_results.items())
     expected: List[tuple[str, dict[str, str]]] = sorted(
