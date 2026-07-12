@@ -179,6 +179,7 @@ class InventoryPage(BasePage):
         timeout_ms: int = self._timeout_ms(timeout)
         return self._is_item_displayed(self._all_items_container, timeout_ms)
 
+    # get_all_products_names, get_all_products_descriptions, get_all_products_prices aren't refactored since data might change in the future
     def get_all_products_names(self, timeout: Optional[int] = None) -> List[str]:
         timeout_ms: int = self._timeout_ms(timeout)
         names: List[str] = []
