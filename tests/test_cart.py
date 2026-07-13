@@ -12,7 +12,7 @@ from sauce_project.po.pages.login_page import LoginPage
 
 
 def test_00_verify__cart_url(empty_cart_page: CartPage) -> None:
-    expect(empty_cart_page._page).to_have_url("https://www.saucedemo.com/cart.html")
+    expect(empty_cart_page._page).to_have_url(CART_URL)
 
 
 def test_01_cart_is_empty(empty_cart_page: CartPage) -> None:

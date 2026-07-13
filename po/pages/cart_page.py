@@ -1,17 +1,27 @@
 from typing import TYPE_CHECKING, List, Optional
 
 from playwright.sync_api import Locator, Page
-from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 
-from .base_page import BasePage
+# fmt: off
+from .base_page import (DESCRIPTION, ITEM, ITEM_DESCRIPTION, ITEM_NAME,
+                        ITEM_PRICE, ITEM_QUANTITY, NAME, PRICE, QUANTITY,
+                        BasePage)
+# fmt: on
 from .inventory_page import InventoryPage
 
 if TYPE_CHECKING:
     from .checkout_step_1_page import CheckoutStepOnePage
 
-REMOVE_BUTTON_NAME = "Remove"
-CONTINUE_SHOPPING_BUTTON_NAME = "Continue Shopping"
-CHECKOUT_BUTTON_NAME = "Checkout"
+
+# Labels
+REMOVE_BUTTON_LABEL = "Remove Button"
+
+# Button names
+REMOVE = "Remove"
+CONTINUE_SHOPPING = "Continue Shopping"
+CHECKOUT = "Checkout"
+
+SHORT_TIMEOUT = 600
 
 
 class CartPage(BasePage):
@@ -20,80 +30,60 @@ class CartPage(BasePage):
         self._cart_list: Locator = self.locator(".cart_list")
 
         self._item_object: Locator = self.locator(".cart_item")
-        self._item_quantity: Locator = self.locator(".cart_quantity")
-        self._item_name: Locator = self.locator(".inventory_item_name")
-        self._item_description: Locator = self.locator(".inventory_item_desc")
-        self._item_price: Locator = self.locator(".inventory_item_price")
-        self._remove_item_button: Locator = page.get_by_role(
-            "button", name=REMOVE_BUTTON_NAME
+        self._item_quantity: Locator = self._item_object.locator(ITEM_QUANTITY)
+        self._item_name: Locator = self._item_object.locator(ITEM_NAME)
+        self._item_description: Locator = self._item_object.locator(ITEM_DESCRIPTION)
+        self._item_price: Locator = self._item_object.locator(ITEM_PRICE)
+        self._remove_item_button: Locator = self._item_object.get_by_role(
+            "button", name=REMOVE
         )
 
-        self._continue_shopping_button: Locator = page.get_by_role(
-            "button", name=CONTINUE_SHOPPING_BUTTON_NAME
+        self._continue_shopping_button: Locator = self._page.get_by_role(
+            "button", name=CONTINUE_SHOPPING
         )
-        self._checkout_button: Locator = page.get_by_role(
-            "button", name=CHECKOUT_BUTTON_NAME
-        )
-
-    def is_cart_list_container_displayed(self, timeout: Optional[int] = None) -> bool:
-        timeout_ms: int = self._timeout_ms(timeout)
-        try:
-            self._cart_list.wait_for(state="visible", timeout=timeout_ms)
-            return True
-        except PlaywrightTimeoutError:
-            return False
-
-    def is_cart_empty(self, timeout: Optional[int] = None) -> bool:
-        timeout_ms: int = self._timeout_ms(timeout)
-        try:
-            self._item_object.wait_for(state="hidden", timeout=timeout_ms)
-            return True
-        except PlaywrightTimeoutError:
-            return False
-
-    def get_all_products_quantities(self, timeout: Optional[int] = None) -> List[str]:
-        timeout_ms: int = self._timeout_ms(timeout)
-        if self.is_cart_list_container_displayed(timeout=timeout_ms):
-            all_products_quantity: List[str] = [
-                item.inner_text().strip() for item in self._item_quantity.all()
-            ]
-            return all_products_quantity
-        raise RuntimeError(
-            f"Timed out waiting for car list container to be displayed (after {timeout_ms} ms)"
-        )
+        self._checkout_button: Locator = self._page.get_by_role("button", name=CHECKOUT)
 
     def get_all_products_names(self, timeout: Optional[int] = None) -> List[str]:
         timeout_ms: int = self._timeout_ms(timeout)
-        if self.is_cart_list_container_displayed(timeout=timeout_ms):
-            all_products_names: List[str] = [
-                item.inner_text().strip() for item in self._item_name.all()
-            ]
-            return all_products_names
-        raise RuntimeError(
-            f"Timed out waiting for car list container to be displayed (after {timeout_ms} ms)"
-        )
+        all_products_names: List[str] = list()
+        for index, item in enumerate(self._item_object.all()):
+            name: Locator = self.get_element(
+                item.locator(ITEM_NAME), f"{NAME} for {ITEM}{index}", timeout_ms
+            )
+            all_products_names.append(name.inner_text().strip())
+        return all_products_names
+
+    def get_all_products_quantities(self, timeout: Optional[int] = None) -> List[str]:
+        timeout_ms: int = self._timeout_ms(timeout)
+        all_products_quantities: List[str] = list()
+        for index, item in enumerate(self._item_object.all()):
+            quantity: Locator = self.get_element(
+                item.locator(ITEM_QUANTITY), f"{QUANTITY} for {ITEM}{index}", timeout_ms
+            )
+            all_products_quantities.append(quantity.inner_text().strip())
+        return all_products_quantities
 
     def get_all_products_descriptions(self, timeout: Optional[int] = None) -> List[str]:
         timeout_ms: int = self._timeout_ms(timeout)
-        if self.is_cart_list_container_displayed(timeout=timeout_ms):
-            all_products_descriptions: List[str] = [
-                item.inner_text().strip() for item in self._item_description.all()
-            ]
-            return all_products_descriptions
-        raise RuntimeError(
-            f"Timed out waiting for car list container to be displayed (after {timeout_ms} ms)"
-        )
+        all_products_descriptions: List[str] = list()
+        for index, item in enumerate(self._item_object.all()):
+            description: Locator = self.get_element(
+                item.locator(ITEM_DESCRIPTION),
+                f"{DESCRIPTION} for {ITEM}{index}",
+                timeout_ms,
+            )
+            all_products_descriptions.append(description.inner_text().strip())
+        return all_products_descriptions
 
     def get_all_products_prices(self, timeout: Optional[int] = None) -> List[str]:
         timeout_ms: int = self._timeout_ms(timeout)
-        if self.is_cart_list_container_displayed(timeout=timeout_ms):
-            all_products_price: List[str] = [
-                item.inner_text().strip() for item in self._item_price.all()
-            ]
-            return all_products_price
-        raise RuntimeError(
-            f"Timed out waiting for car list container to be displayed (after {timeout_ms} ms)"
-        )
+        all_products_prices: List[str] = list()
+        for index, item in enumerate(self._item_object.all()):
+            price: Locator = self.get_element(
+                item.locator(ITEM_PRICE), f"{PRICE} for {ITEM}{index}", timeout_ms
+            )
+            all_products_prices.append(price.inner_text().strip())
+        return all_products_prices
 
     def get_all_products_information(
         self, timeout: Optional[int] = None
@@ -125,73 +115,55 @@ class CartPage(BasePage):
             return inventory_items_data
         except ValueError as exception:
             raise RuntimeError(
-                "The arguments (name, description, price, and quantity) for zip have different lengths, this means that some inventory items have missing properties."
+                "The arguments (name, description, price, and quantity) have different lengths, this means that some inventory items have missing properties."
             ) from exception
 
     def remove_item(self, index: int = 0, timeout: Optional[int] = None) -> None:
         timeout_ms: int = self._timeout_ms(timeout)
-        try:
-            self._remove_item_button.wait_for(state="visible", timeout=timeout_ms)
-            self._remove_item_button.nth(index).click()
-        except PlaywrightTimeoutError:
-            raise RuntimeError(
-                f"Timed out waiting for remove button for item #{index} to be displayed (after {timeout_ms} ms)"
-            )
+        remove_button: Locator = self.get_element(
+            self._remove_item_button.nth(index),
+            f"{REMOVE_BUTTON_LABEL} for {ITEM}{index}",
+            timeout_ms,
+        )
+        remove_button.click()
 
     def get_amount_of_items_in_cart(self, timeout: Optional[int] = None) -> int:
-        timeout_ms: int = self._timeout_ms(timeout)
-        if self.is_cart_list_container_displayed(timeout_ms):
-            index = 0
-            try:
-                all_items: List[Locator] = self._item_object.all()
-                for index, item in enumerate(all_items):
-                    item.wait_for(state="visible", timeout=timeout_ms)
-            except PlaywrightTimeoutError:
-                raise RuntimeError(
-                    f"Timed out waiting for item #{index} to be displayed (after {timeout_ms} ms)"
-                )
-            else:
-                return len(all_items)
-        return 0
+        if timeout is None:
+            timeout_ms: int = SHORT_TIMEOUT
+        else:
+            timeout_ms = self._timeout_ms(timeout)
+        try:
+            self.get_element(self._item_object.first, ITEM, timeout_ms)
+            return self._item_object.count()
+        except RuntimeError:
+            return 0
 
     def is_continue_shopping_button_displayed(
         self, timeout: Optional[int] = None
     ) -> bool:
         timeout_ms: int = self._timeout_ms(timeout)
-        try:
-            self._continue_shopping_button.wait_for(state="visible", timeout=timeout_ms)
-            return True
-        except PlaywrightTimeoutError:
-            return False
+        return self._is_item_displayed(self._continue_shopping_button, timeout_ms)
 
     def get_inventory_page(self, timeout: Optional[int] = None) -> InventoryPage:
         timeout_ms: int = self._timeout_ms(timeout)
-        try:
-            self._continue_shopping_button.click(timeout=timeout_ms)
-            return InventoryPage(self._page)
-        except PlaywrightTimeoutError:
-            raise RuntimeError(
-                f"Timed out waiting for {CONTINUE_SHOPPING_BUTTON_NAME} button to be clicked (after {timeout_ms} ms)"
-            )
+        continue_shopping_button: Locator = self.get_element(
+            self._continue_shopping_button, CONTINUE_SHOPPING, timeout_ms
+        )
+        continue_shopping_button.click()
+        return InventoryPage(self._page)
 
     def is_checkout_button_displayed(self, timeout: Optional[int] = None) -> bool:
         timeout_ms: int = self._timeout_ms(timeout)
-        try:
-            self._checkout_button.wait_for(state="visible", timeout=timeout_ms)
-            return True
-        except PlaywrightTimeoutError:
-            return False
+        return self._is_item_displayed(self._checkout_button, timeout_ms)
 
     def get_checkout_step_1_page(
         self, timeout: Optional[int] = None
     ) -> "CheckoutStepOnePage":
         timeout_ms: int = self._timeout_ms(timeout)
-        try:
-            self._checkout_button.click(timeout=timeout_ms)
-            from .checkout_step_1_page import CheckoutStepOnePage
+        checkout_button: Locator = self.get_element(
+            self._checkout_button, CHECKOUT, timeout_ms
+        )
+        checkout_button.click()
+        from .checkout_step_1_page import CheckoutStepOnePage
 
-            return CheckoutStepOnePage(self._page)
-        except PlaywrightTimeoutError:
-            raise RuntimeError(
-                f"Timed out waiting for {CHECKOUT_BUTTON_NAME} button to be clicked (after {timeout_ms} ms)"
-            )
+        return CheckoutStepOnePage(self._page)

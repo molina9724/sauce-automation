@@ -10,9 +10,21 @@ CART_URL: str = BASE_URL + "cart.html"
 CHECKOUT_STEP_1_URL: str = BASE_URL + "checkout-step-one.html"
 CHECKOUT_STEP_2_URL: str = BASE_URL + "checkout-step-two.html"
 
+# Selectors
+ITEM_NAME: str = ".inventory_item_name"
+ITEM_PRICE: str = ".inventory_item_price"
+ITEM_DESCRIPTION: str = ".inventory_item_desc"
+CART_BUTTON: str = ".shopping_cart_link"
+CART_COUNTER_BADGE: str = ".shopping_cart_badge"
+ITEM_QUANTITY: str = ".cart_quantity"
 READY_SELECTOR: str = 'input[name="user-name"]'
 
+# Labels
 ITEM: str = "Item #"
+NAME: str = "Name"
+PRICE: str = "Price"
+DESCRIPTION: str = "Description"
+QUANTITY: str = "Quantity"
 
 
 class BasePage:
@@ -41,6 +53,8 @@ class BasePage:
         """
         self._page: Page = page
         self._timeout: int = timeout
+        self._cart_button: Locator = self._page.locator(CART_BUTTON)
+        self._cart_counter: Locator = self._cart_button.locator(CART_COUNTER_BADGE)
 
     def _timeout_ms(self, timeout: Optional[int]) -> int:
         """Resolve an optional timeout argument to an int (milliseconds).
@@ -146,3 +160,11 @@ class BasePage:
         raise RuntimeError(
             f"Timed out waiting for {label} to be displayed after {timeout_ms} ms"
         )
+
+    def is_cart_empty(self, timeout: Optional[int] = None) -> bool:
+        timeout_ms: int = self._timeout_ms(timeout)
+        try:
+            self._cart_counter.wait_for(state="hidden", timeout=timeout_ms)
+            return True
+        except PlaywrightTimeoutError:
+            return False

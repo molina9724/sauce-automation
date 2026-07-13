@@ -1,9 +1,13 @@
 from typing import TYPE_CHECKING, List, Optional
 
 from playwright.sync_api import Locator, Page
-from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 
-from .base_page import BASE_URL, CART_URL, ITEM, BasePage
+# fmt: off
+from .base_page import (BASE_URL, CART_BUTTON, CART_COUNTER_BADGE, CART_URL,
+                        ITEM, ITEM_DESCRIPTION, ITEM_NAME, ITEM_PRICE,
+                        BasePage)
+
+# fmt: on
 
 if TYPE_CHECKING:
     from .cart_page import CartPage
@@ -13,12 +17,7 @@ if TYPE_CHECKING:
 # Selectors
 ADD_BUTTON: str = ".btn_inventory"
 REMOVE_BUTTON: str = ADD_BUTTON
-CART_BUTTON: str = ".shopping_cart_link"
-CART_COUNTER_BADGE: str = ".shopping_cart_badge"
 LEFT_MENU_ITEM: str = ".menu-item"
-ITEM_PRICE: str = ".inventory_item_price"
-ITEM_DESCRIPTION: str = ".inventory_item_desc"
-ITEM_NAME: str = ".inventory_item_name"
 
 # Labels
 CART_COUNTER: str = "Cart Counter"
@@ -82,9 +81,6 @@ class InventoryPage(BasePage):
         )
         self._add_to_cart_button: Locator = self._item.locator(ADD_BUTTON)
         self._remove_button: Locator = self._item.locator(REMOVE_BUTTON)
-
-        self._cart_button: Locator = self._page.locator(CART_BUTTON)
-        self._cart_counter: Locator = self._cart_button.locator(CART_COUNTER_BADGE)
 
     def get_hamburger_button(self, timeout: Optional[int] = None) -> Locator:
         timeout_ms: int = self._timeout_ms(timeout)
@@ -296,11 +292,3 @@ class InventoryPage(BasePage):
             raise RuntimeError(
                 f"{CART_COUNTER} is returning a value that cannot be converted to int"
             )
-
-    def is_cart_empty(self, timeout: Optional[int] = None) -> bool:
-        timeout_ms: int = self._timeout_ms(timeout)
-        try:
-            self._cart_counter.wait_for(state="hidden", timeout=timeout_ms)
-            return True
-        except PlaywrightTimeoutError:
-            return False

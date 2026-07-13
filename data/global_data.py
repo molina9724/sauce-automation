@@ -1,2 +1,3 @@
+# POM
 ITEM_INDEX: int = 0
 ITEMS_AMOUNT: int = 6
