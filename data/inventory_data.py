@@ -1,6 +1,6 @@
 from typing import List
 
-LEFT_MENU_COMPONENTS: List[str] = ["All Items", "About", "Logout", "Reset App State"]
+LEFT_MENU_ITEMS: List[str] = ["All Items", "About", "Logout", "Reset App State"]
 
 # Filter options
 A_TO_Z = "Name (A to Z)"

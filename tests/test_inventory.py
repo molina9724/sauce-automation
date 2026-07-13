@@ -8,7 +8,7 @@ from sauce_project.data.global_data import ITEM_INDEX
 from sauce_project.data.inventory_data import (
     ACCESS_INVENTORY_PAGE_ERROR_WITHOUT_LOGIN, DEFAULT_FILTER_VALUE,
     DOCUMENT_TITLE, FILTER_OPTIONS, HIGH_TO_LOW, INVENTORY_ITEMS_DATA,
-    LEFT_MENU_COMPONENTS, LOGO_TEXT, LOW_TO_HIGH, PRODUCTS_TITLE, Z_TO_A,
+    LEFT_MENU_ITEMS, LOGO_TEXT, LOW_TO_HIGH, PRODUCTS_TITLE, Z_TO_A,
     get_price_value)
 # fmt: on
 from sauce_project.po.pages.base_page import INVENTORY_URL
@@ -34,7 +34,7 @@ def test_03_verify_left_menu_components(inventory_page: InventoryPage) -> None:
     inventory_page.open_hamburger_button()
     assert inventory_page.is_left_menu_displayed()
     left_menu_items: List[str] = inventory_page.get_left_menu_elements()
-    assert left_menu_items == LEFT_MENU_COMPONENTS
+    assert left_menu_items == LEFT_MENU_ITEMS
 
 
 def test_04_verify_products_title(inventory_page: InventoryPage) -> None:
