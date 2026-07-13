@@ -3,9 +3,8 @@ from typing import TYPE_CHECKING, List, Optional
 from playwright.sync_api import Locator, Page
 
 # fmt: off
-from .base_page import (BASE_URL, CART_BUTTON, CART_COUNTER_BADGE, CART_URL,
-                        ITEM, ITEM_DESCRIPTION, ITEM_NAME, ITEM_PRICE,
-                        BasePage)
+from .base_page import (BASE_URL, CART_URL, ITEM, ITEM_DESCRIPTION, ITEM_NAME,
+                        ITEM_PRICE, BasePage)
 
 # fmt: on
 
@@ -22,7 +21,7 @@ LEFT_MENU_ITEM: str = ".menu-item"
 # Labels
 CART_COUNTER: str = "Cart Counter"
 ITEMS_CONTAINER: str = "Items Container"
-SORT_FILTER: str = "Sort Filter"
+PRODUCTS_FILTER: str = "Products Filter"
 PRODUCTS_TITLE: str = "Products Title"
 LOGO_TEXT: str = "Logo Text"
 DOCUMENT_TITLE: str = "Document Title"
@@ -69,7 +68,10 @@ class InventoryPage(BasePage):
         self._logout_link: Locator = self._left_menu.get_by_role("link", name="Logout")
 
         self._products_title: Locator = self._page.locator(".title")
+
         self._products_filter: Locator = self._page.get_by_role("combobox")
+        self._all_filter_options: Locator = self._page.locator("option")
+        self._selected_filter_option: Locator = self._page.locator(".active_option")
 
         self._all_items_container: Locator = self._page.locator(".inventory_list")
         self._item: Locator = self._page.locator(".inventory_item")
@@ -147,9 +149,11 @@ class InventoryPage(BasePage):
     def get_products_filter_options(self, timeout: Optional[int] = None) -> List[str]:
         timeout_ms: int = self._timeout_ms(timeout)
         sort_filter: Locator = self.get_element(
-            self._products_filter, SORT_FILTER, timeout_ms
+            self._products_filter, PRODUCTS_FILTER, timeout_ms
         )
-        filter_options: List[Locator] = sort_filter.locator("option").all()
+        filter_options: List[Locator] = sort_filter.locator(
+            self._all_filter_options
+        ).all()
         all_prices_filter_options: List[str] = [
             filter_option.inner_text().strip()
             for filter_option in filter_options
@@ -160,14 +164,14 @@ class InventoryPage(BasePage):
     def get_products_filter_selected_option(self, timeout: Optional[int] = None) -> str:
         timeout_ms: int = self._timeout_ms(timeout)
         selected_filter: Locator = self.get_element(
-            self._page.locator(".active_option"), SORT_FILTER, timeout_ms
+            self._selected_filter_option, PRODUCTS_FILTER, timeout_ms
         )
         return selected_filter.inner_text().strip()
 
     def set_products_filter(self, option: str, timeout: Optional[int] = None) -> None:
         timeout_ms: int = self._timeout_ms(timeout)
         filter_options: Locator = self.get_element(
-            self._products_filter, SORT_FILTER, timeout_ms
+            self._products_filter, PRODUCTS_FILTER, timeout_ms
         )
         filter_options.select_option(option)
 
