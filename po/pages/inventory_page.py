@@ -4,7 +4,7 @@ from playwright.sync_api import Locator, Page
 
 # fmt: off
 from .base_page import (BASE_URL, CART_URL, ITEM, ITEM_DESCRIPTION, ITEM_NAME,
-                        ITEM_PRICE, BasePage)
+                        ITEM_PRICE, REMOVE_BUTTON_LABEL, BasePage)
 
 # fmt: on
 
@@ -28,9 +28,7 @@ DOCUMENT_TITLE: str = "Document Title"
 HAMBURGER_BUTTON: str = "Hamburger Button"
 LOGOUT_LINK: str = "Logout Link"
 LEFT_MENU: str = "Left Menu"
-
-# Buttons names
-REMOVE_FROM_CART = "Remove"
+ADD_TO_CART_LABEL: str = "Add to cart Button"
 
 
 class InventoryPage(BasePage):
@@ -272,17 +270,21 @@ class InventoryPage(BasePage):
 
     def add_item_to_cart(self, index: int, timeout: Optional[int] = None) -> None:
         timeout_ms: int = self._timeout_ms(timeout)
-        item: Locator = self.get_element(
-            self._item.nth(index), f"{ITEM}{index}", timeout_ms
+        add_button: Locator = self.get_element(
+            self._add_to_cart_button.nth(index),
+            f"{ADD_TO_CART_LABEL} for {ITEM}{index}",
+            timeout_ms,
         )
-        item.locator(ADD_BUTTON).click(timeout=timeout_ms)
+        add_button.click(timeout=timeout_ms)
 
     def remove_item_from_cart(self, index: int, timeout: Optional[int] = None) -> None:
         timeout_ms: int = self._timeout_ms(timeout)
-        item: Locator = self.get_element(
-            self._item.nth(index), f"{ITEM}{index}", timeout_ms
+        remove_button: Locator = self.get_element(
+            self._remove_button.nth(index),
+            f"{REMOVE_BUTTON_LABEL} for {ITEM}{index}",
+            timeout_ms,
         )
-        item.locator(REMOVE_BUTTON).click(timeout=timeout_ms)
+        remove_button.click(timeout=timeout_ms)
 
     def get_cart_counter(self, timeout: Optional[int] = None) -> int:
         timeout_ms: int = self._timeout_ms(timeout)

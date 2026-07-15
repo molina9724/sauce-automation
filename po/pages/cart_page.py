@@ -5,7 +5,7 @@ from playwright.sync_api import Locator, Page
 # fmt: off
 from .base_page import (DESCRIPTION, ITEM, ITEM_DESCRIPTION, ITEM_NAME,
                         ITEM_PRICE, ITEM_QUANTITY, NAME, PRICE, QUANTITY,
-                        BasePage)
+                        REMOVE_BUTTON_LABEL, BasePage)
 # fmt: on
 from .inventory_page import InventoryPage
 
@@ -13,13 +13,10 @@ if TYPE_CHECKING:
     from .checkout_step_1_page import CheckoutStepOnePage
 
 
-# Labels
-REMOVE_BUTTON_LABEL = "Remove Button"
-
 # Button names
-REMOVE = "Remove"
 CONTINUE_SHOPPING = "Continue Shopping"
 CHECKOUT = "Checkout"
+REMOVE: str = "Remove"
 
 SHORT_TIMEOUT = 600
 
@@ -29,12 +26,12 @@ class CartPage(BasePage):
         super().__init__(page, timeout)
         self._cart_list: Locator = self.locator(".cart_list")
 
-        self._item_object: Locator = self.locator(".cart_item")
-        self._item_quantity: Locator = self._item_object.locator(ITEM_QUANTITY)
-        self._item_name: Locator = self._item_object.locator(ITEM_NAME)
-        self._item_description: Locator = self._item_object.locator(ITEM_DESCRIPTION)
-        self._item_price: Locator = self._item_object.locator(ITEM_PRICE)
-        self._remove_item_button: Locator = self._item_object.get_by_role(
+        self._item: Locator = self.locator(".cart_item")
+        self._item_quantity: Locator = self._item.locator(ITEM_QUANTITY)
+        self._item_name: Locator = self._item.locator(ITEM_NAME)
+        self._item_description: Locator = self._item.locator(ITEM_DESCRIPTION)
+        self._item_price: Locator = self._item.locator(ITEM_PRICE)
+        self._remove_item_button: Locator = self._item.get_by_role(
             "button", name=REMOVE
         )
 
@@ -46,7 +43,7 @@ class CartPage(BasePage):
     def get_all_products_names(self, timeout: Optional[int] = None) -> List[str]:
         timeout_ms: int = self._timeout_ms(timeout)
         all_products_names: List[str] = list()
-        for index, item in enumerate(self._item_object.all()):
+        for index, item in enumerate(self._item.all()):
             name: Locator = self.get_element(
                 item.locator(ITEM_NAME), f"{NAME} for {ITEM}{index}", timeout_ms
             )
@@ -56,7 +53,7 @@ class CartPage(BasePage):
     def get_all_products_quantities(self, timeout: Optional[int] = None) -> List[str]:
         timeout_ms: int = self._timeout_ms(timeout)
         all_products_quantities: List[str] = list()
-        for index, item in enumerate(self._item_object.all()):
+        for index, item in enumerate(self._item.all()):
             quantity: Locator = self.get_element(
                 item.locator(ITEM_QUANTITY), f"{QUANTITY} for {ITEM}{index}", timeout_ms
             )
@@ -66,7 +63,7 @@ class CartPage(BasePage):
     def get_all_products_descriptions(self, timeout: Optional[int] = None) -> List[str]:
         timeout_ms: int = self._timeout_ms(timeout)
         all_products_descriptions: List[str] = list()
-        for index, item in enumerate(self._item_object.all()):
+        for index, item in enumerate(self._item.all()):
             description: Locator = self.get_element(
                 item.locator(ITEM_DESCRIPTION),
                 f"{DESCRIPTION} for {ITEM}{index}",
@@ -78,7 +75,7 @@ class CartPage(BasePage):
     def get_all_products_prices(self, timeout: Optional[int] = None) -> List[str]:
         timeout_ms: int = self._timeout_ms(timeout)
         all_products_prices: List[str] = list()
-        for index, item in enumerate(self._item_object.all()):
+        for index, item in enumerate(self._item.all()):
             price: Locator = self.get_element(
                 item.locator(ITEM_PRICE), f"{PRICE} for {ITEM}{index}", timeout_ms
             )
@@ -133,8 +130,8 @@ class CartPage(BasePage):
         else:
             timeout_ms = self._timeout_ms(timeout)
         try:
-            self.get_element(self._item_object.first, ITEM, timeout_ms)
-            return self._item_object.count()
+            self.get_element(self._item.first, ITEM, timeout_ms)
+            return self._item.count()
         except RuntimeError:
             return 0
 

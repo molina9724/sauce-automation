@@ -25,6 +25,7 @@ NAME: str = "Name"
 PRICE: str = "Price"
 DESCRIPTION: str = "Description"
 QUANTITY: str = "Quantity"
+REMOVE_BUTTON_LABEL = "Remove Button"
 
 
 class BasePage:
