@@ -6,7 +6,7 @@ from sauce_project.po.pages.cart_page import REMOVE
 
 # fmt: off
 from .base_page import (BASE_URL, CART_URL, ITEM, ITEM_DESCRIPTION, ITEM_NAME,
-                        ITEM_PRICE, REMOVE_BUTTON_LABEL, BasePage)
+                        ITEM_PRICE, BasePage)
 
 # fmt: on
 
@@ -14,12 +14,14 @@ if TYPE_CHECKING:
     from .cart_page import CartPage
     from .login_page import LoginPage
 
-
 # Selectors
 LEFT_MENU_ITEM: str = ".menu-item"
 
 # Buttons
 ADD_TO_CART: str = "Add to cart"
+
+# Textbox names
+LOGOUT: str = "Logout"
 
 # Labels
 CART_COUNTER: str = "Cart Counter"
@@ -66,7 +68,7 @@ class InventoryPage(BasePage):
         )
         self._left_menu: Locator = self._page.locator(".bm-menu")
         self._left_menu_item: Locator = self._left_menu.locator(LEFT_MENU_ITEM)
-        self._logout_link: Locator = self._left_menu.get_by_role("link", name="Logout")
+        self._logout_link: Locator = self._left_menu.get_by_role("link", name=LOGOUT)
 
         self._products_title: Locator = self._page.locator(".title")
 

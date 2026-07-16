@@ -10,6 +10,11 @@ from .base_page import INVENTORY_URL, BasePage
 if TYPE_CHECKING:
     from .inventory_page import InventoryPage
 
+# Textbox names
+USERNAME: str = "Username"
+PASSWORD: str = "Password"
+LOGIN: str = "Login"
+
 # Extra timeouts
 INCREASED_TIMEOUT = 20000
 SHORT_TIMEOUT = 600
@@ -33,9 +38,9 @@ class LoginPage(BasePage):
             "heading", name="Password for all users:"
         )
 
-        self._username: Locator = self._page.get_by_role("textbox", name="Username")
-        self._password: Locator = self._page.get_by_role("textbox", name="Password")
-        self._login_button: Locator = self._page.get_by_role("button", name="Login")
+        self._username: Locator = self._page.get_by_role("textbox", name=USERNAME)
+        self._password: Locator = self._page.get_by_role("textbox", name=PASSWORD)
+        self._login_button: Locator = self._page.get_by_role("button", name=LOGIN)
 
         self._error_header: Locator = self._page.locator('[data-test="error"]')
         self._close_error_button: Locator = self._page.locator(
@@ -56,12 +61,9 @@ class LoginPage(BasePage):
         self._password.fill(password)
         self._login_button.click()
 
-        try:
-            self._error_header.wait_for(state="visible", timeout=SHORT_TIMEOUT)
-            error_message = self.get_error_text() or "Unknown login error"
-            raise RuntimeError(error_message)
-        except PlaywrightTimeoutError:
-            pass
+        if self._is_item_displayed(self._error_header, SHORT_TIMEOUT):
+            quick_error_message: str = self.get_error_text() or "Unknown login error"
+            raise RuntimeError(quick_error_message)
 
         try:
             self.wait_for_url(INVENTORY_URL, timeout=timeout_ms)

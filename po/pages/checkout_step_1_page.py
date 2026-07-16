@@ -12,12 +12,17 @@ from sauce_project.po.pages.cart_page import CartPage
 if TYPE_CHECKING:
     from .checkout_step_2_page import CheckoutStepTwoPage
 
-FIRST_NAME_FIELD = "First Name"
-LAST_NAME_FIELD = "Last Name"
-ZIP_CODE_FIELD = "Zip/Postal Code"
+# Textbox names
+FIRST_NAME = "First Name"
+LAST_NAME = "Last Name"
+ZIP_CODE = "Zip/Postal Code"
 
-CANCEL_BUTTON_TEXT = "Cancel"
-CONTINUE_BUTTON_TEXT = "Continue"
+# Buttons names
+CANCEL_BUTTON = "Cancel"
+CONTINUE_BUTTON = "Continue"
+
+# Labels
+CANCEL_BUTTON_LABEL: str = "Cancel Button"
 
 SHORT_TIMEOUT: int = 600
 
@@ -25,27 +30,24 @@ SHORT_TIMEOUT: int = 600
 class CheckoutStepOnePage(BasePage):
     def __init__(self, page: Page, timeout: int = 10000) -> None:
         super().__init__(page, timeout)
-        self._checkout_information_wrapper = self.locator(".checkout_info_wrapper")
-        self._first_name: Locator = page.get_by_role("textbox", name=FIRST_NAME_FIELD)
-        self._last_name: Locator = page.get_by_role("textbox", name=LAST_NAME_FIELD)
-        self._zip_code: Locator = page.get_by_role("textbox", name=ZIP_CODE_FIELD)
-
-        self._error_heading: Locator = self.locator("h3[data-test='error']")
-
-        self._cancel_button: Locator = page.get_by_role(
-            "button", name=CANCEL_BUTTON_TEXT
+        self._checkout_information_wrapper: Locator = self.locator(
+            ".checkout_info_wrapper"
         )
+        self._first_name: Locator = page.get_by_role("textbox", name=FIRST_NAME)
+        self._last_name: Locator = page.get_by_role("textbox", name=LAST_NAME)
+        self._zip_code: Locator = page.get_by_role("textbox", name=ZIP_CODE)
+
+        self._error_heading: Locator = self.locator('[data-test="error"]')
+        self._close_error_button: Locator = self._page.locator(".error-button")
+
+        self._cancel_button: Locator = page.get_by_role("button", name=CANCEL_BUTTON)
         self._continue_button: Locator = page.get_by_role(
-            "button", name=CONTINUE_BUTTON_TEXT
+            "button", name=CONTINUE_BUTTON
         )
 
-    def is_error_heading_visible(self, timeout: Optional[int] = None):
+    def is_error_heading_visible(self, timeout: Optional[int] = None) -> bool:
         timeout_ms: int = self._timeout_ms(timeout)
-        try:
-            self._error_heading.wait_for(state="visible", timeout=timeout_ms)
-            return True
-        except PlaywrightTimeoutError:
-            return False
+        return self._is_item_displayed(self._error_heading, timeout_ms)
 
     def get_error_text(self, timeout: Optional[int] = None) -> str | None:
         timeout_ms: int = self._timeout_ms(timeout)
@@ -54,6 +56,7 @@ class CheckoutStepOnePage(BasePage):
         else:
             return None
 
+    # TODO: Refactor this method and login (Optional)
     def fill_in_checkout_information(
         self,
         first_name: str,
@@ -68,14 +71,11 @@ class CheckoutStepOnePage(BasePage):
         self._zip_code.fill(zip_code)
         self._continue_button.click()
 
-        try:
-            self._error_heading.wait_for(state="visible", timeout=SHORT_TIMEOUT)
-            error_message = (
+        if self._is_item_displayed(self._error_heading, SHORT_TIMEOUT):
+            quick_error_message: str = (
                 self.get_error_text(SHORT_TIMEOUT) or "Unknown error in checkout"
             )
-            raise RuntimeError(error_message)
-        except PlaywrightTimeoutError:
-            pass
+            raise RuntimeError(quick_error_message)
 
         try:
             self._page.wait_for_url(CHECKOUT_STEP_2_URL)
@@ -92,23 +92,18 @@ class CheckoutStepOnePage(BasePage):
 
     def is_cancel_button_displayed(self, timeout: Optional[int] = None) -> bool:
         timeout_ms: int = self._timeout_ms(timeout)
-        try:
-            self._cancel_button.wait_for(state="visible", timeout=timeout_ms)
-            return True
-        except PlaywrightTimeoutError:
-            return False
+        return self._is_item_displayed(self._cancel_button, timeout_ms)
 
     def get_cart_page(self, timeout: Optional[int] = None) -> CartPage:
         timeout_ms: int = self._timeout_ms(timeout)
-        if self.is_cancel_button_displayed(timeout=timeout_ms):
-            try:
-                self._cancel_button.click()
-                self.wait_for_url(CART_URL, timeout_ms)
-                return CartPage(self._page)
-            except RuntimeError:
-                raise RuntimeError(
-                    f"Timed out waiting for checkout to reach {CART_URL} after {timeout_ms} ms"
-                )
-        raise RuntimeError(
-            f"Timed out waiting for {CANCEL_BUTTON_TEXT} to be displayed after {timeout_ms} ms"
+        cancel_button = self.get_element(
+            self._cancel_button, CANCEL_BUTTON_LABEL, timeout_ms
         )
+        cancel_button.click()
+        try:
+            self.wait_for_url(CART_URL, timeout_ms)
+            return CartPage(self._page)
+        except RuntimeError:
+            raise RuntimeError(
+                f"Timed out waiting for checkout to reach {CART_URL} after {timeout_ms} ms"
+            )
