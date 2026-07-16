@@ -172,3 +172,7 @@ class BasePage:
             return True
         except PlaywrightTimeoutError:
             return False
+
+    @staticmethod
+    def get_parent(locator: Locator) -> Locator:
+        return locator.locator("..")

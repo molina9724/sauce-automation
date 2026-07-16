@@ -12,6 +12,9 @@ from sauce_project.po.pages.cart_page import CartPage
 if TYPE_CHECKING:
     from .checkout_step_2_page import CheckoutStepTwoPage
 
+# Selectors
+ERROR_ICON: str = ".error_icon"
+
 # Textbox names
 FIRST_NAME = "First Name"
 LAST_NAME = "Last Name"
@@ -23,6 +26,9 @@ CONTINUE_BUTTON = "Continue"
 
 # Labels
 CANCEL_BUTTON_LABEL: str = "Cancel Button"
+FIRST_NAME_LABEL = "First Name Field"
+LAST_NAME_LABEL = "Last Name Field"
+ZIP_CODE_LABEL = "Zip/Postal Code Field"
 
 SHORT_TIMEOUT: int = 600
 
@@ -55,6 +61,37 @@ class CheckoutStepOnePage(BasePage):
             return self._error_heading.inner_text().strip()
         else:
             return None
+
+    def get_first_name(self, timeout: Optional[int] = None) -> Locator:
+        timeout_ms: int = self._timeout_ms(timeout)
+        first_name: Locator = self.get_element(
+            self._first_name, FIRST_NAME_LABEL, timeout_ms
+        )
+        return first_name
+
+    def get_last_name(self, timeout: Optional[int] = None) -> Locator:
+        timeout_ms: int = self._timeout_ms(timeout)
+        last_name: Locator = self.get_element(
+            self._last_name, LAST_NAME_LABEL, timeout_ms
+        )
+        return last_name
+
+    def get_zip_code(self, timeout: Optional[int] = None) -> Locator:
+        timeout_ms: int = self._timeout_ms(timeout)
+        zip_code: Locator = self.get_element(self._zip_code, ZIP_CODE_LABEL, timeout_ms)
+        return zip_code
+
+    def get_fields_containers(self) -> tuple[Locator, Locator, Locator]:
+        first_name: Locator = self.get_first_name()
+        last_name: Locator = self.get_last_name()
+        zip_code: Locator = self.get_zip_code()
+
+        # The error icon is a sibling of the field, not a child of it
+        first_name_parent: Locator = self.get_parent(first_name)
+        last_name_parent: Locator = self.get_parent(last_name)
+        zip_code_parent: Locator = self.get_parent(zip_code)
+
+        return first_name_parent, last_name_parent, zip_code_parent
 
     # TODO: Refactor this method and login (Optional)
     def fill_in_checkout_information(

@@ -1,5 +1,5 @@
 import pytest
-from playwright.sync_api import expect
+from playwright.sync_api import Locator, expect
 
 # fmt: off
 from sauce_project.data.checkout_step_1_data import (
@@ -9,7 +9,8 @@ from sauce_project.data.checkout_step_1_data import (
 from sauce_project.po.pages.base_page import (CART_URL, CHECKOUT_STEP_1_URL,
                                               CHECKOUT_STEP_2_URL)
 from sauce_project.po.pages.cart_page import CartPage
-from sauce_project.po.pages.checkout_step_1_page import CheckoutStepOnePage
+from sauce_project.po.pages.checkout_step_1_page import (ERROR_ICON,
+                                                         CheckoutStepOnePage)
 from sauce_project.po.pages.login_page import LoginPage
 
 # fmt: on
@@ -18,11 +19,19 @@ from sauce_project.po.pages.login_page import LoginPage
 def test_01_verify_checkout_error_with_empty_first_name(
     checkout_step_1_with_item: CheckoutStepOnePage,
 ) -> None:
+    # General error
     with pytest.raises(RuntimeError) as exception:
         checkout_step_1_with_item.fill_in_checkout_information(
             first_name="", last_name=LAST_NAME, zip_code=ZIP_CODE
         )
     assert EMPTY_FIRST_NAME_ERROR == str(exception.value)
+
+    # Icon error
+    all_containers: tuple[Locator, Locator, Locator] = (
+        checkout_step_1_with_item.get_fields_containers()
+    )
+    for container in all_containers:
+        expect(container.locator(ERROR_ICON)).to_be_visible()
 
 
 def test_02_verify_checkout_error_with_empty_last_name(
