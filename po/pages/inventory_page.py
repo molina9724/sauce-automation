@@ -2,6 +2,8 @@ from typing import TYPE_CHECKING, List, Optional
 
 from playwright.sync_api import Locator, Page
 
+from sauce_project.po.pages.cart_page import REMOVE
+
 # fmt: off
 from .base_page import (BASE_URL, CART_URL, ITEM, ITEM_DESCRIPTION, ITEM_NAME,
                         ITEM_PRICE, REMOVE_BUTTON_LABEL, BasePage)
@@ -14,9 +16,10 @@ if TYPE_CHECKING:
 
 
 # Selectors
-ADD_BUTTON: str = ".btn_inventory"
-REMOVE_BUTTON: str = ADD_BUTTON
 LEFT_MENU_ITEM: str = ".menu-item"
+
+# Buttons
+ADD_TO_CART: str = "Add to cart"
 
 # Labels
 CART_COUNTER: str = "Cart Counter"
@@ -79,8 +82,6 @@ class InventoryPage(BasePage):
         self._item_image: Locator = self._item.locator(
             "img[class='inventory_item_img']"
         )
-        self._add_to_cart_button: Locator = self._item.locator(ADD_BUTTON)
-        self._remove_button: Locator = self._item.locator(REMOVE_BUTTON)
 
     def get_hamburger_button(self, timeout: Optional[int] = None) -> Locator:
         timeout_ms: int = self._timeout_ms(timeout)
@@ -270,20 +271,22 @@ class InventoryPage(BasePage):
 
     def add_item_to_cart(self, index: int, timeout: Optional[int] = None) -> None:
         timeout_ms: int = self._timeout_ms(timeout)
-        add_button: Locator = self.get_element(
-            self._add_to_cart_button.nth(index),
-            f"{ADD_TO_CART_LABEL} for {ITEM}{index}",
+        item: Locator = self.get_element(
+            self._item.nth(index),
+            f"{ITEM}{index}",
             timeout_ms,
         )
+        add_button: Locator = item.get_by_role("button", name=ADD_TO_CART)
         add_button.click(timeout=timeout_ms)
 
     def remove_item_from_cart(self, index: int, timeout: Optional[int] = None) -> None:
         timeout_ms: int = self._timeout_ms(timeout)
-        remove_button: Locator = self.get_element(
-            self._remove_button.nth(index),
-            f"{REMOVE_BUTTON_LABEL} for {ITEM}{index}",
+        item: Locator = self.get_element(
+            self._item.nth(index),
+            f" {ITEM}{index}",
             timeout_ms,
         )
+        remove_button: Locator = item.get_by_role("button", name=REMOVE)
         remove_button.click(timeout=timeout_ms)
 
     def get_cart_counter(self, timeout: Optional[int] = None) -> int:

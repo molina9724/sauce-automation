@@ -27,6 +27,9 @@ DESCRIPTION: str = "Description"
 QUANTITY: str = "Quantity"
 REMOVE_BUTTON_LABEL = "Remove Button"
 
+# Buttons
+REMOVE: str = "Remove"
+
 
 class BasePage:
     """

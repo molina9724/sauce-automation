@@ -5,7 +5,7 @@ from playwright.sync_api import Locator, Page
 # fmt: off
 from .base_page import (DESCRIPTION, ITEM, ITEM_DESCRIPTION, ITEM_NAME,
                         ITEM_PRICE, ITEM_QUANTITY, NAME, PRICE, QUANTITY,
-                        REMOVE_BUTTON_LABEL, BasePage)
+                        REMOVE, REMOVE_BUTTON_LABEL, BasePage)
 # fmt: on
 from .inventory_page import InventoryPage
 
@@ -16,7 +16,6 @@ if TYPE_CHECKING:
 # Button names
 CONTINUE_SHOPPING = "Continue Shopping"
 CHECKOUT = "Checkout"
-REMOVE: str = "Remove"
 
 SHORT_TIMEOUT = 600
 
