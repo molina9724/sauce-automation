@@ -29,7 +29,10 @@ CANCEL_BUTTON_LABEL: str = "Cancel Button"
 FIRST_NAME_LABEL = "First Name Field"
 LAST_NAME_LABEL = "Last Name Field"
 ZIP_CODE_LABEL = "Zip/Postal Code Field"
+ERROR_MESSAGE_CONTAINER: str = "Error Message Container"
+ERROR_HEADING: str = "Error Heading"
 
+# POM
 SHORT_TIMEOUT: int = 600
 
 
@@ -43,13 +46,32 @@ class CheckoutStepOnePage(BasePage):
         self._last_name: Locator = page.get_by_role("textbox", name=LAST_NAME)
         self._zip_code: Locator = page.get_by_role("textbox", name=ZIP_CODE)
 
-        self._error_heading: Locator = self.locator('[data-test="error"]')
-        self._close_error_button: Locator = self._page.locator(".error-button")
+        self._error_message_container: Locator = self.locator(
+            ".error-message-container"
+        )
+        self._error_heading: Locator = self._error_message_container.get_by_role(
+            "heading", name="error"
+        )
+        self._close_error_button: Locator = self._error_heading.locator(".error-button")
 
         self._cancel_button: Locator = page.get_by_role("button", name=CANCEL_BUTTON)
         self._continue_button: Locator = page.get_by_role(
             "button", name=CONTINUE_BUTTON
         )
+
+    def get_error_message_container(self, timeout: Optional[int] = None) -> Locator:
+        timeout_ms: int = self._timeout_ms(timeout)
+        error_message_container = self.get_element(
+            self._error_message_container, ERROR_MESSAGE_CONTAINER, timeout_ms
+        )
+        return error_message_container
+
+    def get_error_heading(self, timeout: Optional[int] = None) -> Locator:
+        timeout_ms: int = self._timeout_ms(timeout)
+        error_heading: Locator = self.get_element(
+            self._error_heading, ERROR_HEADING, timeout_ms
+        )
+        return error_heading
 
     def is_error_heading_visible(self, timeout: Optional[int] = None) -> bool:
         timeout_ms: int = self._timeout_ms(timeout)
@@ -80,6 +102,13 @@ class CheckoutStepOnePage(BasePage):
         timeout_ms: int = self._timeout_ms(timeout)
         zip_code: Locator = self.get_element(self._zip_code, ZIP_CODE_LABEL, timeout_ms)
         return zip_code
+
+    def get_fields(self) -> tuple[Locator, Locator, Locator]:
+        first_name: Locator = self.get_first_name()
+        last_name: Locator = self.get_last_name()
+        zip_code: Locator = self.get_zip_code()
+
+        return first_name, last_name, zip_code
 
     def get_fields_containers(self) -> tuple[Locator, Locator, Locator]:
         first_name: Locator = self.get_first_name()

@@ -30,6 +30,11 @@ REMOVE_BUTTON_LABEL = "Remove Button"
 # Buttons
 REMOVE: str = "Remove"
 
+# CSS
+BORDER_BOTTOM_COLOR: str = "border-bottom-color"
+BACKGROUND_COLOR: str = "background-color"
+COLOR: str = "color"
+
 
 class BasePage:
     """

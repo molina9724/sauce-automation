@@ -3,11 +3,14 @@ from playwright.sync_api import Locator, expect
 
 # fmt: off
 from sauce_project.data.checkout_step_1_data import (
-    ACCESS_CHECKOUT_STEP_1_PAGE_WITHOUT_LOGIN_ERROR, EMPTY_FIRST_NAME_ERROR,
-    EMPTY_LAST_NAME_ERROR, EMPTY_ZIP_CODE_ERROR, FIRST_NAME, LAST_NAME,
-    ZIP_CODE)
-from sauce_project.po.pages.base_page import (CART_URL, CHECKOUT_STEP_1_URL,
-                                              CHECKOUT_STEP_2_URL)
+    ACCESS_CHECKOUT_STEP_1_PAGE_WITHOUT_LOGIN_ERROR, BACKGROUND, BORDER_BOTTOM,
+    EMPTY_FIRST_NAME_ERROR, EMPTY_LAST_NAME_ERROR, EMPTY_ZIP_CODE_ERROR,
+    FIRST_NAME, LAST_NAME, RED, ZIP_CODE)
+from sauce_project.data.global_data import WHITE
+from sauce_project.po.pages.base_page import (BACKGROUND_COLOR,
+                                              BORDER_BOTTOM_COLOR, CART_URL,
+                                              CHECKOUT_STEP_1_URL,
+                                              CHECKOUT_STEP_2_URL, COLOR)
 from sauce_project.po.pages.cart_page import CartPage
 from sauce_project.po.pages.checkout_step_1_page import (ERROR_ICON,
                                                          CheckoutStepOnePage)
@@ -16,42 +19,33 @@ from sauce_project.po.pages.login_page import LoginPage
 # fmt: on
 
 
-def test_01_verify_checkout_error_with_empty_first_name(
-    checkout_step_1_with_item: CheckoutStepOnePage,
-) -> None:
-    # General error
-    with pytest.raises(RuntimeError) as exception:
-        checkout_step_1_with_item.fill_in_checkout_information(
-            first_name="", last_name=LAST_NAME, zip_code=ZIP_CODE
-        )
-    assert EMPTY_FIRST_NAME_ERROR == str(exception.value)
-
-    # Icon error
-    all_containers: tuple[Locator, Locator, Locator] = (
-        checkout_step_1_with_item.get_fields_containers()
-    )
-    for container in all_containers:
+def assert_error_decoration(page: CheckoutStepOnePage) -> None:
+    for container in page.get_fields_containers():
         expect(container.locator(ERROR_ICON)).to_be_visible()
+        expect(container.locator(ERROR_ICON)).to_have_css(COLOR, RED)
+
+    for field in page.get_fields():
+        expect(field).to_have_css(BORDER_BOTTOM_COLOR, BORDER_BOTTOM)
+
+    expect(page.get_error_message_container()).to_have_css(BACKGROUND_COLOR, BACKGROUND)
+    expect(page.get_error_heading()).to_have_css(COLOR, WHITE)
 
 
-def test_02_verify_checkout_error_with_empty_last_name(
-    checkout_step_1_with_item: CheckoutStepOnePage,
+@pytest.mark.parametrize(
+    "first, last, zip_code, expected",
+    [
+        ("", LAST_NAME, ZIP_CODE, EMPTY_FIRST_NAME_ERROR),
+        (FIRST_NAME, "", ZIP_CODE, EMPTY_LAST_NAME_ERROR),
+        (FIRST_NAME, LAST_NAME, "", EMPTY_ZIP_CODE_ERROR),
+    ],
+)
+def test_checkout_error_with_empty_field(
+    checkout_step_1_with_item, first, last, zip_code, expected
 ) -> None:
     with pytest.raises(RuntimeError) as exception:
-        checkout_step_1_with_item.fill_in_checkout_information(
-            first_name=FIRST_NAME, last_name="", zip_code=ZIP_CODE
-        )
-    assert EMPTY_LAST_NAME_ERROR == str(exception.value)
-
-
-def test_03_verify_checkout_error_with_empty_zip_code(
-    checkout_step_1_with_item: CheckoutStepOnePage,
-) -> None:
-    with pytest.raises(RuntimeError) as exception:
-        checkout_step_1_with_item.fill_in_checkout_information(
-            first_name=FIRST_NAME, last_name=LAST_NAME, zip_code=""
-        )
-    assert EMPTY_ZIP_CODE_ERROR == str(exception.value)
+        checkout_step_1_with_item.fill_in_checkout_information(first, last, zip_code)
+    assert expected == str(exception.value)
+    assert_error_decoration(checkout_step_1_with_item)
 
 
 def test_04_verify_cancel_button_takes_user_back_to_cart_page(
