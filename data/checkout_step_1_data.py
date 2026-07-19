@@ -14,3 +14,13 @@ ACCESS_CHECKOUT_STEP_1_PAGE_WITHOUT_LOGIN_ERROR: str = (
 RED: str = "rgb(226, 35, 26)"
 BORDER_BOTTOM: str = RED
 BACKGROUND: str = BORDER_BOTTOM
+DEFAULT_BORDER: str = "rgb(237, 237, 237)"
+
+# Checkout test case data
+CHECKOUT_ARGS: str = "first_name, last_name, zip_code, expected"
+CHECKOUT_PARAMS: list[tuple[str, str, str, str]] = [
+    ("", LAST_NAME, ZIP_CODE, EMPTY_FIRST_NAME_ERROR),
+    (FIRST_NAME, "", ZIP_CODE, EMPTY_LAST_NAME_ERROR),
+    (FIRST_NAME, LAST_NAME, "", EMPTY_ZIP_CODE_ERROR),
+]
+CHECKOUT_IDS: tuple[str, ...] = tuple(x[3] for x in CHECKOUT_PARAMS)

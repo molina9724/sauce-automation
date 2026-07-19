@@ -47,7 +47,7 @@ class CheckoutStepOnePage(BasePage):
         self._zip_code: Locator = page.get_by_role("textbox", name=ZIP_CODE)
 
         self._error_message_container: Locator = self.locator(
-            ".error-message-container"
+            ".error-message-container.error"
         )
         self._error_heading: Locator = self._error_message_container.get_by_role(
             "heading", name="error"
@@ -173,3 +173,7 @@ class CheckoutStepOnePage(BasePage):
             raise RuntimeError(
                 f"Timed out waiting for checkout to reach {CART_URL} after {timeout_ms} ms"
             )
+
+    def is_error_container_displayed(self, timeout: Optional[int] = None) -> bool:
+        timeout_ms: int = self._timeout_ms(timeout)
+        return self._is_item_displayed(self._error_message_container, timeout_ms)
