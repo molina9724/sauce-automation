@@ -61,7 +61,7 @@ class CheckoutStepOnePage(BasePage):
 
     def get_error_message_container(self, timeout: Optional[int] = None) -> Locator:
         timeout_ms: int = self._timeout_ms(timeout)
-        error_message_container = self.get_element(
+        error_message_container: Locator = self.get_element(
             self._error_message_container, ERROR_MESSAGE_CONTAINER, timeout_ms
         )
         return error_message_container
@@ -111,9 +111,7 @@ class CheckoutStepOnePage(BasePage):
         return first_name, last_name, zip_code
 
     def get_fields_containers(self) -> tuple[Locator, Locator, Locator]:
-        first_name: Locator = self.get_first_name()
-        last_name: Locator = self.get_last_name()
-        zip_code: Locator = self.get_zip_code()
+        first_name, last_name, zip_code = self.get_fields()
 
         # The error icon is a sibling of the field, not a child of it
         first_name_parent: Locator = self.get_parent(first_name)

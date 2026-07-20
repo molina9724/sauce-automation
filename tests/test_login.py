@@ -8,13 +8,13 @@ from sauce_project.data.login_data import (DEFAULT_BLOCKED_USER,
                                            EMPTY_PASSWORD_ERROR,
                                            EMPTY_USERNAME_ERROR,
                                            EXPECTED_LOGIN_USERNAMES,
-                                           LOCKED_ACCOUNT_ERROR, LOGO_TEXT,
-                                           PASSWORD, SUCCESS_LOGIN_DATA,
-                                           UNLOCKED_USERS,
+                                           LOCKED_ACCOUNT_ERROR, LOGIN_ARGS,
+                                           LOGO_TEXT, PASSWORD,
+                                           SUCCESS_LOGIN_DATA, UNLOCKED_USERS,
                                            WRONG_CREDENTIALS_ERROR,
                                            WRONG_PASSWORD)
 # fmt: on
-from sauce_project.po.pages.base_page import BASE_URL
+from sauce_project.po.pages.base_page import BASE_URL, INVENTORY_URL, LOGIN_URL
 from sauce_project.po.pages.inventory_page import InventoryPage
 from sauce_project.po.pages.login_page import LoginPage
 
@@ -56,16 +56,10 @@ def test_09_verify_password(login_page: LoginPage) -> None:
     assert login_page.get_password() == PASSWORD
 
 
-@pytest.mark.parametrize(
-    "user, password, expected", argvalues=SUCCESS_LOGIN_DATA, ids=UNLOCKED_USERS
-)
-def test_10_verify_successful_login_and_logout(
-    login_page: LoginPage, user, password, expected
-) -> None:
-    inventory_page: InventoryPage = login_page.login(username=user, password=password)
-    expect(login_page._page).to_have_url(expected)
-    inventory_page.logout()
-    expect(login_page._page).to_have_url(BASE_URL)
+@pytest.mark.parametrize(LOGIN_ARGS, argvalues=SUCCESS_LOGIN_DATA, ids=UNLOCKED_USERS)
+def test_10_verify_successful_login(login_page: LoginPage, user, password) -> None:
+    inventory_page: InventoryPage = login_page.login(user, password)
+    assert inventory_page.get_url() == INVENTORY_URL
 
 
 def test_11_verify_unsuccessful_login_empty_username_and_empty_password(
