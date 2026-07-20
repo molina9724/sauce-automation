@@ -1,20 +1,15 @@
 import pytest
-from playwright.sync_api import expect
 
 # fmt: off
-from sauce_project.data.login_data import (DEFAULT_BLOCKED_USER,
-                                           DEFAULT_UNLOCKED_USER,
-                                           DOCUMENT_TITLE,
-                                           EMPTY_PASSWORD_ERROR,
+from sauce_project.data.login_data import (DOCUMENT_TITLE,
                                            EMPTY_USERNAME_ERROR,
                                            EXPECTED_LOGIN_USERNAMES,
-                                           LOCKED_ACCOUNT_ERROR, LOGIN_ARGS,
-                                           LOGO_TEXT, PASSWORD,
-                                           SUCCESS_LOGIN_DATA, UNLOCKED_USERS,
-                                           WRONG_CREDENTIALS_ERROR,
-                                           WRONG_PASSWORD)
+                                           LOGIN_ARGS, LOGIN_ERROR_ARGS,
+                                           LOGIN_ERROR_PARAMS, LOGO_TEXT,
+                                           PASSWORD, SUCCESS_LOGIN_DATA,
+                                           UNLOCKED_USERS)
 # fmt: on
-from sauce_project.po.pages.base_page import BASE_URL, INVENTORY_URL, LOGIN_URL
+from sauce_project.po.pages.base_page import INVENTORY_URL
 from sauce_project.po.pages.inventory_page import InventoryPage
 from sauce_project.po.pages.login_page import LoginPage
 
@@ -58,48 +53,17 @@ def test_09_verify_password(login_page: LoginPage) -> None:
 
 @pytest.mark.parametrize(LOGIN_ARGS, argvalues=SUCCESS_LOGIN_DATA, ids=UNLOCKED_USERS)
 def test_10_verify_successful_login(login_page: LoginPage, user, password) -> None:
-    inventory_page: InventoryPage = login_page.login(user, password)
+    inventory_page: InventoryPage = login_page.login(username=user, password=password)
     assert inventory_page.get_url() == INVENTORY_URL
 
 
-def test_11_verify_unsuccessful_login_empty_username_and_empty_password(
-    login_page: LoginPage,
+@pytest.mark.parametrize(LOGIN_ERROR_ARGS, LOGIN_ERROR_PARAMS)
+def test_11_verify_unsuccessful_login(
+    login_page: LoginPage, user, password, error
 ) -> None:
     with pytest.raises(RuntimeError) as exception:
-        login_page.login(username="", password="")
-    assert EMPTY_USERNAME_ERROR == str(exception.value)
-
-
-def test_12_verify_unsuccessful_login_username_and_empty_password(
-    login_page: LoginPage,
-) -> None:
-    with pytest.raises(RuntimeError) as exception:
-        login_page.login(username=DEFAULT_UNLOCKED_USER, password="")
-    assert EMPTY_PASSWORD_ERROR == str(exception.value)
-
-
-def test_13_verify_unsuccessful_login_empty_username_and_non_empty_password(
-    login_page: LoginPage,
-) -> None:
-    with pytest.raises(RuntimeError) as exception:
-        login_page.login(username="", password=PASSWORD)
-    assert EMPTY_USERNAME_ERROR == str(exception.value)
-
-
-def test_14_verify_unsuccessful_login_right_username_but_wrong_password(
-    login_page: LoginPage,
-) -> None:
-    with pytest.raises(RuntimeError) as exception:
-        login_page.login(username=DEFAULT_UNLOCKED_USER, password=WRONG_PASSWORD)
-    assert WRONG_CREDENTIALS_ERROR == str(exception.value)
-
-
-def test_15_verify_unsuccessful_login_with_locked_account(
-    login_page: LoginPage,
-) -> None:
-    with pytest.raises(RuntimeError) as exception:
-        login_page.login(username=DEFAULT_BLOCKED_USER, password=PASSWORD)
-    assert LOCKED_ACCOUNT_ERROR == str(exception.value)
+        login_page.login(username=user, password=password)
+    assert error == str(exception.value)
 
 
 def test_16_verify_error_dismissal_after_unsuccessful_login_with_locked_account(
