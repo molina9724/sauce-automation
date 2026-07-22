@@ -4,6 +4,8 @@ from playwright.sync_api import Locator, Page
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 
 # fmt: off
+from sauce_project.po.components.form_validation_mixin import \
+    FormValidationMixIn
 from sauce_project.po.pages.base_page import (CART_URL, CHECKOUT_STEP_2_URL,
                                               BasePage)
 # fmt: on
@@ -11,9 +13,6 @@ from sauce_project.po.pages.cart_page import CartPage
 
 if TYPE_CHECKING:
     from .checkout_step_2_page import CheckoutStepTwoPage
-
-# Selectors
-ERROR_ICON: str = ".error_icon"
 
 # Textbox names
 FIRST_NAME = "First Name"
@@ -29,14 +28,12 @@ CANCEL_BUTTON_LABEL: str = "Cancel Button"
 FIRST_NAME_LABEL = "First Name Field"
 LAST_NAME_LABEL = "Last Name Field"
 ZIP_CODE_LABEL = "Zip/Postal Code Field"
-ERROR_MESSAGE_CONTAINER: str = "Error Message Container"
-ERROR_HEADING: str = "Error Heading"
 
 # POM
 SHORT_TIMEOUT: int = 600
 
 
-class CheckoutStepOnePage(BasePage):
+class CheckoutStepOnePage(FormValidationMixIn, BasePage):
     def __init__(self, page: Page, timeout: int = 10000) -> None:
         super().__init__(page, timeout)
         self._checkout_information_wrapper: Locator = self.locator(
@@ -46,67 +43,34 @@ class CheckoutStepOnePage(BasePage):
         self._last_name: Locator = page.get_by_role("textbox", name=LAST_NAME)
         self._zip_code: Locator = page.get_by_role("textbox", name=ZIP_CODE)
 
-        self._error_message_container: Locator = self.locator(
-            ".error-message-container.error"
-        )
-        self._error_heading: Locator = self._error_message_container.get_by_role(
-            "heading", name="error"
-        )
-        self._close_error_button: Locator = self._error_heading.locator(".error-button")
-
         self._cancel_button: Locator = page.get_by_role("button", name=CANCEL_BUTTON)
         self._continue_button: Locator = page.get_by_role(
             "button", name=CONTINUE_BUTTON
         )
 
-    def get_error_message_container(self, timeout: Optional[int] = None) -> Locator:
-        timeout_ms: int = self._timeout_ms(timeout)
-        error_message_container: Locator = self.get_element(
-            self._error_message_container, ERROR_MESSAGE_CONTAINER, timeout_ms
-        )
-        return error_message_container
-
-    def get_error_heading(self, timeout: Optional[int] = None) -> Locator:
-        timeout_ms: int = self._timeout_ms(timeout)
-        error_heading: Locator = self.get_element(
-            self._error_heading, ERROR_HEADING, timeout_ms
-        )
-        return error_heading
-
-    def is_error_heading_visible(self, timeout: Optional[int] = None) -> bool:
-        timeout_ms: int = self._timeout_ms(timeout)
-        return self._is_item_displayed(self._error_heading, timeout_ms)
-
-    def get_error_text(self, timeout: Optional[int] = None) -> str | None:
-        timeout_ms: int = self._timeout_ms(timeout)
-        if self.is_error_heading_visible(timeout=timeout_ms):
-            return self._error_heading.inner_text().strip()
-        else:
-            return None
-
-    def get_first_name(self, timeout: Optional[int] = None) -> Locator:
+    def get_first_name_object(self, timeout: Optional[int] = None) -> Locator:
         timeout_ms: int = self._timeout_ms(timeout)
         first_name: Locator = self.get_element(
             self._first_name, FIRST_NAME_LABEL, timeout_ms
         )
         return first_name
 
-    def get_last_name(self, timeout: Optional[int] = None) -> Locator:
+    def get_last_name_object(self, timeout: Optional[int] = None) -> Locator:
         timeout_ms: int = self._timeout_ms(timeout)
         last_name: Locator = self.get_element(
             self._last_name, LAST_NAME_LABEL, timeout_ms
         )
         return last_name
 
-    def get_zip_code(self, timeout: Optional[int] = None) -> Locator:
+    def get_zip_code_object(self, timeout: Optional[int] = None) -> Locator:
         timeout_ms: int = self._timeout_ms(timeout)
         zip_code: Locator = self.get_element(self._zip_code, ZIP_CODE_LABEL, timeout_ms)
         return zip_code
 
     def get_fields(self) -> tuple[Locator, Locator, Locator]:
-        first_name: Locator = self.get_first_name()
-        last_name: Locator = self.get_last_name()
-        zip_code: Locator = self.get_zip_code()
+        first_name: Locator = self.get_first_name_object()
+        last_name: Locator = self.get_last_name_object()
+        zip_code: Locator = self.get_zip_code_object()
 
         return first_name, last_name, zip_code
 
@@ -171,7 +135,3 @@ class CheckoutStepOnePage(BasePage):
             raise RuntimeError(
                 f"Timed out waiting for checkout to reach {CART_URL} after {timeout_ms} ms"
             )
-
-    def is_error_container_displayed(self, timeout: Optional[int] = None) -> bool:
-        timeout_ms: int = self._timeout_ms(timeout)
-        return self._is_item_displayed(self._error_message_container, timeout_ms)

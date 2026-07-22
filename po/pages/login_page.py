@@ -4,7 +4,11 @@ from playwright.sync_api import Locator, Page
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 
 from sauce_project.data.login_data import PERFORMANCE_GLITCHED_USER
+# fmt: off
+from sauce_project.po.components.form_validation_mixin import \
+    FormValidationMixIn
 
+# fmt: on
 from .base_page import INVENTORY_URL, BasePage
 
 if TYPE_CHECKING:
@@ -27,7 +31,7 @@ CREDENTIALS = "Credentials Container"
 PASSWORD: str = "Password"
 
 
-class LoginPage(BasePage):
+class LoginPage(FormValidationMixIn, BasePage):
     def __init__(self, page: Page, timeout: int = 10000) -> None:
         super().__init__(page=page, timeout=timeout)
         self._logo_heading: Locator = self._page.locator(".login_logo")
@@ -41,13 +45,35 @@ class LoginPage(BasePage):
         self._username: Locator = self._page.get_by_role("textbox", name=USERNAME)
         self._password: Locator = self._page.get_by_role("textbox", name=PASSWORD)
         self._login_button: Locator = self._page.get_by_role("button", name=LOGIN)
+        self._close_error_button: Locator = self._error_heading.locator(".error-button")
 
-        self._error_header: Locator = self._page.locator('[data-test="error"]')
-        self._close_error_button: Locator = self._page.locator(
-            '[data-test="error-button"]'
-        )
         self._usernames_container: Locator = self._page.locator("#login_credentials")
         self._passwords_container: Locator = self._page.locator(".login_password")
+
+    def get_username_object(self, timeout: Optional[int] = None) -> Locator:
+        timeout_ms: int = self._timeout_ms(timeout)
+        username: Locator = self.get_element(self._username, USERNAME, timeout_ms)
+        return username
+
+    def get_password_object(self, timeout: Optional[int] = None) -> Locator:
+        timeout_ms: int = self._timeout_ms(timeout)
+        password: Locator = self.get_element(self._password, PASSWORD, timeout_ms)
+        return password
+
+    def get_fields(self) -> tuple[Locator, Locator]:
+        username: Locator = self.get_username_object()
+        password: Locator = self.get_password_object()
+
+        return username, password
+
+    def get_fields_containers(self) -> tuple[Locator, Locator]:
+        username, password = self.get_fields()
+
+        # The error icon is a sibling of the field, not a child of it
+        username_parent: Locator = self.get_parent(username)
+        password_parent: Locator = self.get_parent(password)
+
+        return username_parent, password_parent
 
     def login(
         self, username: str, password: str, timeout: Optional[int] = None
@@ -61,7 +87,7 @@ class LoginPage(BasePage):
         self._password.fill(password)
         self._login_button.click()
 
-        if self._is_item_displayed(self._error_header, SHORT_TIMEOUT):
+        if self._is_item_displayed(self._error_heading, SHORT_TIMEOUT):
             quick_error_message: str = self.get_error_text() or "Unknown login error"
             raise RuntimeError(quick_error_message)
 
@@ -78,24 +104,12 @@ class LoginPage(BasePage):
                 f"Timed out waiting for login to reach {INVENTORY_URL} after {timeout_ms} ms"
             )
 
-    def is_error_displayed(self, timeout: Optional[int] = None) -> bool:
-        if timeout is None:
-            return self._error_header.is_visible()
-        timeout_ms: int = self._timeout_ms(timeout)
-        return self._is_item_displayed(self._error_header, timeout_ms)
-
-    def get_error_text(self) -> str | None:
-        if self._is_item_displayed(self._error_header):
-            return self._error_header.inner_text().strip()
-        else:
-            return None
-
     def dismiss_error(self, timeout: Optional[int] = None) -> None:
         timeout_ms: int = self._timeout_ms(timeout)
         self.get_element(self._close_error_button, CLOSE_ERROR_BUTTON, timeout_ms)
         try:
             self._close_error_button.click()
-            self._error_header.wait_for(state="hidden", timeout=timeout_ms)
+            self._error_heading.wait_for(state="hidden", timeout=timeout_ms)
             return None
         except PlaywrightTimeoutError:
             raise RuntimeError(
@@ -170,7 +184,7 @@ class LoginPage(BasePage):
         timeout_ms: int = self._timeout_ms(timeout)
         self._page.goto(url)
         try:
-            self._error_header.wait_for(state="visible", timeout=timeout_ms)
+            self._error_heading.wait_for(state="visible", timeout=timeout_ms)
             error_message: str | None = self.get_error_text()
             raise RuntimeError(error_message)
         except PlaywrightTimeoutError:

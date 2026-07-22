@@ -1,19 +1,19 @@
+# fmt: off
 import pytest
 from playwright.sync_api import expect
 
-# fmt: off
 from sauce_project.data.checkout_step_1_data import (
-    ACCESS_CHECKOUT_STEP_1_PAGE_WITHOUT_LOGIN_ERROR, BACKGROUND, BORDER_BOTTOM,
-    CHECKOUT_ARGS, CHECKOUT_IDS, CHECKOUT_PARAMS, DEFAULT_BORDER, FIRST_NAME,
-    LAST_NAME, RED, ZIP_CODE)
-from sauce_project.data.global_data import WHITE
+    ACCESS_CHECKOUT_STEP_1_PAGE_WITHOUT_LOGIN_ERROR, CHECKOUT_ARGS,
+    CHECKOUT_IDS, CHECKOUT_PARAMS, FIRST_NAME, LAST_NAME, ZIP_CODE)
+from sauce_project.data.global_data import (BACKGROUND, BORDER_BOTTOM,
+                                            DEFAULT_BORDER, RED, WHITE)
+from sauce_project.po.components.form_validation_mixin import ERROR_ICON
 from sauce_project.po.pages.base_page import (BACKGROUND_COLOR,
                                               BORDER_BOTTOM_COLOR, CART_URL,
                                               CHECKOUT_STEP_1_URL,
                                               CHECKOUT_STEP_2_URL, COLOR)
 from sauce_project.po.pages.cart_page import CartPage
-from sauce_project.po.pages.checkout_step_1_page import (ERROR_ICON,
-                                                         SHORT_TIMEOUT,
+from sauce_project.po.pages.checkout_step_1_page import (SHORT_TIMEOUT,
                                                          CheckoutStepOnePage)
 from sauce_project.po.pages.login_page import LoginPage
 
