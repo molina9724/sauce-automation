@@ -5,48 +5,15 @@ from playwright.sync_api import expect
 from sauce_project.data.checkout_step_1_data import (
     ACCESS_CHECKOUT_STEP_1_PAGE_WITHOUT_LOGIN_ERROR, CHECKOUT_ARGS,
     CHECKOUT_IDS, CHECKOUT_PARAMS, FIRST_NAME, LAST_NAME, ZIP_CODE)
-from sauce_project.data.global_data import (BACKGROUND, BORDER_BOTTOM,
-                                            DEFAULT_BORDER, RED, WHITE)
-from sauce_project.po.components.form_validation_mixin import ERROR_ICON
-from sauce_project.po.pages.base_page import (BACKGROUND_COLOR,
-                                              BORDER_BOTTOM_COLOR, CART_URL,
-                                              CHECKOUT_STEP_1_URL,
-                                              CHECKOUT_STEP_2_URL, COLOR)
+from sauce_project.po.pages.base_page import (CART_URL, CHECKOUT_STEP_1_URL,
+                                              CHECKOUT_STEP_2_URL)
 from sauce_project.po.pages.cart_page import CartPage
-from sauce_project.po.pages.checkout_step_1_page import (SHORT_TIMEOUT,
-                                                         CheckoutStepOnePage)
+from sauce_project.po.pages.checkout_step_1_page import CheckoutStepOnePage
 from sauce_project.po.pages.login_page import LoginPage
+from sauce_project.tests.form_validation_mixin_helpers import (
+    assert_error_decorations, assert_no_error_decorations)
 
 # fmt: on
-
-
-# Helpers
-def assert_no_error_decorations(page: CheckoutStepOnePage) -> None:
-    for container in page.get_fields_containers():
-        expect(container.locator(ERROR_ICON)).to_be_hidden()
-
-    for field in page.get_fields():
-        expect(field).to_have_css(BORDER_BOTTOM_COLOR, DEFAULT_BORDER)
-
-    assert not page.is_error_container_displayed(SHORT_TIMEOUT)
-
-
-def assert_error_decorations(page: CheckoutStepOnePage) -> None:
-    for container in page.get_fields_containers():
-        expect(container.locator(ERROR_ICON)).to_be_visible()
-        expect(container.locator(ERROR_ICON)).to_have_css(COLOR, RED)
-
-    for field in page.get_fields():
-        expect(field).to_have_css(BORDER_BOTTOM_COLOR, BORDER_BOTTOM)
-
-    expect(page.get_error_message_container()).to_have_css(BACKGROUND_COLOR, BACKGROUND)
-    expect(page.get_error_heading()).to_have_css(COLOR, WHITE)
-
-
-def test_verify_no_error_displayed_before_filling_checkout_information(
-    checkout_step_1_with_item: CheckoutStepOnePage,
-) -> None:
-    assert_no_error_decorations(checkout_step_1_with_item)
 
 
 @pytest.mark.parametrize(CHECKOUT_ARGS, CHECKOUT_PARAMS, ids=CHECKOUT_IDS)
@@ -57,6 +24,7 @@ def test_verify_checkout_error_with_empty_field(
     zip_code,
     expected,
 ) -> None:
+    assert_no_error_decorations(checkout_step_1_with_item)
     with pytest.raises(RuntimeError) as exception:
         checkout_step_1_with_item.fill_in_checkout_information(
             first_name, last_name, zip_code

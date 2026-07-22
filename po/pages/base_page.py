@@ -35,6 +35,10 @@ BORDER_BOTTOM_COLOR: str = "border-bottom-color"
 BACKGROUND_COLOR: str = "background-color"
 COLOR: str = "color"
 
+# POM
+SHORT_TIMEOUT: int = 600
+INCREASED_TIMEOUT = 20000
+
 
 class BasePage:
     """

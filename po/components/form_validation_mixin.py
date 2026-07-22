@@ -61,3 +61,7 @@ class FormValidationMixIn(_Base):
             return self._error_heading.inner_text().strip()
         else:
             return None
+
+    def get_fields(self) -> tuple[Locator, ...]: ...
+
+    def get_fields_containers(self) -> tuple[Locator, ...]: ...

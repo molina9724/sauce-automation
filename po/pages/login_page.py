@@ -9,7 +9,7 @@ from sauce_project.po.components.form_validation_mixin import \
     FormValidationMixIn
 
 # fmt: on
-from .base_page import INVENTORY_URL, BasePage
+from .base_page import INCREASED_TIMEOUT, INVENTORY_URL, SHORT_TIMEOUT, BasePage
 
 if TYPE_CHECKING:
     from .inventory_page import InventoryPage
@@ -18,10 +18,6 @@ if TYPE_CHECKING:
 USERNAME: str = "Username"
 PASSWORD: str = "Password"
 LOGIN: str = "Login"
-
-# Extra timeouts
-INCREASED_TIMEOUT = 20000
-SHORT_TIMEOUT = 600
 
 # Labels
 CLOSE_ERROR_BUTTON: str = "Close error button"

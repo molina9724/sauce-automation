@@ -10,12 +10,6 @@ ACCESS_CHECKOUT_STEP_1_PAGE_WITHOUT_LOGIN_ERROR: str = (
     "Epic sadface: You can only access '/checkout-step-one.html' when you are logged in."
 )
 
-# Colors
-RED: str = "rgb(226, 35, 26)"
-BORDER_BOTTOM: str = RED
-BACKGROUND: str = BORDER_BOTTOM
-DEFAULT_BORDER: str = "rgb(237, 237, 237)"
-
 # Checkout test case data
 CHECKOUT_ARGS: str = "first_name, last_name, zip_code, expected"
 CHECKOUT_PARAMS: list[tuple[str, str, str, str]] = [

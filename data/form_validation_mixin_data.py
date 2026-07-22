@@ -1,0 +1,5 @@
+RED: str = "rgb(226, 35, 26)"
+BORDER_BOTTOM: str = RED
+BACKGROUND: str = BORDER_BOTTOM
+
+DEFAULT_BORDER: str = "rgb(237, 237, 237)"
