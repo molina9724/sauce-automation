@@ -18,45 +18,48 @@ from sauce_project.po.pages.inventory_page import InventoryPage
 from sauce_project.po.pages.login_page import LoginPage
 
 
-def test_00_verify__inventory_url(inventory_page: InventoryPage) -> None:
-    expect(inventory_page._page).to_have_url(INVENTORY_URL)
+def test_00_verify__inventory_url(empty_inventory_page: InventoryPage) -> None:
+    expect(empty_inventory_page._page).to_have_url(INVENTORY_URL)
 
 
-def test_01_verify_document_title(inventory_page: InventoryPage) -> None:
-    assert inventory_page.get_document_title() == DOCUMENT_TITLE
+def test_01_verify_document_title(empty_inventory_page: InventoryPage) -> None:
+    assert empty_inventory_page.get_document_title() == DOCUMENT_TITLE
 
 
-def test_02_verify_page_title(inventory_page: InventoryPage) -> None:
-    assert inventory_page.get_logo_text() == LOGO_TEXT
+def test_02_verify_page_title(empty_inventory_page: InventoryPage) -> None:
+    assert empty_inventory_page.get_logo_text() == LOGO_TEXT
 
 
-def test_03_verify_left_menu_components(inventory_page: InventoryPage) -> None:
-    inventory_page.open_hamburger_button()
-    assert inventory_page.is_left_menu_displayed()
-    left_menu_items: List[str] = inventory_page.get_left_menu_elements()
+def test_03_verify_left_menu_components(empty_inventory_page: InventoryPage) -> None:
+    empty_inventory_page.open_hamburger_button()
+    assert empty_inventory_page.is_left_menu_displayed()
+    left_menu_items: List[str] = empty_inventory_page.get_left_menu_elements()
     assert left_menu_items == LEFT_MENU_ITEMS
 
 
-def test_04_verify_products_title(inventory_page: InventoryPage) -> None:
-    assert inventory_page.get_products_title() == PRODUCTS_TITLE
+def test_04_verify_products_title(empty_inventory_page: InventoryPage) -> None:
+    assert empty_inventory_page.get_products_title() == PRODUCTS_TITLE
 
 
 def test_05_verify_default_product_filter_options(
-    inventory_page: InventoryPage,
+    empty_inventory_page: InventoryPage,
 ) -> None:
-    assert inventory_page.get_products_filter_selected_option() == DEFAULT_FILTER_VALUE
+    assert (
+        empty_inventory_page.get_products_filter_selected_option()
+        == DEFAULT_FILTER_VALUE
+    )
 
 
 def test_06_verify_all_product_filter_options(
-    inventory_page: InventoryPage,
+    empty_inventory_page: InventoryPage,
 ) -> None:
-    assert inventory_page.get_products_filter_options() == FILTER_OPTIONS
+    assert empty_inventory_page.get_products_filter_options() == FILTER_OPTIONS
 
 
-def test_07_verify_z_to_a_filter(inventory_page: InventoryPage) -> None:
-    inventory_page.set_products_filter(Z_TO_A)
+def test_07_verify_z_to_a_filter(empty_inventory_page: InventoryPage) -> None:
+    empty_inventory_page.set_products_filter(Z_TO_A)
     z_to_a_ordered_results: dict[str, dict[str, str]] = (
-        inventory_page.get_all_products_information()
+        empty_inventory_page.get_all_products_information()
     )
 
     actual: List[tuple[str, dict[str, str]]] = list(z_to_a_ordered_results.items())
@@ -66,10 +69,10 @@ def test_07_verify_z_to_a_filter(inventory_page: InventoryPage) -> None:
     assert actual == expected
 
 
-def test_08_verify_low_to_high_filter(inventory_page: InventoryPage) -> None:
-    inventory_page.set_products_filter(LOW_TO_HIGH)
+def test_08_verify_low_to_high_filter(empty_inventory_page: InventoryPage) -> None:
+    empty_inventory_page.set_products_filter(LOW_TO_HIGH)
     low_to_high_ordered_results: dict[str, dict[str, str]] = (
-        inventory_page.get_all_products_information()
+        empty_inventory_page.get_all_products_information()
     )
 
     actual: List[tuple[str, dict[str, str]]] = list(low_to_high_ordered_results.items())
@@ -79,10 +82,10 @@ def test_08_verify_low_to_high_filter(inventory_page: InventoryPage) -> None:
     assert actual == expected
 
 
-def test_09_verify_high_to_low_filter(inventory_page: InventoryPage) -> None:
-    inventory_page.set_products_filter(HIGH_TO_LOW)
+def test_09_verify_high_to_low_filter(empty_inventory_page: InventoryPage) -> None:
+    empty_inventory_page.set_products_filter(HIGH_TO_LOW)
     high_to_low_ordered_results: dict[str, dict[str, str]] = (
-        inventory_page.get_all_products_information()
+        empty_inventory_page.get_all_products_information()
     )
 
     actual: List[tuple[str, dict[str, str]]] = list(high_to_low_ordered_results.items())
@@ -100,26 +103,32 @@ def test_10_verify_exception_when_trying_to_access_inventory_page_without_login(
     assert ACCESS_INVENTORY_PAGE_ERROR_WITHOUT_LOGIN == str(exception_information.value)
 
 
-def test_11_verify_items_images_are_displayed(inventory_page: InventoryPage) -> None:
-    assert inventory_page.are_items_images_displayed()
+def test_11_verify_items_images_are_displayed(
+    empty_inventory_page: InventoryPage,
+) -> None:
+    assert empty_inventory_page.are_items_images_displayed()
 
 
-def test_12_verify_user_can_add_item_to_cart(inventory_page: InventoryPage) -> None:
-    inventory_page.add_item_to_cart(ITEM_INDEX)
-    assert inventory_page.get_cart_counter() == 1
+def test_12_verify_user_can_add_item_to_cart(
+    empty_inventory_page: InventoryPage,
+) -> None:
+    empty_inventory_page.add_item_to_cart(ITEM_INDEX)
+    assert empty_inventory_page.get_cart_counter() == 1
 
 
-def test_13_verify_cart_is_empty_by_default(inventory_page: InventoryPage) -> None:
-    assert inventory_page.is_cart_empty()
+def test_13_verify_cart_is_empty_by_default(
+    empty_inventory_page: InventoryPage,
+) -> None:
+    assert empty_inventory_page.is_cart_empty()
 
 
 def test_14_verify_cart_is_empty_after_adding_item_and_removing_it(
-    inventory_page: InventoryPage,
+    empty_inventory_page: InventoryPage,
 ) -> None:
-    inventory_page.add_item_to_cart(ITEM_INDEX)
-    assert inventory_page.get_cart_counter() == 1
-    inventory_page.remove_item_from_cart(ITEM_INDEX)
-    assert inventory_page.is_cart_empty()
+    empty_inventory_page.add_item_to_cart(ITEM_INDEX)
+    assert empty_inventory_page.get_cart_counter() == 1
+    empty_inventory_page.remove_item_from_cart(ITEM_INDEX)
+    assert empty_inventory_page.is_cart_empty()
 
 
 def test_15_go_back_to_continue_shopping(cart_page_with_item: CartPage) -> None:

@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, List, Optional
 
 from playwright.sync_api import Locator, Page
+from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 
 from sauce_project.po.components.left_menu import LeftMenu
 from sauce_project.po.pages.cart_page import REMOVE
@@ -13,19 +14,18 @@ from .base_page import (CART_URL, ITEM, ITEM_DESCRIPTION, ITEM_NAME,
 
 if TYPE_CHECKING:
     from .cart_page import CartPage
-    from .login_page import LoginPage
 
 # Buttons
 ADD_TO_CART: str = "Add to cart"
 
 # Labels
-CART_COUNTER: str = "Cart Counter"
 ITEMS_CONTAINER: str = "Items Container"
 PRODUCTS_FILTER: str = "Products Filter"
 PRODUCTS_TITLE: str = "Products Title"
 LOGO_TEXT: str = "Logo Text"
 DOCUMENT_TITLE: str = "Document Title"
 ADD_TO_CART_LABEL: str = "Add to cart Button"
+CART_COUNTER: str = "Cart Counter"
 
 
 class InventoryPage(LeftMenu, BasePage):
@@ -235,6 +235,7 @@ class InventoryPage(LeftMenu, BasePage):
         remove_button: Locator = item.get_by_role("button", name=REMOVE)
         remove_button.click(timeout=timeout_ms)
 
+    # TODO: Generalize cart and its components for the pages where it's displayed
     def get_cart_counter(self, timeout: Optional[int] = None) -> int:
         timeout_ms: int = self._timeout_ms(timeout)
         cart_counter: Locator = self.get_element(
@@ -247,3 +248,11 @@ class InventoryPage(LeftMenu, BasePage):
             raise RuntimeError(
                 f"{CART_COUNTER} is returning a value that cannot be converted to int"
             )
+
+    def is_cart_empty(self, timeout: Optional[int] = None) -> bool:
+        timeout_ms: int = self._timeout_ms(timeout)
+        try:
+            self._cart_counter.wait_for(state="hidden", timeout=timeout_ms)
+            return True
+        except PlaywrightTimeoutError:
+            return False

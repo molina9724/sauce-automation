@@ -7,6 +7,7 @@
 * [ ] Add type hint to all constants and variables
 * [ ] Add return type annotations to all the methods and functions
 * [ ] Add parameter annotations to all the classes, methods and functions
+* [ ] Implement checkout page
 
 ## In Progress
 

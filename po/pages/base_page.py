@@ -175,14 +175,6 @@ class BasePage:
             f"Timed out waiting for {label} to be displayed after {timeout_ms} ms"
         )
 
-    def is_cart_empty(self, timeout: Optional[int] = None) -> bool:
-        timeout_ms: int = self._timeout_ms(timeout)
-        try:
-            self._cart_counter.wait_for(state="hidden", timeout=timeout_ms)
-            return True
-        except PlaywrightTimeoutError:
-            return False
-
     @staticmethod
     def get_parent(locator: Locator) -> Locator:
         return locator.locator("..")

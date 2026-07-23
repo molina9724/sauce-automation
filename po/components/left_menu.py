@@ -2,11 +2,12 @@ from typing import TYPE_CHECKING, List, Optional
 
 from playwright.sync_api import Locator
 
-from sauce_project.po.pages.base_page import BASE_URL, BasePage
+from sauce_project.po.pages.base_page import BASE_URL, INVENTORY_URL, BasePage
 from sauce_project.po.pages.login_page import LoginPage
 
 if TYPE_CHECKING:
     _Base = BasePage
+    from sauce_project.po.pages.inventory_page import InventoryPage
 else:
     _Base = object
 
@@ -20,6 +21,7 @@ LOGOUT: str = "Logout"
 HAMBURGER_BUTTON: str = "Hamburger Button"
 LEFT_MENU: str = "Left Menu"
 LOGOUT_LINK: str = "Logout Link"
+ALL_ITEMS: str = "All Items"
 
 
 class LeftMenu(_Base):
@@ -29,8 +31,9 @@ class LeftMenu(_Base):
             "button", name="Open Menu"
         )
         self._left_menu: Locator = self._page.locator(".bm-menu")
-        self._left_menu_item: Locator = self._left_menu.locator(LEFT_MENU_ITEM)
-        self._logout_link: Locator = self._left_menu.get_by_role("link", name=LOGOUT)
+        self._item: Locator = self._left_menu.locator(LEFT_MENU_ITEM)
+        self._logout: Locator = self._left_menu.get_by_role("link", name=LOGOUT)
+        self._all_items: Locator = self._left_menu.get_by_role("link", name=ALL_ITEMS)
 
     def get_hamburger_button(self, timeout: Optional[int] = None) -> Locator:
         timeout_ms: int = self._timeout_ms(timeout)
@@ -43,10 +46,15 @@ class LeftMenu(_Base):
         timeout_ms: int = self._timeout_ms(timeout)
         self.get_hamburger_button(timeout_ms).click()
 
-    def get_logout_link(self, timeout: Optional[int] = None) -> Locator:
+    def get_logout(self, timeout: Optional[int] = None) -> Locator:
         timeout_ms: int = self._timeout_ms(timeout)
-        logout: Locator = self.get_element(self._logout_link, LOGOUT_LINK, timeout_ms)
+        logout: Locator = self.get_element(self._logout, LOGOUT_LINK, timeout_ms)
         return logout
+
+    def get_all_items(self, timeout: Optional[int] = None) -> Locator:
+        timeout_ms: int = self._timeout_ms(timeout)
+        all_items: Locator = self.get_element(self._all_items, ALL_ITEMS, timeout_ms)
+        return all_items
 
     def is_left_menu_displayed(self, timeout: Optional[int] = None) -> bool:
         timeout_ms: int = self._timeout_ms(timeout)
@@ -61,11 +69,25 @@ class LeftMenu(_Base):
     def logout(self, timeout: Optional[int] = None) -> LoginPage:
         timeout_ms: int = self._timeout_ms(timeout)
         self.get_hamburger_button(timeout_ms).click()
-        self.get_logout_link(timeout_ms).click()
+        self.get_logout(timeout_ms).click()
         try:
             self.wait_for_url(BASE_URL, timeout=timeout_ms)
             return LoginPage(self._page)
         except RuntimeError as exception:
             raise RuntimeError(
                 f"Timed out waiting for logout to reach {BASE_URL} after {timeout_ms} ms"
+            ) from exception
+
+    def all_items(self, timeout: Optional[int] = None) -> "InventoryPage":
+        timeout_ms: int = self._timeout_ms(timeout)
+        self.get_hamburger_button(timeout_ms).click()
+        self.get_all_items(timeout_ms).click()
+        try:
+            self.wait_for_url(INVENTORY_URL, timeout_ms)
+            from sauce_project.po.pages.inventory_page import InventoryPage
+
+            return InventoryPage(self._page)
+        except RuntimeError as exception:
+            raise RuntimeError(
+                f"Timed out waiting for logout to reach {ALL_ITEMS} after {timeout_ms} ms"
             ) from exception
