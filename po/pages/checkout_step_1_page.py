@@ -6,6 +6,7 @@ from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 # fmt: off
 from sauce_project.po.components.form_validation_mixin import \
     FormValidationMixIn
+from sauce_project.po.components.left_menu import LeftMenu
 from sauce_project.po.pages.base_page import (CART_URL, CHECKOUT_STEP_2_URL,
                                               BasePage)
 # fmt: on
@@ -33,7 +34,7 @@ ZIP_CODE_LABEL = "Zip/Postal Code Field"
 SHORT_TIMEOUT: int = 600
 
 
-class CheckoutStepOnePage(FormValidationMixIn, BasePage):
+class CheckoutStepOnePage(FormValidationMixIn, LeftMenu, BasePage):
     def __init__(self, page: Page, timeout: int = 10000) -> None:
         super().__init__(page, timeout)
         self._checkout_information_wrapper: Locator = self.locator(

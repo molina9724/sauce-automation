@@ -2,6 +2,8 @@ from typing import TYPE_CHECKING, List, Optional
 
 from playwright.sync_api import Locator, Page
 
+from sauce_project.po.components.left_menu import LeftMenu
+
 # fmt: off
 from .base_page import (DESCRIPTION, ITEM, ITEM_DESCRIPTION, ITEM_NAME,
                         ITEM_PRICE, ITEM_QUANTITY, NAME, PRICE, QUANTITY,
@@ -18,7 +20,7 @@ CONTINUE_SHOPPING = "Continue Shopping"
 CHECKOUT = "Checkout"
 
 
-class CartPage(BasePage):
+class CartPage(LeftMenu, BasePage):
     def __init__(self, page: Page, timeout: int = 10000) -> None:
         super().__init__(page, timeout)
         self._cart_list: Locator = self.locator(".cart_list")

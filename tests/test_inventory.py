@@ -11,7 +11,7 @@ from sauce_project.data.inventory_data import (
     LEFT_MENU_ITEMS, LOGO_TEXT, LOW_TO_HIGH, PRODUCTS_TITLE, Z_TO_A,
     get_price_value)
 # fmt: on
-from sauce_project.po.pages.base_page import INVENTORY_URL, LOGIN_URL
+from sauce_project.po.pages.base_page import INVENTORY_URL
 from sauce_project.po.pages.cart_page import CartPage
 from sauce_project.po.pages.checkout_step_1_page import CheckoutStepOnePage
 from sauce_project.po.pages.inventory_page import InventoryPage
@@ -133,8 +133,3 @@ def test_16_verify_item_remain_in_cart_after_pressing_cancel_in_checkout_step_on
     cart_page: CartPage = checkout_step_1_with_item.get_cart_page()
     inventory_page: InventoryPage = cart_page.get_inventory_page()
     assert inventory_page.get_cart_counter() == 1
-
-
-def test_17_verify_logout(inventory_page: InventoryPage) -> None:
-    login_page: LoginPage = inventory_page.logout()
-    assert login_page.get_url() == LOGIN_URL

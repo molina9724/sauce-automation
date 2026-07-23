@@ -4,6 +4,7 @@ from typing import Optional
 from playwright.sync_api import Locator, Page
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 
+from sauce_project.po.components.left_menu import LeftMenu
 from sauce_project.po.pages.base_page import BasePage
 
 TAXES: Decimal = Decimal("0.08")
@@ -14,7 +15,7 @@ TAX: str = "Tax"
 TOTAL: str = "Total"
 
 
-class CheckoutStepTwoPage(BasePage):
+class CheckoutStepTwoPage(LeftMenu, BasePage):
     def __init__(self, page: Page, timeout: int = 10000) -> None:
         super().__init__(page, timeout)
         self._cart_list: Locator = self.locator(".cart_list")

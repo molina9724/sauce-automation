@@ -11,6 +11,7 @@ CHECKOUT_STEP_1_URL: str = BASE_URL + "checkout-step-one.html"
 CHECKOUT_STEP_2_URL: str = BASE_URL + "checkout-step-two.html"
 
 # Selectors
+# FIXME: Items are not global, move them to the right place
 ITEM_NAME: str = ".inventory_item_name"
 ITEM_PRICE: str = ".inventory_item_price"
 ITEM_DESCRIPTION: str = ".inventory_item_desc"

@@ -2,10 +2,11 @@ from typing import TYPE_CHECKING, List, Optional
 
 from playwright.sync_api import Locator, Page
 
+from sauce_project.po.components.left_menu import LeftMenu
 from sauce_project.po.pages.cart_page import REMOVE
 
 # fmt: off
-from .base_page import (BASE_URL, CART_URL, ITEM, ITEM_DESCRIPTION, ITEM_NAME,
+from .base_page import (CART_URL, ITEM, ITEM_DESCRIPTION, ITEM_NAME,
                         ITEM_PRICE, BasePage)
 
 # fmt: on
@@ -14,14 +15,8 @@ if TYPE_CHECKING:
     from .cart_page import CartPage
     from .login_page import LoginPage
 
-# Selectors
-LEFT_MENU_ITEM: str = ".menu-item"
-
 # Buttons
 ADD_TO_CART: str = "Add to cart"
-
-# Textbox names
-LOGOUT: str = "Logout"
 
 # Labels
 CART_COUNTER: str = "Cart Counter"
@@ -30,13 +25,10 @@ PRODUCTS_FILTER: str = "Products Filter"
 PRODUCTS_TITLE: str = "Products Title"
 LOGO_TEXT: str = "Logo Text"
 DOCUMENT_TITLE: str = "Document Title"
-HAMBURGER_BUTTON: str = "Hamburger Button"
-LOGOUT_LINK: str = "Logout Link"
-LEFT_MENU: str = "Left Menu"
 ADD_TO_CART_LABEL: str = "Add to cart Button"
 
 
-class InventoryPage(BasePage):
+class InventoryPage(LeftMenu, BasePage):
     """
     Page object model for the inventory page.
 
@@ -63,13 +55,6 @@ class InventoryPage(BasePage):
         super().__init__(page, timeout)
         self._inventory_logo: Locator = self._page.locator(".app_logo")
 
-        self._hamburger_button: Locator = self._page.get_by_role(
-            "button", name="Open Menu"
-        )
-        self._left_menu: Locator = self._page.locator(".bm-menu")
-        self._left_menu_item: Locator = self._left_menu.locator(LEFT_MENU_ITEM)
-        self._logout_link: Locator = self._left_menu.get_by_role("link", name=LOGOUT)
-
         self._products_title: Locator = self._page.locator(".title")
 
         self._products_filter: Locator = self._page.get_by_role("combobox")
@@ -84,47 +69,6 @@ class InventoryPage(BasePage):
         self._item_image: Locator = self._item.locator(
             "img[class='inventory_item_img']"
         )
-
-    def get_hamburger_button(self, timeout: Optional[int] = None) -> Locator:
-        timeout_ms: int = self._timeout_ms(timeout)
-        hamburger_button: Locator = self.get_element(
-            self._hamburger_button, HAMBURGER_BUTTON, timeout_ms
-        )
-        return hamburger_button
-
-    def open_hamburger_button(self, timeout: Optional[int] = None) -> None:
-        timeout_ms: int = self._timeout_ms(timeout)
-        self.get_hamburger_button(timeout_ms).click()
-
-    def get_logout_link(self, timeout: Optional[int] = None) -> Locator:
-        timeout_ms: int = self._timeout_ms(timeout)
-        logout: Locator = self.get_element(self._logout_link, LOGOUT_LINK, timeout_ms)
-        return logout
-
-    def is_left_menu_displayed(self, timeout: Optional[int] = None) -> bool:
-        timeout_ms: int = self._timeout_ms(timeout)
-        return self._is_item_displayed(self._left_menu, timeout_ms)
-
-    def get_left_menu_elements(self, timeout: Optional[int] = None) -> list[str]:
-        timeout_ms: int = self._timeout_ms(timeout)
-        left_menu: Locator = self.get_element(self._left_menu, LEFT_MENU, timeout_ms)
-        all_items: List[Locator] = left_menu.locator(LEFT_MENU_ITEM).all()
-        return [item.inner_text().strip() for item in all_items]
-
-    def logout(self, timeout: Optional[int] = None) -> "LoginPage":
-        timeout_ms: int = self._timeout_ms(timeout)
-        self.get_hamburger_button(timeout_ms).click()
-        self.get_logout_link(timeout_ms).click()
-        try:
-            self.wait_for_url(BASE_URL, timeout=timeout_ms)
-            # local import to avoid circular import
-            from .login_page import LoginPage
-
-            return LoginPage(self._page)
-        except RuntimeError as exception:
-            raise RuntimeError(
-                f"Timed out waiting for logout to reach {BASE_URL} after {timeout_ms} ms"
-            ) from exception
 
     def get_document_title(self, timeout: Optional[int] = None) -> str:
         timeout_ms: int = self._timeout_ms(timeout)
