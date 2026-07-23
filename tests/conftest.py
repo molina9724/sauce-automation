@@ -10,11 +10,11 @@ from sauce_project.data.global_data import ITEM_INDEX
 from sauce_project.data.login_data import DEFAULT_UNLOCKED_USER, PASSWORD
 from sauce_project.po.pages.checkout_step_2_page import CheckoutStepTwoPage
 
-from ..po.pages.base_page import LOGIN_URL
-from ..po.pages.cart_page import CartPage
-from ..po.pages.checkout_step_1_page import CheckoutStepOnePage
-from ..po.pages.inventory_page import InventoryPage
-from ..po.pages.login_page import LoginPage
+from sauce_project.po.pages.base_page import LOGIN_URL
+from sauce_project.po.pages.cart_page import CartPage
+from sauce_project.po.pages.checkout_step_1_page import CheckoutStepOnePage
+from sauce_project.po.pages.inventory_page import InventoryPage
+from sauce_project.po.pages.login_page import LoginPage
 
 
 @pytest.fixture
