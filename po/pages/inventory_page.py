@@ -1,16 +1,11 @@
 from typing import TYPE_CHECKING, List, Optional
 
 from playwright.sync_api import Locator, Page
-from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 
-from sauce_project.po.components.left_menu import LeftMenu
-from sauce_project.po.pages.cart_page import REMOVE
-
-# fmt: off
-from .base_page import (CART_URL, ITEM, ITEM_DESCRIPTION, ITEM_NAME,
-                        ITEM_PRICE, BasePage)
-
-# fmt: on
+from ..components.cart import Cart
+from ..components.left_menu import LeftMenu
+from ..pages.cart_page import REMOVE
+from .base_page import ITEM, ITEM_DESCRIPTION, ITEM_NAME, ITEM_PRICE, BasePage
 
 if TYPE_CHECKING:
     from .cart_page import CartPage
@@ -25,10 +20,9 @@ PRODUCTS_TITLE: str = "Products Title"
 LOGO_TEXT: str = "Logo Text"
 DOCUMENT_TITLE: str = "Document Title"
 ADD_TO_CART_LABEL: str = "Add to cart Button"
-CART_COUNTER: str = "Cart Counter"
 
 
-class InventoryPage(LeftMenu, BasePage):
+class InventoryPage(LeftMenu, Cart, BasePage):
     """
     Page object model for the inventory page.
 
@@ -207,14 +201,6 @@ class InventoryPage(LeftMenu, BasePage):
                 is_item_image_displayed.append(visibility_flag)
         return all(is_item_image_displayed)
 
-    def get_cart_page(self, timeout: Optional[int] = None) -> "CartPage":
-        timeout_ms: int = self._timeout_ms(timeout)
-        cart_button: Locator = self.get_element(self._cart_button, CART_URL, timeout_ms)
-        cart_button.click()
-        from .cart_page import CartPage
-
-        return CartPage(self._page)
-
     def add_item_to_cart(self, index: int, timeout: Optional[int] = None) -> None:
         timeout_ms: int = self._timeout_ms(timeout)
         item: Locator = self.get_element(
@@ -234,25 +220,3 @@ class InventoryPage(LeftMenu, BasePage):
         )
         remove_button: Locator = item.get_by_role("button", name=REMOVE)
         remove_button.click(timeout=timeout_ms)
-
-    # TODO: Generalize cart and its components for the pages where it's displayed
-    def get_cart_counter(self, timeout: Optional[int] = None) -> int:
-        timeout_ms: int = self._timeout_ms(timeout)
-        cart_counter: Locator = self.get_element(
-            self._cart_counter, CART_COUNTER, timeout_ms
-        )
-        counter: str = cart_counter.inner_text().strip()
-        try:
-            return int(counter)
-        except ValueError:
-            raise RuntimeError(
-                f"{CART_COUNTER} is returning a value that cannot be converted to int"
-            )
-
-    def is_cart_empty(self, timeout: Optional[int] = None) -> bool:
-        timeout_ms: int = self._timeout_ms(timeout)
-        try:
-            self._cart_counter.wait_for(state="hidden", timeout=timeout_ms)
-            return True
-        except PlaywrightTimeoutError:
-            return False
