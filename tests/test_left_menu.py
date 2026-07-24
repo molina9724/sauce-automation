@@ -1,24 +1,16 @@
+#fmt:off
 import pytest
+
+from sauce_project.tests.shared_fixtures_names import (EMPTY_FIXTURES,
+                                                       FIXTURES_WITH_ITEM,
+                                                       PAGE_FIXTURE)
 
 from ..po.components.left_menu import LeftMenu
 from ..po.pages.inventory_page import InventoryPage
 from ..po.pages.login_page import LoginPage
 from ..tests.left_menu_helpers import all_items, logout
 
-PAGE_FIXTURE = "page_fixture"
-EMPTY_FIXTURES: list[str] = [
-    "empty_inventory_page",
-    "empty_cart_page",
-    "empty_checkout_step_1",
-    "empty_checkout_step_2",
-]
-
-FIXTURES_WITH_ONE_ITEM: list[str] = [
-    "inventory_page_with_item",
-    "cart_page_with_item",
-    "checkout_step_1_with_item",
-    "checkout_step_2_with_item",
-]
+#fmt:on
 
 
 @pytest.mark.parametrize(
@@ -46,7 +38,7 @@ def test_all_items_from_all_menu_pages_with_empty_cart(
 
 @pytest.mark.parametrize(
     PAGE_FIXTURE,
-    FIXTURES_WITH_ONE_ITEM,
+    FIXTURES_WITH_ITEM,
 )
 def test_all_items_from_all_menu_pages_with_item_in_cart(
     page_fixture, request: pytest.FixtureRequest
