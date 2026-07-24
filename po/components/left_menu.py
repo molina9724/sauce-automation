@@ -2,8 +2,8 @@ from typing import TYPE_CHECKING, List, Optional
 
 from playwright.sync_api import Locator
 
-from sauce_project.po.pages.base_page import BASE_URL, INVENTORY_URL, BasePage
-from sauce_project.po.pages.login_page import LoginPage
+from ..pages.base_page import BASE_URL, INVENTORY_URL, BasePage
+from ..pages.login_page import LoginPage
 
 if TYPE_CHECKING:
     _Base = BasePage

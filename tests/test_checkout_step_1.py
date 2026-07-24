@@ -2,16 +2,16 @@
 import pytest
 from playwright.sync_api import expect
 
-from sauce_project.data.checkout_step_1_data import (
+from ..data.checkout_step_1_data import (
     ACCESS_CHECKOUT_STEP_1_PAGE_WITHOUT_LOGIN_ERROR, CHECKOUT_ARGS,
     CHECKOUT_IDS, CHECKOUT_PARAMS, FIRST_NAME, LAST_NAME, ZIP_CODE)
-from sauce_project.po.pages.base_page import (CART_URL, CHECKOUT_STEP_1_URL,
-                                              CHECKOUT_STEP_2_URL)
-from sauce_project.po.pages.cart_page import CartPage
-from sauce_project.po.pages.checkout_step_1_page import CheckoutStepOnePage
-from sauce_project.po.pages.login_page import LoginPage
-from sauce_project.tests.form_validation_mixin_helpers import (
-    assert_error_decorations, assert_no_error_decorations)
+from ..po.pages.base_page import (CART_URL, CHECKOUT_STEP_1_URL,
+                                  CHECKOUT_STEP_2_URL)
+from ..po.pages.cart_page import CartPage
+from ..po.pages.checkout_step_1_page import CheckoutStepOnePage
+from ..po.pages.login_page import LoginPage
+from ..tests.form_validation_helpers import (assert_error_decorations,
+                                             assert_no_error_decorations)
 
 # fmt: on
 

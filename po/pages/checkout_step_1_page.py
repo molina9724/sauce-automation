@@ -3,14 +3,10 @@ from typing import TYPE_CHECKING, Optional
 from playwright.sync_api import Locator, Page
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 
-# fmt: off
-from sauce_project.po.components.form_validation_mixin import \
-    FormValidationMixIn
-from sauce_project.po.components.left_menu import LeftMenu
-from sauce_project.po.pages.base_page import (CART_URL, CHECKOUT_STEP_2_URL,
-                                              BasePage)
-# fmt: on
-from sauce_project.po.pages.cart_page import CartPage
+from ..components.form_validation import FormValidation
+from ..components.left_menu import LeftMenu
+from ..pages.base_page import CART_URL, CHECKOUT_STEP_2_URL, BasePage
+from ..pages.cart_page import CartPage
 
 if TYPE_CHECKING:
     from .checkout_step_2_page import CheckoutStepTwoPage
@@ -34,7 +30,7 @@ ZIP_CODE_LABEL = "Zip/Postal Code Field"
 SHORT_TIMEOUT: int = 600
 
 
-class CheckoutStepOnePage(FormValidationMixIn, LeftMenu, BasePage):
+class CheckoutStepOnePage(FormValidation, LeftMenu, BasePage):
     def __init__(self, page: Page, timeout: int = 10000) -> None:
         super().__init__(page, timeout)
         self._checkout_information_wrapper: Locator = self.locator(

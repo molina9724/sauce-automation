@@ -1,18 +1,17 @@
+# fmt: off
 from typing import TYPE_CHECKING, Optional
 
 from playwright.sync_api import Locator, Page
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 
-from sauce_project.data.login_data import PERFORMANCE_GLITCHED_USER
-# fmt: off
-from sauce_project.po.components.form_validation_mixin import \
-    FormValidationMixIn
-
-# fmt: on
-from .base_page import INCREASED_TIMEOUT, INVENTORY_URL, SHORT_TIMEOUT, BasePage
+from ...data.login_data import PERFORMANCE_GLITCHED_USER
+from ..components.form_validation import FormValidation
+from .base_page import (INCREASED_TIMEOUT, INVENTORY_URL, SHORT_TIMEOUT,
+                        BasePage)
 
 if TYPE_CHECKING:
     from .inventory_page import InventoryPage
+# fmt: on
 
 # Textbox names
 USERNAME: str = "Username"
@@ -27,7 +26,7 @@ CREDENTIALS = "Credentials Container"
 PASSWORD: str = "Password"
 
 
-class LoginPage(FormValidationMixIn, BasePage):
+class LoginPage(FormValidation, BasePage):
     def __init__(self, page: Page, timeout: int = 10000) -> None:
         super().__init__(page=page, timeout=timeout)
         self._logo_heading: Locator = self._page.locator(".login_logo")

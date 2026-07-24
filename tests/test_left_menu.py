@@ -1,10 +1,9 @@
 import pytest
 
-from sauce_project.po.components.left_menu import LeftMenu
-from sauce_project.po.pages.base_page import LOGIN_URL
-from sauce_project.po.pages.inventory_page import InventoryPage
-from sauce_project.po.pages.login_page import LoginPage
-from sauce_project.tests.left_menu_helpers import all_items, logout
+from ..po.components.left_menu import LeftMenu
+from ..po.pages.inventory_page import InventoryPage
+from ..po.pages.login_page import LoginPage
+from ..tests.left_menu_helpers import all_items, logout
 
 PAGE_FIXTURE = "page_fixture"
 EMPTY_FIXTURES: list[str] = [

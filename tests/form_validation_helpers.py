@@ -1,26 +1,18 @@
+#fmt:off
 from playwright.sync_api import expect
 
-from sauce_project.data.form_validation_mixin_data import (
-    BACKGROUND,
-    BORDER_BOTTOM,
-    DEFAULT_BORDER,
-    RED,
-)
-from sauce_project.data.global_data import WHITE
-from sauce_project.po.components.form_validation_mixin import (
-    ERROR_ICON,
-    FormValidationMixIn,
-)
-from sauce_project.po.pages.base_page import (
-    BACKGROUND_COLOR,
-    BORDER_BOTTOM_COLOR,
-    COLOR,
-    SHORT_TIMEOUT,
-)
+from ..data.form_validation_data import (BACKGROUND, BORDER_BOTTOM,
+                                         DEFAULT_BORDER, RED)
+from ..data.global_data import WHITE
+from ..po.components.form_validation import ERROR_ICON, FormValidation
+from ..po.pages.base_page import (BACKGROUND_COLOR, BORDER_BOTTOM_COLOR, COLOR,
+                                  SHORT_TIMEOUT)
+
+#fmt:on
 
 
 # Helpers
-def assert_no_error_decorations(page: FormValidationMixIn) -> None:
+def assert_no_error_decorations(page: FormValidation) -> None:
     for container in page.get_fields_containers():
         expect(container.locator(ERROR_ICON)).to_be_hidden()
 
@@ -30,7 +22,7 @@ def assert_no_error_decorations(page: FormValidationMixIn) -> None:
     assert not page.is_error_container_displayed(SHORT_TIMEOUT)
 
 
-def assert_error_decorations(page: FormValidationMixIn) -> None:
+def assert_error_decorations(page: FormValidation) -> None:
     for container in page.get_fields_containers():
         expect(container.locator(ERROR_ICON)).to_be_visible()
         expect(container.locator(ERROR_ICON)).to_have_css(COLOR, RED)

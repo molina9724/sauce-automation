@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING, Optional
 
 from playwright.sync_api import Locator
 
-from sauce_project.po.pages.base_page import BasePage
+from ..pages.base_page import BasePage
 
 if TYPE_CHECKING:
     _Base = BasePage
@@ -17,7 +17,7 @@ ERROR_MESSAGE_CONTAINER: str = "Error Message Container"
 ERROR_HEADING: str = "Error Heading"
 
 
-class FormValidationMixIn(_Base):
+class FormValidation(_Base):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self._error_message_container: Locator = self._page.locator(

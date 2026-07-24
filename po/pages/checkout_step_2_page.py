@@ -4,8 +4,8 @@ from typing import Optional
 from playwright.sync_api import Locator, Page
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 
-from sauce_project.po.components.left_menu import LeftMenu
-from sauce_project.po.pages.base_page import BasePage
+from ..components.left_menu import LeftMenu
+from ..pages.base_page import BasePage
 
 TAXES: Decimal = Decimal("0.08")
 CURRENCY = "$"

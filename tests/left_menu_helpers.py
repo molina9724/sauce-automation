@@ -1,7 +1,7 @@
-from sauce_project.po.components.left_menu import LeftMenu
-from sauce_project.po.pages.base_page import INVENTORY_URL, LOGIN_URL
-from sauce_project.po.pages.inventory_page import InventoryPage
-from sauce_project.po.pages.login_page import LoginPage
+from ..po.components.left_menu import LeftMenu
+from ..po.pages.base_page import INVENTORY_URL, LOGIN_URL
+from ..po.pages.inventory_page import InventoryPage
+from ..po.pages.login_page import LoginPage
 
 
 def logout(left_menu: LeftMenu) -> LoginPage:

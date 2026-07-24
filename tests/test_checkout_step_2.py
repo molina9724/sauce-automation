@@ -1,10 +1,10 @@
-from sauce_project.data.cart_data import CART_ITEM_DATA
 # fmt: off
-from sauce_project.data.checkout_step_2_data import (calculate_subtotal,
-                                                     calculate_taxes)
+from ..data.cart_data import CART_ITEM_DATA
+from ..data.checkout_step_2_data import calculate_subtotal, calculate_taxes
+from ..data.inventory_data import INVENTORY_ITEMS_DATA
+from ..po.pages.checkout_step_2_page import CheckoutStepTwoPage
+
 # fmt: on
-from sauce_project.data.inventory_data import INVENTORY_ITEMS_DATA
-from sauce_project.po.pages.checkout_step_2_page import CheckoutStepTwoPage
 
 
 def test_01_validate_item_subtotal(
