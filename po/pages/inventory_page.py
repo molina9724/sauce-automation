@@ -2,7 +2,8 @@ from typing import TYPE_CHECKING, List, Optional
 
 from playwright.sync_api import Locator, Page
 
-from ..components.cart import Cart
+from sauce_project.po.components.cart import Cart
+
 from ..components.left_menu import LeftMenu
 from ..pages.cart_page import REMOVE
 from .base_page import ITEM, ITEM_DESCRIPTION, ITEM_NAME, ITEM_PRICE, BasePage
@@ -22,7 +23,7 @@ DOCUMENT_TITLE: str = "Document Title"
 ADD_TO_CART_LABEL: str = "Add to cart Button"
 
 
-class InventoryPage(LeftMenu, Cart, BasePage):
+class InventoryPage(LeftMenu, BasePage):
     """
     Page object model for the inventory page.
 
@@ -63,6 +64,7 @@ class InventoryPage(LeftMenu, Cart, BasePage):
         self._item_image: Locator = self._item.locator(
             "img[class='inventory_item_img']"
         )
+        self.cart: Cart = Cart(page)
 
     def get_document_title(self, timeout: Optional[int] = None) -> str:
         timeout_ms: int = self._timeout_ms(timeout)

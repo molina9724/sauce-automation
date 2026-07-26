@@ -46,6 +46,7 @@ class CheckoutStepOnePage(LeftMenu, FormValidation, Cart, BasePage):
         self._continue_button: Locator = page.get_by_role(
             "button", name=CONTINUE_BUTTON
         )
+        self.cart: Cart = Cart(self._page)
 
     def get_first_name_object(self, timeout: Optional[int] = None) -> Locator:
         timeout_ms: int = self._timeout_ms(timeout)

@@ -1,11 +1,16 @@
 #fmt:off
+from typing import Union
+
 import pytest
 
 from sauce_project.tests.shared_fixtures_names import (EMPTY_FIXTURES,
                                                        FIXTURES_WITH_ITEM,
                                                        PAGE_FIXTURE)
 
-from ..po.components.cart import Cart
+from ..po.pages.cart_page import CartPage
+from ..po.pages.checkout_step_1_page import CheckoutStepOnePage
+from ..po.pages.checkout_step_2_page import CheckoutStepTwoPage
+from ..po.pages.inventory_page import InventoryPage
 
 #fmt:on
 
@@ -17,8 +22,10 @@ from ..po.components.cart import Cart
 def test_shopping_cart_is_empty_from_all_pages(
     page_fixture, request: pytest.FixtureRequest
 ) -> None:
-    cart: Cart = request.getfixturevalue(page_fixture)
-    assert cart.is_cart_empty()
+    page: Union[InventoryPage, CartPage, CheckoutStepOnePage, CheckoutStepTwoPage] = (
+        request.getfixturevalue(page_fixture)
+    )
+    assert page.cart.is_cart_empty()
 
 
 @pytest.mark.parametrize(
@@ -28,5 +35,7 @@ def test_shopping_cart_is_empty_from_all_pages(
 def test_shopping_cart_with_item_from_all_pages(
     page_fixture, request: pytest.FixtureRequest
 ) -> None:
-    cart: Cart = request.getfixturevalue(page_fixture)
-    assert cart.get_cart_counter() == 1
+    page: Union[InventoryPage, CartPage, CheckoutStepOnePage, CheckoutStepTwoPage] = (
+        request.getfixturevalue(page_fixture)
+    )
+    assert page.cart.get_cart_counter() == 1

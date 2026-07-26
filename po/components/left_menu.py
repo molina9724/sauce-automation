@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, List, Optional
 
-from playwright.sync_api import Locator
+from playwright.sync_api import Locator, Page
 
 from ..pages.base_page import BASE_URL, INVENTORY_URL, BasePage
 from ..pages.login_page import LoginPage
@@ -25,8 +25,9 @@ ALL_ITEMS: str = "All Items"
 
 
 class LeftMenu(_Base):
-    def __init__(self, *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs)
+
+    def __init__(self, page: Page, timeout: int = 10000) -> None:
+        super().__init__(page, timeout)
         self._hamburger_button: Locator = self._page.get_by_role(
             "button", name="Open Menu"
         )

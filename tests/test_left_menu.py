@@ -33,7 +33,7 @@ def test_all_items_from_all_menu_pages_with_empty_cart(
 ) -> None:
     page: LeftMenu = request.getfixturevalue(page_fixture)
     inventory_page: InventoryPage = all_items(page)
-    assert inventory_page.is_cart_empty()
+    assert inventory_page.cart.is_cart_empty()
 
 
 @pytest.mark.parametrize(
@@ -45,4 +45,4 @@ def test_all_items_from_all_menu_pages_with_item_in_cart(
 ) -> None:
     page: LeftMenu = request.getfixturevalue(page_fixture)
     inventory_page: InventoryPage = all_items(page)
-    assert inventory_page.get_cart_counter() == 1
+    assert inventory_page.cart.get_cart_counter() == 1

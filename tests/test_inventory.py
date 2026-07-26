@@ -115,27 +115,27 @@ def test_12_verify_user_can_add_item_to_cart(
     empty_inventory_page: InventoryPage,
 ) -> None:
     empty_inventory_page.add_item_to_cart(ITEM_INDEX)
-    assert empty_inventory_page.get_cart_counter() == 1
+    assert empty_inventory_page.cart.get_cart_counter() == 1
 
 
 def test_13_verify_cart_is_empty_by_default(
     empty_inventory_page: InventoryPage,
 ) -> None:
-    assert empty_inventory_page.is_cart_empty()
+    assert empty_inventory_page.cart.is_cart_empty()
 
 
 def test_14_verify_cart_is_empty_after_adding_item_and_removing_it(
     empty_inventory_page: InventoryPage,
 ) -> None:
     empty_inventory_page.add_item_to_cart(ITEM_INDEX)
-    assert empty_inventory_page.get_cart_counter() == 1
+    assert empty_inventory_page.cart.get_cart_counter() == 1
     empty_inventory_page.remove_item_from_cart(ITEM_INDEX)
-    assert empty_inventory_page.is_cart_empty()
+    assert empty_inventory_page.cart.is_cart_empty()
 
 
 def test_15_go_back_to_continue_shopping(cart_page_with_item: CartPage) -> None:
     inventory_page: InventoryPage = cart_page_with_item.get_inventory_page()
-    assert inventory_page.get_cart_counter() == 1
+    assert inventory_page.cart.get_cart_counter() == 1
 
 
 def test_16_verify_item_remain_in_cart_after_pressing_cancel_in_checkout_step_one_page(
@@ -143,4 +143,4 @@ def test_16_verify_item_remain_in_cart_after_pressing_cancel_in_checkout_step_on
 ) -> None:
     cart_page: CartPage = checkout_step_1_with_item.get_cart_page()
     inventory_page: InventoryPage = cart_page.get_inventory_page()
-    assert inventory_page.get_cart_counter() == 1
+    assert inventory_page.cart.get_cart_counter() == 1

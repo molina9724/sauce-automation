@@ -46,14 +46,14 @@ def inventory_page_with_all_items(login_page: LoginPage) -> InventoryPage:
 
 @pytest.fixture
 def empty_cart_page(empty_inventory_page: InventoryPage) -> CartPage:
-    cart_page: CartPage = empty_inventory_page.get_cart_page()
+    cart_page: CartPage = empty_inventory_page.cart.get_cart_page()
     return cart_page
 
 
 @pytest.fixture
 def cart_page_with_item(empty_inventory_page: InventoryPage) -> CartPage:
     empty_inventory_page.add_item_to_cart(ITEM_INDEX)
-    cart_page: CartPage = empty_inventory_page.get_cart_page()
+    cart_page: CartPage = empty_inventory_page.cart.get_cart_page()
     return cart_page
 
 
@@ -61,7 +61,7 @@ def cart_page_with_item(empty_inventory_page: InventoryPage) -> CartPage:
 def cart_page_with_all_items(empty_inventory_page: InventoryPage) -> CartPage:
     for index in ALL_ITEMS_INDEX:
         empty_inventory_page.add_item_to_cart(index)
-    cart_page: CartPage = empty_inventory_page.get_cart_page()
+    cart_page: CartPage = empty_inventory_page.cart.get_cart_page()
     return cart_page
 
 

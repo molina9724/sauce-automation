@@ -1,15 +1,12 @@
 from typing import TYPE_CHECKING, Optional
 
-from playwright.sync_api import Locator
+from playwright.sync_api import Locator, Page
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 
-from ..pages.base_page import CART_URL, BasePage
+from sauce_project.po.components.base_component import BaseComponent
 
 if TYPE_CHECKING:
-    _Base = BasePage
     from sauce_project.po.pages.cart_page import CartPage
-else:
-    _Base = object
 
 # Selectors
 CART_BUTTON: str = ".shopping_cart_link"
@@ -17,17 +14,21 @@ CART_COUNTER_BADGE: str = ".shopping_cart_badge"
 
 # Labels
 CART_COUNTER: str = "Cart Counter"
+CART_BUTTON_LABEL: str = "Cart Button"
 
 
-class Cart(_Base):
-    def __init__(self, *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs)
+class Cart(BaseComponent):
+
+    def __init__(self, page: Page, timeout: int = 10000) -> None:
+        super().__init__(page, timeout)
         self._cart_button: Locator = self._page.locator(CART_BUTTON)
         self._cart_counter: Locator = self._cart_button.locator(CART_COUNTER_BADGE)
 
     def get_cart_page(self, timeout: Optional[int] = None) -> "CartPage":
         timeout_ms: int = self._timeout_ms(timeout)
-        cart_button: Locator = self.get_element(self._cart_button, CART_URL, timeout_ms)
+        cart_button: Locator = self.get_element(
+            self._cart_button, CART_BUTTON_LABEL, timeout_ms
+        )
         cart_button.click()
         from sauce_project.po.pages.cart_page import CartPage
 
