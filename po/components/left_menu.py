@@ -2,11 +2,12 @@ from typing import TYPE_CHECKING, List, Optional
 
 from playwright.sync_api import Locator, Page
 
-from ..pages.base_page import BASE_URL, INVENTORY_URL, BasePage
+from sauce_project.po.components.base_component import BaseComponent
+
+from ..pages.base_page import BASE_URL, INVENTORY_URL
 from ..pages.login_page import LoginPage
 
 if TYPE_CHECKING:
-    _Base = BasePage
     from sauce_project.po.pages.inventory_page import InventoryPage
 else:
     _Base = object
@@ -24,7 +25,7 @@ LOGOUT_LINK: str = "Logout Link"
 ALL_ITEMS: str = "All Items"
 
 
-class LeftMenu(_Base):
+class LeftMenu(BaseComponent):
 
     def __init__(self, page: Page, timeout: int = 10000) -> None:
         super().__init__(page, timeout)
@@ -43,6 +44,7 @@ class LeftMenu(_Base):
         )
         return hamburger_button
 
+    # This button is a sibling of LeftMenu, not a children
     def open_hamburger_button(self, timeout: Optional[int] = None) -> None:
         timeout_ms: int = self._timeout_ms(timeout)
         self.get_hamburger_button(timeout_ms).click()
@@ -90,5 +92,5 @@ class LeftMenu(_Base):
             return InventoryPage(self._page)
         except RuntimeError as exception:
             raise RuntimeError(
-                f"Timed out waiting for logout to reach {ALL_ITEMS} after {timeout_ms} ms"
+                f"Timed out waiting for {ALL_ITEMS} after {timeout_ms} ms"
             ) from exception

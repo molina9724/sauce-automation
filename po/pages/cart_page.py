@@ -20,7 +20,7 @@ CONTINUE_SHOPPING = "Continue Shopping"
 CHECKOUT = "Checkout"
 
 
-class CartPage(LeftMenu, Cart, BasePage):
+class CartPage(BasePage):
     def __init__(self, page: Page, timeout: int = 10000) -> None:
         super().__init__(page, timeout)
         self._cart_list: Locator = self.locator(".cart_list")
@@ -39,6 +39,7 @@ class CartPage(LeftMenu, Cart, BasePage):
         )
         self._checkout_button: Locator = self._page.get_by_role("button", name=CHECKOUT)
         self.cart: Cart = Cart(self._page)
+        self.left_menu: LeftMenu = LeftMenu(self._page)
 
     def get_all_products_names(self, timeout: Optional[int] = None) -> List[str]:
         timeout_ms: int = self._timeout_ms(timeout)

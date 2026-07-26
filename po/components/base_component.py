@@ -41,3 +41,16 @@ class BaseComponent:
     @staticmethod
     def get_parent(locator: Locator) -> Locator:
         return locator.locator("..")
+
+    def wait_for_url(self, expected_url: str, timeout: Optional[int] = None) -> None:
+        """Wait until the page URL matches expected_url within timeout.
+
+        Raises RuntimeError on timeout to keep behavior consistent with other waits.
+        """
+        timeout_ms: int = self._timeout_ms(timeout)
+        try:
+            self._page.wait_for_url(expected_url, timeout=timeout_ms)
+        except PlaywrightTimeoutError as e:
+            raise RuntimeError(
+                f"Timed out waiting for URL {expected_url} after {timeout_ms} ms"
+            ) from e

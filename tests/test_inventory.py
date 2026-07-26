@@ -33,9 +33,9 @@ def test_02_verify_page_title(empty_inventory_page: InventoryPage) -> None:
 
 
 def test_03_verify_left_menu_components(empty_inventory_page: InventoryPage) -> None:
-    empty_inventory_page.open_hamburger_button()
-    assert empty_inventory_page.is_left_menu_displayed()
-    left_menu_items: List[str] = empty_inventory_page.get_left_menu_elements()
+    empty_inventory_page.left_menu.open_hamburger_button()
+    assert empty_inventory_page.left_menu.is_left_menu_displayed()
+    left_menu_items: List[str] = empty_inventory_page.left_menu.get_left_menu_elements()
     assert left_menu_items == LEFT_MENU_ITEMS
 
 

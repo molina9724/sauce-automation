@@ -23,7 +23,7 @@ DOCUMENT_TITLE: str = "Document Title"
 ADD_TO_CART_LABEL: str = "Add to cart Button"
 
 
-class InventoryPage(LeftMenu, BasePage):
+class InventoryPage(BasePage):
     """
     Page object model for the inventory page.
 
@@ -64,7 +64,8 @@ class InventoryPage(LeftMenu, BasePage):
         self._item_image: Locator = self._item.locator(
             "img[class='inventory_item_img']"
         )
-        self.cart: Cart = Cart(page)
+        self.left_menu: LeftMenu = LeftMenu(self._page)
+        self.cart: Cart = Cart(self._page)
 
     def get_document_title(self, timeout: Optional[int] = None) -> str:
         timeout_ms: int = self._timeout_ms(timeout)

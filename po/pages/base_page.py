@@ -1,6 +1,6 @@
 from typing import Optional, Union
 
-from playwright.sync_api import Locator, Page
+from playwright.sync_api import Locator
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 
 from sauce_project.po.components.cart import BaseComponent
@@ -101,19 +101,6 @@ class BasePage(BaseComponent):
             raise RuntimeError(
                 f"Timed out waiting for selector {label} to be visible after navigating to {url} (after {timeout_ms} ms)"
             ) from exception
-
-    def wait_for_url(self, expected_url: str, timeout: Optional[int] = None) -> None:
-        """Wait until the page URL matches expected_url within timeout.
-
-        Raises RuntimeError on timeout to keep behavior consistent with other waits.
-        """
-        timeout_ms: int = self._timeout_ms(timeout)
-        try:
-            self._page.wait_for_url(expected_url, timeout=timeout_ms)
-        except PlaywrightTimeoutError as e:
-            raise RuntimeError(
-                f"Timed out waiting for URL {expected_url} after {timeout_ms} ms"
-            ) from e
 
     def get_url(self) -> str:
         return self._page.url

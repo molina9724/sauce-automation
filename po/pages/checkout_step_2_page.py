@@ -17,7 +17,7 @@ TAX: str = "Tax"
 TOTAL: str = "Total"
 
 
-class CheckoutStepTwoPage(LeftMenu, Cart, BasePage):
+class CheckoutStepTwoPage(BasePage):
     def __init__(self, page: Page, timeout: int = 10000) -> None:
         super().__init__(page, timeout)
         self._cart_list: Locator = self.locator(".cart_list")
@@ -32,6 +32,7 @@ class CheckoutStepTwoPage(LeftMenu, Cart, BasePage):
         self._tax: Locator = self.locator(".summary_tax_label")
         self._total: Locator = self.locator(".summary_total_label")
 
+        self.left_menu: LeftMenu = LeftMenu(self._page)
         self.cart: Cart = Cart(self._page)
 
     def is_cart_list_displayed(self, timeout: Optional[int] = None) -> bool:

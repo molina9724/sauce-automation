@@ -32,7 +32,7 @@ ZIP_CODE_LABEL = "Zip/Postal Code Field"
 SHORT_TIMEOUT: int = 600
 
 
-class CheckoutStepOnePage(LeftMenu, FormValidation, Cart, BasePage):
+class CheckoutStepOnePage(FormValidation, BasePage):
     def __init__(self, page: Page, timeout: int = 10000) -> None:
         super().__init__(page, timeout)
         self._checkout_information_wrapper: Locator = self.locator(
@@ -46,6 +46,7 @@ class CheckoutStepOnePage(LeftMenu, FormValidation, Cart, BasePage):
         self._continue_button: Locator = page.get_by_role(
             "button", name=CONTINUE_BUTTON
         )
+        self.left_menu: LeftMenu = LeftMenu(self._page)
         self.cart: Cart = Cart(self._page)
 
     def get_first_name_object(self, timeout: Optional[int] = None) -> Locator:
