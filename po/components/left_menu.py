@@ -33,12 +33,11 @@ class LeftMenu(BaseComponent):
         self._hamburger_button: Locator = self._page.get_by_role(
             "button", name="Open Menu"
         )
-        self._left_menu: Locator = self._page.locator(".bm-menu")
+        self._left_menu: Locator = self._page.locator(".bm-menu-wrap")
         self._item: Locator = self._left_menu.locator(LEFT_MENU_ITEM)
         self._logout: Locator = self._left_menu.get_by_role("link", name=LOGOUT)
         self._all_items: Locator = self._left_menu.get_by_role("link", name=ALL_ITEMS)
-
-        self._close: Locator = self._page.locator(".bm-cross-button")
+        self._close: Locator = self._left_menu.locator(".bm-cross-button")
 
     def get_hamburger_button(self, timeout: Optional[int] = None) -> Locator:
         timeout_ms: int = self._timeout_ms(timeout)
