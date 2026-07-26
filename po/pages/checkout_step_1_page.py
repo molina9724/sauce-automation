@@ -122,17 +122,3 @@ class CheckoutStepOnePage(FormValidation, BasePage):
     def is_cancel_button_displayed(self, timeout: Optional[int] = None) -> bool:
         timeout_ms: int = self._timeout_ms(timeout)
         return self._is_item_displayed(self._cancel_button, timeout_ms)
-
-    def get_cart_page(self, timeout: Optional[int] = None) -> CartPage:
-        timeout_ms: int = self._timeout_ms(timeout)
-        cancel_button = self.get_element(
-            self._cancel_button, CANCEL_BUTTON_LABEL, timeout_ms
-        )
-        cancel_button.click()
-        try:
-            self.wait_for_url(CART_URL, timeout_ms)
-            return CartPage(self._page)
-        except RuntimeError:
-            raise RuntimeError(
-                f"Timed out waiting for checkout to reach {CART_URL} after {timeout_ms} ms"
-            )

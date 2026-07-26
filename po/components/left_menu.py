@@ -20,6 +20,7 @@ LOGOUT: str = "Logout"
 
 # Labels
 HAMBURGER_BUTTON: str = "Hamburger Button"
+CLOSE_ERROR_BUTTON: str = "Close error button"
 LEFT_MENU: str = "Left Menu"
 LOGOUT_LINK: str = "Logout Link"
 ALL_ITEMS: str = "All Items"
@@ -37,6 +38,8 @@ class LeftMenu(BaseComponent):
         self._logout: Locator = self._left_menu.get_by_role("link", name=LOGOUT)
         self._all_items: Locator = self._left_menu.get_by_role("link", name=ALL_ITEMS)
 
+        self._close: Locator = self._page.locator(".bm-cross-button")
+
     def get_hamburger_button(self, timeout: Optional[int] = None) -> Locator:
         timeout_ms: int = self._timeout_ms(timeout)
         hamburger_button: Locator = self.get_element(
@@ -44,10 +47,24 @@ class LeftMenu(BaseComponent):
         )
         return hamburger_button
 
-    # This button is a sibling of LeftMenu, not a children
-    def open_hamburger_button(self, timeout: Optional[int] = None) -> None:
+    def is_hamburger_button_displayed(self, timeout: Optional[int] = None) -> bool:
         timeout_ms: int = self._timeout_ms(timeout)
-        self.get_hamburger_button(timeout_ms).click()
+        return self._is_item_displayed(self._hamburger_button, timeout_ms)
+
+    # This button is a sibling of LeftMenu, not a children
+    def open(self, timeout: Optional[int] = None) -> None:
+        timeout_ms: int = self._timeout_ms(timeout)
+        hamburger_button: Locator = self.get_element(
+            self._hamburger_button, HAMBURGER_BUTTON, timeout_ms
+        )
+        hamburger_button.click()
+
+    def close(self, timeout: Optional[int] = None) -> None:
+        timeout_ms: int = self._timeout_ms(timeout)
+        close_button: Locator = self.get_element(
+            self._close, CLOSE_ERROR_BUTTON, timeout_ms
+        )
+        close_button.click()
 
     def get_logout(self, timeout: Optional[int] = None) -> Locator:
         timeout_ms: int = self._timeout_ms(timeout)
@@ -62,6 +79,10 @@ class LeftMenu(BaseComponent):
     def is_left_menu_displayed(self, timeout: Optional[int] = None) -> bool:
         timeout_ms: int = self._timeout_ms(timeout)
         return self._is_item_displayed(self._left_menu, timeout_ms)
+
+    def is_left_menu_hidden(self, timeout: Optional[int] = None) -> bool:
+        timeout_ms: int = self._timeout_ms(timeout)
+        return self._is_item_hidden(self._left_menu, timeout_ms)
 
     def get_left_menu_elements(self, timeout: Optional[int] = None) -> list[str]:
         timeout_ms: int = self._timeout_ms(timeout)

@@ -28,6 +28,14 @@ class BaseComponent:
         except PlaywrightTimeoutError:
             return False
 
+    def _is_item_hidden(self, locator: Locator, timeout: Optional[int] = None) -> bool:
+        timeout_ms: int = self._timeout_ms(timeout)
+        try:
+            locator.wait_for(state="hidden", timeout=timeout_ms)
+            return True
+        except PlaywrightTimeoutError:
+            return False
+
     def get_element(
         self, locator: Locator, label: str, timeout: Optional[int] = None
     ) -> Locator:
