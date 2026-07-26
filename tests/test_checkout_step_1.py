@@ -36,7 +36,7 @@ def test_verify_checkout_error_with_empty_field(
 def test_04_verify_cancel_button_takes_user_back_to_cart_page(
     checkout_step_1_with_item: CheckoutStepOnePage,
 ) -> None:
-    cart_page: CartPage = checkout_step_1_with_item.get_cart_page()
+    cart_page: CartPage = checkout_step_1_with_item.cart.get_cart_page()
     expect(cart_page._page).to_have_url(CART_URL)
 
 

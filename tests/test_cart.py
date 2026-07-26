@@ -39,7 +39,7 @@ def test_04_verify_several_items_can_be_added_to_cart(
 def test_05_verify_items_remain_in_cart_after_pressing_cancel_in_checkout_step_one_page(
     checkout_step_1_with_item: CheckoutStepOnePage,
 ) -> None:
-    cart_page: CartPage = checkout_step_1_with_item.get_cart_page()
+    cart_page: CartPage = checkout_step_1_with_item.cart.get_cart_page()
     assert cart_page.get_all_products_information() == CART_ITEM_DATA
 
 
