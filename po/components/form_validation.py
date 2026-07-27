@@ -37,6 +37,10 @@ class FormValidation(BaseComponent):
         timeout_ms: int = self._timeout_ms(timeout)
         return self._is_item_displayed(self._error_heading, timeout_ms)
 
+    def is_error_heading_hidden(self, timeout: Optional[int] = None) -> bool:
+        timeout_ms: int = self._timeout_ms(timeout)
+        return self._is_item_hidden(self._error_heading, timeout_ms)
+
     def get_error_heading(self, timeout: Optional[int] = None) -> Locator:
         timeout_ms: int = self._timeout_ms(timeout)
         error_heading: Locator = self.get_element(

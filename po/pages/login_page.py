@@ -41,8 +41,8 @@ class LoginPage(BasePage):
         self._username: Locator = self._page.get_by_role("textbox", name=USERNAME)
         self._password: Locator = self._page.get_by_role("textbox", name=PASSWORD)
         self._login_button: Locator = self._page.get_by_role("button", name=LOGIN)
-        self._close_error_button: Locator = self.form_validation._error_heading.locator(
-            ".error-button"
+        self._close_error_button: Locator = self._page.locator(
+            ".error-message-container.error .error-button"
         )
 
         self._usernames_container: Locator = self._page.locator("#login_credentials")
@@ -85,7 +85,7 @@ class LoginPage(BasePage):
         self._password.fill(password)
         self._login_button.click()
 
-        if self._is_item_displayed(self.form_validation._error_heading, SHORT_TIMEOUT):
+        if self.form_validation.is_error_heading_displayed(SHORT_TIMEOUT):
             quick_error_message: str = (
                 self.form_validation.get_error_text() or "Unknown login error"
             )
@@ -108,7 +108,7 @@ class LoginPage(BasePage):
         timeout_ms: int = self._timeout_ms(timeout)
         self.get_element(self._close_error_button, CLOSE_ERROR_BUTTON, timeout_ms)
         self._close_error_button.click()
-        if self._is_item_hidden(self.form_validation._error_heading, timeout_ms):
+        if self.form_validation.is_error_heading_hidden(timeout_ms):
             return None
         else:
             raise RuntimeError(
@@ -182,7 +182,7 @@ class LoginPage(BasePage):
     ) -> None:
         timeout_ms: int = self._timeout_ms(timeout)
         self._page.goto(url)
-        if self._is_item_displayed(self.form_validation._error_heading, timeout_ms):
+        if self.form_validation.is_error_heading_displayed(timeout_ms):
             error_message: str | None = self.form_validation.get_error_text()
             raise RuntimeError(error_message)
         else:
