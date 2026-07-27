@@ -65,8 +65,6 @@ Honest list of what isn't done yet:
 - [ ] No CI pipeline — tests run locally only
 - [ ] Chromium only; Firefox and WebKit untested
 - [ ] No API-level setup; all state created through the UI, which is slow
-- [ ] Coverage gaps: [name them]
-- [ ] No trace/screenshot capture on failure
 - [ ] [anything from TODO.MD]
 
 ## Roadmap
