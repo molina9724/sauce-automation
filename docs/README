@@ -32,7 +32,6 @@ pytest
 ```bash
 pytest                          # full suite
 pytest tests/test_login.py      # single file
-pytest -m smoke                 # by marker
 pytest --headed                 # watch it run
 pytest -n auto                  # parallel
 ```
