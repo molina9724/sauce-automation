@@ -1,0 +1,7 @@
+playwright>=1.58
+pytest>=9.0
+pytest-playwright>=0.7
+pytest-xdist>=3.8
+pytest-html>=4.2
+pytest-rerunfailures>=16.1
+pytest-timeout>=2.4
