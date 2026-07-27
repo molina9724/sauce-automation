@@ -8,16 +8,11 @@ from data.login_data import (DOCUMENT_TITLE, EMPTY_USERNAME_ERROR,
 from po.pages.base_page import INVENTORY_URL
 from po.pages.inventory_page import InventoryPage
 from po.pages.login_page import LoginPage
+
 from .form_validation_helpers import (assert_error_decorations,
                                       assert_no_error_decorations)
 
 # fmt: on
-
-
-@pytest.fixture(autouse=True)
-def ensure_no_errors(login_page: LoginPage) -> None:
-    if assert_no_error_decorations(login_page):
-        login_page.dismiss_error()
 
 
 def test_01_verify_document_title(login_page: LoginPage) -> None:

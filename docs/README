@@ -66,7 +66,6 @@ Honest list of what isn't done yet:
 - [ ] Chromium only; Firefox and WebKit untested
 - [ ] No API-level setup; all state created through the UI, which is slow
 - [ ] Coverage gaps: [name them]
-- [ ] Not verified under parallel execution
 - [ ] No trace/screenshot capture on failure
 - [ ] [anything from TODO.MD]
 
