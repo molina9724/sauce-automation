@@ -1,13 +1,8 @@
-from typing import TYPE_CHECKING, Optional
+from typing import Optional
 
-from playwright.sync_api import Locator
+from playwright.sync_api import Locator, Page
 
-from ..pages.base_page import BasePage
-
-if TYPE_CHECKING:
-    _Base = BasePage
-else:
-    _Base = object
+from sauce_project.po.components.cart import BaseComponent
 
 # Selectors
 ERROR_ICON: str = ".error_icon"
@@ -17,9 +12,9 @@ ERROR_MESSAGE_CONTAINER: str = "Error Message Container"
 ERROR_HEADING: str = "Error Heading"
 
 
-class FormValidation(_Base):
-    def __init__(self, *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs)
+class FormValidation(BaseComponent):
+    def __init__(self, page: Page, timeout: int = 10000) -> None:
+        super().__init__(page, timeout)
         self._error_message_container: Locator = self._page.locator(
             ".error-message-container.error"
         )
@@ -38,7 +33,7 @@ class FormValidation(_Base):
         )
         return error_message_container
 
-    def is_error_heading_visible(self, timeout: Optional[int] = None) -> bool:
+    def is_error_heading_displayed(self, timeout: Optional[int] = None) -> bool:
         timeout_ms: int = self._timeout_ms(timeout)
         return self._is_item_displayed(self._error_heading, timeout_ms)
 
@@ -57,7 +52,7 @@ class FormValidation(_Base):
 
     def get_error_text(self, timeout: Optional[int] = None) -> str | None:
         timeout_ms: int = self._timeout_ms(timeout)
-        if self.is_error_heading_visible(timeout=timeout_ms):
+        if self.is_error_heading_displayed(timeout=timeout_ms):
             return self._error_heading.inner_text().strip()
         else:
             return None

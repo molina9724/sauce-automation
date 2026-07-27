@@ -72,13 +72,14 @@ def test_11_verify_unsuccessful_login(
 def test_16_verify_error_dismissal_after_unsuccessful_login_with_locked_account(
     login_page: LoginPage,
 ) -> None:
+    assert not login_page.form_validation.is_error_displayed()
     with pytest.raises(RuntimeError) as exception:
         login_page.login(username="", password="")
     assert EMPTY_USERNAME_ERROR == str(exception.value)
-    assert login_page.is_error_displayed()
+    assert login_page.form_validation.is_error_displayed()
     login_page.dismiss_error()
     assert_no_error_decorations(login_page)
-    assert not login_page.is_error_displayed()
+    assert not login_page.form_validation.is_error_displayed()
 
 
 def test_17_verify_password_field_masking(login_page: LoginPage) -> None:

@@ -7,8 +7,7 @@ from sauce_project.po.components.cart import Cart
 
 from ..components.form_validation import FormValidation
 from ..components.left_menu import LeftMenu
-from ..pages.base_page import CART_URL, CHECKOUT_STEP_2_URL, BasePage
-from ..pages.cart_page import CartPage
+from ..pages.base_page import CHECKOUT_STEP_2_URL, BasePage
 
 if TYPE_CHECKING:
     from .checkout_step_2_page import CheckoutStepTwoPage
@@ -48,6 +47,7 @@ class CheckoutStepOnePage(FormValidation, BasePage):
         )
         self.left_menu: LeftMenu = LeftMenu(self._page)
         self.cart: Cart = Cart(self._page)
+        self.form_validation = FormValidation(self._page)
 
     def get_first_name_object(self, timeout: Optional[int] = None) -> Locator:
         timeout_ms: int = self._timeout_ms(timeout)

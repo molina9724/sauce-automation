@@ -2,7 +2,6 @@
 from typing import TYPE_CHECKING, Optional
 
 from playwright.sync_api import Locator, Page
-from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 
 from ...data.login_data import PERFORMANCE_GLITCHED_USER
 from ..components.form_validation import FormValidation
@@ -26,7 +25,7 @@ CREDENTIALS = "Credentials Container"
 PASSWORD: str = "Password"
 
 
-class LoginPage(FormValidation, BasePage):
+class LoginPage(BasePage):
     def __init__(self, page: Page, timeout: int = 10000) -> None:
         super().__init__(page=page, timeout=timeout)
         self._logo_heading: Locator = self._page.locator(".login_logo")
@@ -37,10 +36,14 @@ class LoginPage(FormValidation, BasePage):
             "heading", name="Password for all users:"
         )
 
+        self.form_validation = FormValidation(self._page)
+
         self._username: Locator = self._page.get_by_role("textbox", name=USERNAME)
         self._password: Locator = self._page.get_by_role("textbox", name=PASSWORD)
         self._login_button: Locator = self._page.get_by_role("button", name=LOGIN)
-        self._close_error_button: Locator = self._error_heading.locator(".error-button")
+        self._close_error_button: Locator = self.form_validation._error_heading.locator(
+            ".error-button"
+        )
 
         self._usernames_container: Locator = self._page.locator("#login_credentials")
         self._passwords_container: Locator = self._page.locator(".login_password")
@@ -82,8 +85,10 @@ class LoginPage(FormValidation, BasePage):
         self._password.fill(password)
         self._login_button.click()
 
-        if self._is_item_displayed(self._error_heading, SHORT_TIMEOUT):
-            quick_error_message: str = self.get_error_text() or "Unknown login error"
+        if self._is_item_displayed(self.form_validation._error_heading, SHORT_TIMEOUT):
+            quick_error_message: str = (
+                self.form_validation.get_error_text() or "Unknown login error"
+            )
             raise RuntimeError(quick_error_message)
 
         try:
@@ -92,7 +97,7 @@ class LoginPage(FormValidation, BasePage):
 
             return InventoryPage(self._page)
         except RuntimeError:
-            error_message = self.get_error_text()
+            error_message = self.form_validation.get_error_text()
             if error_message:
                 raise RuntimeError(error_message)
             raise RuntimeError(
@@ -102,11 +107,10 @@ class LoginPage(FormValidation, BasePage):
     def dismiss_error(self, timeout: Optional[int] = None) -> None:
         timeout_ms: int = self._timeout_ms(timeout)
         self.get_element(self._close_error_button, CLOSE_ERROR_BUTTON, timeout_ms)
-        try:
-            self._close_error_button.click()
-            self._error_heading.wait_for(state="hidden", timeout=timeout_ms)
+        self._close_error_button.click()
+        if self._is_item_hidden(self.form_validation._error_heading, timeout_ms):
             return None
-        except PlaywrightTimeoutError:
+        else:
             raise RuntimeError(
                 f"Timed out waiting for error to dismiss (after {timeout_ms} ms)"
             )
@@ -178,11 +182,10 @@ class LoginPage(FormValidation, BasePage):
     ) -> None:
         timeout_ms: int = self._timeout_ms(timeout)
         self._page.goto(url)
-        try:
-            self._error_heading.wait_for(state="visible", timeout=timeout_ms)
-            error_message: str | None = self.get_error_text()
+        if self._is_item_displayed(self.form_validation._error_heading, timeout_ms):
+            error_message: str | None = self.form_validation.get_error_text()
             raise RuntimeError(error_message)
-        except PlaywrightTimeoutError:
+        else:
             raise RuntimeError(
                 f"No error displayed after accessing {url} without authenticating."
             )
