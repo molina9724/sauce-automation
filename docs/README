@@ -64,15 +64,12 @@ Honest list of what isn't done yet:
 
 - [ ] No CI pipeline — tests run locally only
 - [ ] Chromium only; Firefox and WebKit untested
-- [ ] No API-level setup; all state created through the UI, which is slow
-- [ ] [anything from TODO.MD]
 
 ## Roadmap
 
 - [ ] GitHub Actions workflow running the suite on push
 - [ ] Failure artifacts: trace, screenshot, video
 - [ ] Cross-browser via parametrized fixtures
-- [ ] API-based test data setup and teardown
 - [ ] Allure or HTML reporting
 
 ## Notes
