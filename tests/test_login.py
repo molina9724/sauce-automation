@@ -14,6 +14,12 @@ from ..tests.form_validation_helpers import (assert_error_decorations,
 # fmt: on
 
 
+@pytest.fixture(autouse=True)
+def ensure_no_errors(login_page: LoginPage) -> None:
+    if assert_no_error_decorations(login_page):
+        login_page.dismiss_error()
+
+
 def test_01_verify_document_title(login_page: LoginPage) -> None:
     assert login_page.get_document_title() == DOCUMENT_TITLE
 
@@ -53,7 +59,6 @@ def test_09_verify_password(login_page: LoginPage) -> None:
 
 @pytest.mark.parametrize(LOGIN_ARGS, argvalues=SUCCESS_LOGIN_DATA, ids=UNLOCKED_USERS)
 def test_10_verify_successful_login(login_page: LoginPage, user, password) -> None:
-    assert_no_error_decorations(login_page)
     inventory_page: InventoryPage = login_page.login(username=user, password=password)
     assert inventory_page.get_url() == INVENTORY_URL
 
@@ -62,7 +67,6 @@ def test_10_verify_successful_login(login_page: LoginPage, user, password) -> No
 def test_11_verify_unsuccessful_login(
     login_page: LoginPage, user, password, error
 ) -> None:
-    assert_no_error_decorations(login_page)
     with pytest.raises(RuntimeError) as exception:
         login_page.login(username=user, password=password)
     assert_error_decorations(login_page)
@@ -72,7 +76,6 @@ def test_11_verify_unsuccessful_login(
 def test_16_verify_error_dismissal_after_unsuccessful_login_with_locked_account(
     login_page: LoginPage,
 ) -> None:
-    assert_no_error_decorations(login_page)
     with pytest.raises(RuntimeError) as exception:
         login_page.login(username="", password="")
     assert EMPTY_USERNAME_ERROR == str(exception.value)
