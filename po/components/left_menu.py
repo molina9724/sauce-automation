@@ -2,13 +2,13 @@ from typing import TYPE_CHECKING, List, Optional
 
 from playwright.sync_api import Locator, Page
 
-from sauce_project.po.components.base_component import BaseComponent
+from .base_component import BaseComponent
 
 from ..pages.base_page import BASE_URL, INVENTORY_URL
 from ..pages.login_page import LoginPage
 
 if TYPE_CHECKING:
-    from sauce_project.po.pages.inventory_page import InventoryPage
+    from ..pages.inventory_page import InventoryPage
 else:
     _Base = object
 
@@ -107,7 +107,7 @@ class LeftMenu(BaseComponent):
         self.get_all_items(timeout_ms).click()
         try:
             self.wait_for_url(INVENTORY_URL, timeout_ms)
-            from sauce_project.po.pages.inventory_page import InventoryPage
+            from ..pages.inventory_page import InventoryPage
 
             return InventoryPage(self._page)
         except RuntimeError as exception:

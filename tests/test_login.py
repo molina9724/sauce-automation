@@ -1,15 +1,15 @@
 # fmt: off
 import pytest
 
-from ..data.login_data import (DOCUMENT_TITLE, EMPTY_USERNAME_ERROR,
-                               EXPECTED_LOGIN_USERNAMES, LOGIN_ARGS,
-                               LOGIN_ERROR_ARGS, LOGIN_ERROR_PARAMS, LOGO_TEXT,
-                               PASSWORD, SUCCESS_LOGIN_DATA, UNLOCKED_USERS)
-from ..po.pages.base_page import INVENTORY_URL
-from ..po.pages.inventory_page import InventoryPage
-from ..po.pages.login_page import LoginPage
-from ..tests.form_validation_helpers import (assert_error_decorations,
-                                             assert_no_error_decorations)
+from data.login_data import (DOCUMENT_TITLE, EMPTY_USERNAME_ERROR,
+                             EXPECTED_LOGIN_USERNAMES, LOGIN_ARGS,
+                             LOGIN_ERROR_ARGS, LOGIN_ERROR_PARAMS, LOGO_TEXT,
+                             PASSWORD, SUCCESS_LOGIN_DATA, UNLOCKED_USERS)
+from po.pages.base_page import INVENTORY_URL
+from po.pages.inventory_page import InventoryPage
+from po.pages.login_page import LoginPage
+from .form_validation_helpers import (assert_error_decorations,
+                                      assert_no_error_decorations)
 
 # fmt: on
 

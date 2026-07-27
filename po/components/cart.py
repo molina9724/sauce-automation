@@ -3,10 +3,10 @@ from typing import TYPE_CHECKING, Optional
 from playwright.sync_api import Locator, Page
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 
-from sauce_project.po.components.base_component import BaseComponent
+from .base_component import BaseComponent
 
 if TYPE_CHECKING:
-    from sauce_project.po.pages.cart_page import CartPage
+    from ..pages.cart_page import CartPage
 
 # Selectors
 CART_BUTTON: str = ".shopping_cart_link"
@@ -30,7 +30,7 @@ class Cart(BaseComponent):
             self._cart_button, CART_BUTTON_LABEL, timeout_ms
         )
         cart_button.click()
-        from sauce_project.po.pages.cart_page import CartPage
+        from ..pages.cart_page import CartPage
 
         return CartPage(self._page)
 

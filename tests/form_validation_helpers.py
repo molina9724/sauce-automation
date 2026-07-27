@@ -3,15 +3,15 @@ from typing import Union
 
 from playwright.sync_api import expect
 
-from sauce_project.po.pages.checkout_step_1_page import CheckoutStepOnePage
-from sauce_project.po.pages.login_page import LoginPage
+from po.pages.checkout_step_1_page import CheckoutStepOnePage
+from po.pages.login_page import LoginPage
 
-from ..data.form_validation_data import (BACKGROUND, BORDER_BOTTOM,
-                                         DEFAULT_BORDER, RED)
-from ..data.global_data import WHITE
-from ..po.components.form_validation import ERROR_ICON
-from ..po.pages.base_page import (BACKGROUND_COLOR, BORDER_BOTTOM_COLOR, COLOR,
-                                  SHORT_TIMEOUT)
+from data.form_validation_data import (BACKGROUND, BORDER_BOTTOM,
+                                       DEFAULT_BORDER, RED)
+from data.global_data import WHITE
+from po.components.form_validation import ERROR_ICON
+from po.pages.base_page import (BACKGROUND_COLOR, BORDER_BOTTOM_COLOR, COLOR,
+                                SHORT_TIMEOUT)
 
 #fmt:on
 

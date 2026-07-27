@@ -2,10 +2,10 @@ from typing import TYPE_CHECKING, List, Optional
 
 from playwright.sync_api import Locator, Page
 
-from sauce_project.po.components.cart import Cart
+from ..components.cart import Cart
 
 from ..components.left_menu import LeftMenu
-from ..pages.cart_page import REMOVE
+from .base_page import REMOVE
 from .base_page import ITEM, ITEM_DESCRIPTION, ITEM_NAME, ITEM_PRICE, BasePage
 
 if TYPE_CHECKING:

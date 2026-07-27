@@ -3,14 +3,14 @@ from typing import Union
 
 import pytest
 
-from sauce_project.tests.shared_fixtures_names import (EMPTY_FIXTURES,
-                                                       FIXTURES_WITH_ITEM,
-                                                       PAGE_FIXTURE)
+from .shared_fixtures_names import (EMPTY_FIXTURES,
+                                    FIXTURES_WITH_ITEM,
+                                    PAGE_FIXTURE)
 
-from ..po.pages.cart_page import CartPage
-from ..po.pages.checkout_step_1_page import CheckoutStepOnePage
-from ..po.pages.checkout_step_2_page import CheckoutStepTwoPage
-from ..po.pages.inventory_page import InventoryPage
+from po.pages.cart_page import CartPage
+from po.pages.checkout_step_1_page import CheckoutStepOnePage
+from po.pages.checkout_step_2_page import CheckoutStepTwoPage
+from po.pages.inventory_page import InventoryPage
 
 #fmt:on
 

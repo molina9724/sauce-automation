@@ -1,8 +1,8 @@
 # fmt: off
-from ..data.cart_data import CART_ITEM_DATA
-from ..data.checkout_step_2_data import calculate_subtotal, calculate_taxes
-from ..data.inventory_data import INVENTORY_ITEMS_DATA
-from ..po.pages.checkout_step_2_page import CheckoutStepTwoPage
+from data.cart_data import CART_ITEM_DATA
+from data.checkout_step_2_data import calculate_subtotal, calculate_taxes
+from data.inventory_data import INVENTORY_ITEMS_DATA
+from po.pages.checkout_step_2_page import CheckoutStepTwoPage
 
 # fmt: on
 

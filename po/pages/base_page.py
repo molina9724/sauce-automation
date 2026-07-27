@@ -3,7 +3,7 @@ from typing import Optional, Union
 from playwright.sync_api import Locator
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 
-from sauce_project.po.components.cart import BaseComponent
+from ..components.base_component import BaseComponent
 
 BASE_URL: str = "https://www.saucedemo.com/"
 LOGIN_URL: str = BASE_URL

@@ -4,18 +4,18 @@ from typing import List
 import pytest
 from playwright.sync_api import expect
 
-from ..data.global_data import ITEM_INDEX
-from ..data.inventory_data import (ACCESS_INVENTORY_PAGE_ERROR_WITHOUT_LOGIN,
-                                   DEFAULT_FILTER_VALUE, DOCUMENT_TITLE,
-                                   FILTER_OPTIONS, HIGH_TO_LOW,
-                                   INVENTORY_ITEMS_DATA, LEFT_MENU_ITEMS,
-                                   LOGO_TEXT, LOW_TO_HIGH, PRODUCTS_TITLE,
-                                   Z_TO_A, get_price_value)
-from ..po.pages.base_page import INVENTORY_URL
-from ..po.pages.cart_page import CartPage
-from ..po.pages.checkout_step_1_page import CheckoutStepOnePage
-from ..po.pages.inventory_page import InventoryPage
-from ..po.pages.login_page import LoginPage
+from data.global_data import ITEM_INDEX
+from data.inventory_data import (ACCESS_INVENTORY_PAGE_ERROR_WITHOUT_LOGIN,
+                                 DEFAULT_FILTER_VALUE, DOCUMENT_TITLE,
+                                 FILTER_OPTIONS, HIGH_TO_LOW,
+                                 INVENTORY_ITEMS_DATA, LEFT_MENU_ITEMS,
+                                 LOGO_TEXT, LOW_TO_HIGH, PRODUCTS_TITLE,
+                                 Z_TO_A, get_price_value)
+from po.pages.base_page import INVENTORY_URL
+from po.pages.cart_page import CartPage
+from po.pages.checkout_step_1_page import CheckoutStepOnePage
+from po.pages.inventory_page import InventoryPage
+from po.pages.login_page import LoginPage
 
 # fmt: on
 

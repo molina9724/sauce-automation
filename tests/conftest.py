@@ -1,16 +1,16 @@
 import pytest
 from playwright.sync_api import Page
 
-from ..data.cart_data import ALL_ITEMS_INDEX
-from ..data.checkout_step_1_data import FIRST_NAME, LAST_NAME, ZIP_CODE
-from ..data.global_data import ITEM_INDEX
-from ..data.login_data import DEFAULT_UNLOCKED_USER, PASSWORD
-from ..po.pages.base_page import LOGIN_URL
-from ..po.pages.cart_page import CartPage
-from ..po.pages.checkout_step_1_page import CheckoutStepOnePage
-from ..po.pages.checkout_step_2_page import CheckoutStepTwoPage
-from ..po.pages.inventory_page import InventoryPage
-from ..po.pages.login_page import LoginPage
+from data.cart_data import ALL_ITEMS_INDEX
+from data.checkout_step_1_data import FIRST_NAME, LAST_NAME, ZIP_CODE
+from data.global_data import ITEM_INDEX
+from data.login_data import DEFAULT_UNLOCKED_USER, PASSWORD
+from po.pages.base_page import LOGIN_URL
+from po.pages.cart_page import CartPage
+from po.pages.checkout_step_1_page import CheckoutStepOnePage
+from po.pages.checkout_step_2_page import CheckoutStepTwoPage
+from po.pages.inventory_page import InventoryPage
+from po.pages.login_page import LoginPage
 
 
 @pytest.fixture

@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Optional
 from playwright.sync_api import Locator, Page
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 
-from sauce_project.po.components.cart import Cart
+from ..components.cart import Cart
 
 from ..components.form_validation import FormValidation
 from ..components.left_menu import LeftMenu

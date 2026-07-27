@@ -1,5 +1,5 @@
-from ..data.global_data import ITEMS_AMOUNT
-from ..data.inventory_data import INVENTORY_ITEMS_DATA
+from data.global_data import ITEMS_AMOUNT
+from data.inventory_data import INVENTORY_ITEMS_DATA
 
 ALL_ITEMS_INDEX: list[int] = [index for index in range(ITEMS_AMOUNT)]
 

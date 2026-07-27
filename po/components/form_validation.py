@@ -2,7 +2,7 @@ from typing import Optional
 
 from playwright.sync_api import Locator, Page
 
-from sauce_project.po.components.cart import BaseComponent
+from .base_component import BaseComponent
 
 # Selectors
 ERROR_ICON: str = ".error_icon"

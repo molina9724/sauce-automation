@@ -2,12 +2,11 @@
 import pytest
 from playwright.sync_api import expect
 
-from ..data.cart_data import (ACCESS_CART_PAGE_WITHOUT_LOGIN_ERROR,
-                              CART_ITEM_DATA)
-from ..po.pages.base_page import CART_URL
-from ..po.pages.cart_page import CartPage
-from ..po.pages.checkout_step_1_page import CheckoutStepOnePage
-from ..po.pages.login_page import LoginPage
+from data.cart_data import ACCESS_CART_PAGE_WITHOUT_LOGIN_ERROR, CART_ITEM_DATA
+from po.pages.base_page import CART_URL
+from po.pages.cart_page import CartPage
+from po.pages.checkout_step_1_page import CheckoutStepOnePage
+from po.pages.login_page import LoginPage
 
 # fmt: on
 
