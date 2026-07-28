@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING, Optional
 from playwright.sync_api import Locator, Page
 
 from data.login_data import PERFORMANCE_GLITCHED_USER
+
 from ..components.form_validation import FormValidation
 from .base_page import (INCREASED_TIMEOUT, INVENTORY_URL, SHORT_TIMEOUT,
                         BasePage)
@@ -22,7 +23,6 @@ CLOSE_ERROR_BUTTON: str = "Close error button"
 DOCUMENT_TITLE: str = "Document Title"
 LOGO: str = "Logo"
 CREDENTIALS = "Credentials Container"
-PASSWORD: str = "Password"
 
 
 class LoginPage(BasePage):
