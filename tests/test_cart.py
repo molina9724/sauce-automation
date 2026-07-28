@@ -1,6 +1,5 @@
 # fmt: off
 import pytest
-from playwright.sync_api import expect
 
 from data.cart_data import ACCESS_CART_PAGE_WITHOUT_LOGIN_ERROR, CART_ITEM_DATA
 from po.pages.base_page import CART_URL

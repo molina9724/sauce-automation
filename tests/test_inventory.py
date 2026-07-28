@@ -2,7 +2,6 @@
 from typing import List
 
 import pytest
-from playwright.sync_api import expect
 
 from data.global_data import ITEM_INDEX
 from data.inventory_data import (ACCESS_INVENTORY_PAGE_ERROR_WITHOUT_LOGIN,

@@ -1,6 +1,5 @@
 # fmt: off
 import pytest
-from playwright.sync_api import expect
 
 from data.checkout_step_1_data import (
     ACCESS_CHECKOUT_STEP_1_PAGE_WITHOUT_LOGIN_ERROR, CHECKOUT_ARGS,
