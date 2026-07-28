@@ -10,8 +10,9 @@ from po.pages.base_page import (CART_URL, CHECKOUT_STEP_1_URL,
 from po.pages.cart_page import CartPage
 from po.pages.checkout_step_1_page import CheckoutStepOnePage
 from po.pages.login_page import LoginPage
+
 from .form_validation_helpers import (assert_error_decorations,
-                                     assert_no_error_decorations)
+                                      assert_no_error_decorations)
 
 # fmt: on
 
@@ -37,7 +38,7 @@ def test_04_verify_cancel_button_takes_user_back_to_cart_page(
     checkout_step_1_with_item: CheckoutStepOnePage,
 ) -> None:
     cart_page: CartPage = checkout_step_1_with_item.cart.get_cart_page()
-    expect(cart_page._page).to_have_url(CART_URL)
+    assert cart_page.get_url() == CART_URL
 
 
 def test_05_verify_user_is_taken_to_checkout_step_2_after_successfully_filling_data_and_pressing_continue_button(
@@ -46,7 +47,7 @@ def test_05_verify_user_is_taken_to_checkout_step_2_after_successfully_filling_d
     checkout_step_1_with_item.fill_in_checkout_information(
         first_name=FIRST_NAME, last_name=LAST_NAME, zip_code=ZIP_CODE
     )
-    expect(checkout_step_1_with_item._page).to_have_url(CHECKOUT_STEP_2_URL)
+    assert checkout_step_1_with_item.get_url() == CHECKOUT_STEP_2_URL
 
 
 def test_06_verify_exception_when_accessing_checkout_step_1_page_error_without_login(

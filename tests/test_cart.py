@@ -12,7 +12,7 @@ from po.pages.login_page import LoginPage
 
 
 def test_00_verify_cart_url(empty_cart_page: CartPage) -> None:
-    expect(empty_cart_page._page).to_have_url(CART_URL)
+    assert empty_cart_page.get_url() == CART_URL
 
 
 def test_01_verify_cart_is_empty(empty_cart_page: CartPage) -> None:

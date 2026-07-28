@@ -21,7 +21,7 @@ from po.pages.login_page import LoginPage
 
 
 def test_00_verify__inventory_url(empty_inventory_page: InventoryPage) -> None:
-    expect(empty_inventory_page._page).to_have_url(INVENTORY_URL)
+    assert empty_inventory_page.get_url() == INVENTORY_URL
 
 
 def test_01_verify_document_title(empty_inventory_page: InventoryPage) -> None:
