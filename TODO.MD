@@ -8,6 +8,8 @@
 * [ ] Add return type annotations to all the methods and functions
 * [ ] Add parameter annotations to all the classes, methods and functions
 * [ ] Implement checkout page
+* [ ] Fixture set grew combinatorially; needs a factory
+* [ ] All state built through the UI; no `storage_state` reuse
 
 ## In Progress
 
