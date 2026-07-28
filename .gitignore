@@ -4,3 +4,4 @@ __pycache__/
 report.html
 assets/
 .pytest_cache/
+test-results/
