@@ -33,14 +33,14 @@ def test_verify_checkout_error_with_empty_field(
     assert_error_decorations(checkout_step_1_with_item)
 
 
-def test_04_verify_cancel_button_takes_user_back_to_cart_page(
+def test_verify_cancel_button_takes_user_back_to_cart_page(
     checkout_step_1_with_item: CheckoutStepOnePage,
 ) -> None:
     cart_page: CartPage = checkout_step_1_with_item.cart.get_cart_page()
     assert cart_page.get_url() == CART_URL
 
 
-def test_05_verify_user_is_taken_to_checkout_step_2_after_successfully_filling_data_and_pressing_continue_button(
+def test_verify_user_is_taken_to_checkout_step_2_after_successfully_filling_data_and_pressing_continue_button(
     checkout_step_1_with_item: CheckoutStepOnePage,
 ) -> None:
     checkout_step_1_with_item.fill_in_checkout_information(
@@ -49,7 +49,7 @@ def test_05_verify_user_is_taken_to_checkout_step_2_after_successfully_filling_d
     assert checkout_step_1_with_item.get_url() == CHECKOUT_STEP_2_URL
 
 
-def test_06_verify_exception_when_accessing_checkout_step_1_page_error_without_login(
+def test_verify_exception_when_accessing_checkout_step_1_page_error_without_login(
     login_page: LoginPage,
 ) -> None:
     with pytest.raises(RuntimeError) as exception:

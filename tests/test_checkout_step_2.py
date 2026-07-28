@@ -7,7 +7,7 @@ from po.pages.checkout_step_2_page import CheckoutStepTwoPage
 # fmt: on
 
 
-def test_01_validate_item_subtotal(
+def test_validate_item_subtotal(
     checkout_step_2_with_item: CheckoutStepTwoPage,
 ) -> None:
     assert checkout_step_2_with_item.get_subtotal() == calculate_subtotal(
@@ -15,7 +15,7 @@ def test_01_validate_item_subtotal(
     )
 
 
-def test_02_validate_all_items_total(
+def test_validate_all_items_total(
     checkout_step_2_with_all_items: CheckoutStepTwoPage,
 ) -> None:
     assert checkout_step_2_with_all_items.get_subtotal() == calculate_subtotal(
@@ -23,13 +23,13 @@ def test_02_validate_all_items_total(
     )
 
 
-def test_03_verify_taxes_calculation_for_single_item(
+def test_verify_taxes_calculation_for_single_item(
     checkout_step_2_with_item: CheckoutStepTwoPage,
 ) -> None:
     assert checkout_step_2_with_item.get_tax() == calculate_taxes(CART_ITEM_DATA)
 
 
-def test_04_verify_taxes_calculation_for_all_items(
+def test_verify_taxes_calculation_for_all_items(
     checkout_step_2_with_all_items: CheckoutStepTwoPage,
 ) -> None:
     assert checkout_step_2_with_all_items.get_tax() == calculate_taxes(
