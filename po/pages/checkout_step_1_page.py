@@ -4,7 +4,6 @@ from playwright.sync_api import Locator, Page
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 
 from ..components.cart import Cart
-
 from ..components.form_validation import FormValidation
 from ..components.left_menu import LeftMenu
 from ..pages.base_page import CHECKOUT_STEP_2_URL, BasePage
@@ -31,7 +30,7 @@ ZIP_CODE_LABEL = "Zip/Postal Code Field"
 SHORT_TIMEOUT: int = 600
 
 
-class CheckoutStepOnePage(FormValidation, BasePage):
+class CheckoutStepOnePage(BasePage):
     def __init__(self, page: Page, timeout: int = 10000) -> None:
         super().__init__(page, timeout)
         self._checkout_information_wrapper: Locator = self.locator(
@@ -47,7 +46,7 @@ class CheckoutStepOnePage(FormValidation, BasePage):
         )
         self.left_menu: LeftMenu = LeftMenu(self._page)
         self.cart: Cart = Cart(self._page)
-        self.form_validation = FormValidation(self._page)
+        self.form_validation: FormValidation = FormValidation(self._page)
 
     def get_first_name_object(self, timeout: Optional[int] = None) -> Locator:
         timeout_ms: int = self._timeout_ms(timeout)
@@ -100,9 +99,10 @@ class CheckoutStepOnePage(FormValidation, BasePage):
         self._zip_code.fill(zip_code)
         self._continue_button.click()
 
-        if self._is_item_displayed(self._error_heading, SHORT_TIMEOUT):
+        if self.form_validation.is_error_heading_displayed(SHORT_TIMEOUT):
             quick_error_message: str = (
-                self.get_error_text(SHORT_TIMEOUT) or "Unknown error in checkout"
+                self.form_validation.get_error_text(SHORT_TIMEOUT)
+                or "Unknown error in checkout"
             )
             raise RuntimeError(quick_error_message)
 
@@ -112,7 +112,9 @@ class CheckoutStepOnePage(FormValidation, BasePage):
 
             return CheckoutStepTwoPage(self._page)
         except PlaywrightTimeoutError:
-            error_message: str | None = self.get_error_text(SHORT_TIMEOUT)
+            error_message: str | None = self.form_validation.get_error_text(
+                SHORT_TIMEOUT
+            )
             if error_message:
                 raise RuntimeError(error_message)
             raise RuntimeError(
