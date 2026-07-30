@@ -1,4 +1,5 @@
 # fmt: off
+
 import pytest
 
 from data.login_data import (DOCUMENT_TITLE, EMPTY_USERNAME_ERROR,

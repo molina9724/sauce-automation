@@ -5,3 +5,4 @@ report.html
 assets/
 .pytest_cache/
 test-results/
+playwright/.auth
