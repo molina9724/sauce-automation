@@ -1,15 +1,10 @@
-from typing import TYPE_CHECKING, List, Optional
+from typing import List, Optional
 
 from playwright.sync_api import Locator, Page
 
 from ..components.cart import Cart
-
 from ..components.left_menu import LeftMenu
-from .base_page import REMOVE
-from .base_page import ITEM, ITEM_DESCRIPTION, ITEM_NAME, ITEM_PRICE, BasePage
-
-if TYPE_CHECKING:
-    from .cart_page import CartPage
+from .base_page import ITEM, ITEM_DESCRIPTION, ITEM_NAME, ITEM_PRICE, REMOVE, BasePage
 
 # Buttons
 ADD_TO_CART: str = "Add to cart"

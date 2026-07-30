@@ -18,7 +18,7 @@ ITEM_NAME: str = ".inventory_item_name"
 ITEM_PRICE: str = ".inventory_item_price"
 ITEM_DESCRIPTION: str = ".inventory_item_desc"
 ITEM_QUANTITY: str = ".cart_quantity"
-READY_SELECTOR: str = 'input[name="user-name"]'
+READY_SELECTOR: str = "#root"
 
 # Labels
 ITEM: str = "Item #"
@@ -60,7 +60,7 @@ class BasePage(BaseComponent):
     def goto(
         self,
         url: str,
-        ready_selector: Optional[Locator] = None,
+        ready_selector: Optional[Union[Locator, str]] = None,
         timeout: Optional[int] = None,
     ) -> None:
         """

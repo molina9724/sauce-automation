@@ -50,24 +50,26 @@ def login_page(page: Page) -> LoginPage:
 
 
 @pytest.fixture
-def empty_inventory_page(login_page: LoginPage) -> InventoryPage:
-    return login_page.login(username=DEFAULT_UNLOCKED_USER, password=PASSWORD)
+def empty_inventory_page(user_page) -> InventoryPage:
+    inventory_page = InventoryPage(user_page)
+    inventory_page.goto(
+        INVENTORY_URL,
+    )
+    return inventory_page
 
 
 @pytest.fixture
-def inventory_page_with_item(login_page: LoginPage) -> InventoryPage:
-    inventory_page: InventoryPage = login_page.login(
-        username=DEFAULT_UNLOCKED_USER, password=PASSWORD
-    )
+def inventory_page_with_item(user_page) -> InventoryPage:
+    inventory_page = InventoryPage(user_page)
+    inventory_page.goto(INVENTORY_URL)
     inventory_page.add_item_to_cart(ITEM_INDEX)
     return inventory_page
 
 
 @pytest.fixture
-def inventory_page_with_all_items(login_page: LoginPage) -> InventoryPage:
-    inventory_page: InventoryPage = login_page.login(
-        username=DEFAULT_UNLOCKED_USER, password=PASSWORD
-    )
+def inventory_page_with_all_items(user_page) -> InventoryPage:
+    inventory_page = InventoryPage(user_page)
+    inventory_page.goto(INVENTORY_URL)
     for index in ALL_ITEMS_INDEX:
         inventory_page.add_item_to_cart(index)
     return inventory_page
