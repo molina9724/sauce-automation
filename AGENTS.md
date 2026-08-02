@@ -6,6 +6,13 @@ Playwright + pytest UI automation framework targeting SauceDemo (https://www.sau
 Page Object Model. Author is transitioning from functional QA to Python automation;
 code quality feedback is the point of this repo.
 
+## Interaction Style
+
+- When the user asks something, answer and explain — don't fix-and-stop. Explain the
+  reasoning, the trade-offs, and what was changed and why.
+- Only act when asked. "Just do it" (or equivalent) means skip the explanation and make
+  the change directly.
+
 ## Structure
 
 - `po/` — page objects and components
