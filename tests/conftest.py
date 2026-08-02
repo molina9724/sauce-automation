@@ -1,4 +1,5 @@
 import os
+from typing import Any, Generator
 
 import pytest
 from playwright.sync_api import Browser, BrowserContext, Page, expect
@@ -19,7 +20,7 @@ AUTH_FILE = f"./playwright/.auth/user_{WORKER}.json"
 
 
 @pytest.fixture(scope="session", autouse=False)
-def auto_login(browser: Browser):
+def auto_login(browser: Browser) -> Generator[None, Any, None]:
     os.makedirs(os.path.dirname(AUTH_FILE), exist_ok=True)
     login_page: Page = browser.new_page()
     login_page.goto(LOGIN_URL)
@@ -35,7 +36,9 @@ def auto_login(browser: Browser):
 
 
 @pytest.fixture
-def user_page(browser: Browser, auto_login):
+def user_page(
+    browser: Browser, auto_login: Generator[None, Any, None]
+) -> Generator[Page, Any, None]:
     context: BrowserContext = browser.new_context(storage_state=AUTH_FILE)
     page: Page = context.new_page()
     yield page
@@ -50,7 +53,9 @@ def login_page(page: Page) -> LoginPage:
 
 
 @pytest.fixture
-def empty_inventory_page(user_page) -> InventoryPage:
+def empty_inventory_page(
+    user_page: Page,
+) -> InventoryPage:
     inventory_page = InventoryPage(user_page)
     inventory_page.goto(
         INVENTORY_URL,
@@ -59,7 +64,7 @@ def empty_inventory_page(user_page) -> InventoryPage:
 
 
 @pytest.fixture
-def inventory_page_with_item(user_page) -> InventoryPage:
+def inventory_page_with_item(user_page: Page) -> InventoryPage:
     inventory_page = InventoryPage(user_page)
     inventory_page.goto(INVENTORY_URL)
     inventory_page.add_item_to_cart(ITEM_INDEX)
@@ -67,7 +72,7 @@ def inventory_page_with_item(user_page) -> InventoryPage:
 
 
 @pytest.fixture
-def inventory_page_with_all_items(user_page) -> InventoryPage:
+def inventory_page_with_all_items(user_page: Page) -> InventoryPage:
     inventory_page = InventoryPage(user_page)
     inventory_page.goto(INVENTORY_URL)
     for index in ALL_ITEMS_INDEX:

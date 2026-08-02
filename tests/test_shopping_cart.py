@@ -20,7 +20,7 @@ from po.pages.inventory_page import InventoryPage
     EMPTY_FIXTURES,
 )
 def test_shopping_cart_is_empty_from_all_pages(
-    page_fixture, request: pytest.FixtureRequest
+    page_fixture: str, request: pytest.FixtureRequest
 ) -> None:
     page: Union[InventoryPage, CartPage, CheckoutStepOnePage, CheckoutStepTwoPage] = (
         request.getfixturevalue(page_fixture)
@@ -33,7 +33,7 @@ def test_shopping_cart_is_empty_from_all_pages(
     FIXTURES_WITH_ITEM,
 )
 def test_shopping_cart_with_item_from_all_pages(
-    page_fixture, request: pytest.FixtureRequest
+    page_fixture: str, request: pytest.FixtureRequest
 ) -> None:
     page: Union[InventoryPage, CartPage, CheckoutStepOnePage, CheckoutStepTwoPage] = (
         request.getfixturevalue(page_fixture)

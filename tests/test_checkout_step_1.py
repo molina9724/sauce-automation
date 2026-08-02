@@ -19,10 +19,10 @@ from .form_validation_helpers import (assert_error_decorations,
 @pytest.mark.parametrize(CHECKOUT_ARGS, CHECKOUT_PARAMS, ids=CHECKOUT_IDS)
 def test_verify_checkout_error_with_empty_field(
     checkout_step_1_with_item: CheckoutStepOnePage,
-    first_name,
-    last_name,
-    zip_code,
-    expected,
+    first_name: str,
+    last_name: str,
+    zip_code: str,
+    expected: str,
 ) -> None:
     assert_no_error_decorations(checkout_step_1_with_item)
     with pytest.raises(RuntimeError) as exception:

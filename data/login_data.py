@@ -1,4 +1,5 @@
 import pytest
+from _pytest.mark.structures import ParameterSet
 
 DOCUMENT_TITLE: str = "Swag Labs"
 LOGO_TEXT: str = "Swag Labs"
@@ -36,7 +37,7 @@ LOCKED_ACCOUNT_ERROR: str = "Epic sadface: Sorry, this user has been locked out.
 LOGIN_ARGS: str = "user, password"
 
 LOGIN_ERROR_ARGS: str = "user, password, error"
-LOGIN_ERROR_PARAMS: list = [
+LOGIN_ERROR_PARAMS: list[ParameterSet] = [
     # Empty field cases
     pytest.param("", "", EMPTY_USERNAME_ERROR, id="both_fields_empty"),
     pytest.param(DEFAULT_UNLOCKED_USER, "", EMPTY_PASSWORD_ERROR, id="empty_password"),

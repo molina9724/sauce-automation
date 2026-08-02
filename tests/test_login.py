@@ -54,14 +54,16 @@ def test_verify_password(login_page: LoginPage) -> None:
 
 
 @pytest.mark.parametrize(LOGIN_ARGS, argvalues=SUCCESS_LOGIN_DATA, ids=UNLOCKED_USERS)
-def test_verify_successful_login(login_page: LoginPage, user, password) -> None:
+def test_verify_successful_login(
+    login_page: LoginPage, user: str, password: str
+) -> None:
     inventory_page: InventoryPage = login_page.login(username=user, password=password)
     assert inventory_page.get_url() == INVENTORY_URL
 
 
 @pytest.mark.parametrize(LOGIN_ERROR_ARGS, LOGIN_ERROR_PARAMS)
 def test_verify_unsuccessful_login(
-    login_page: LoginPage, user, password, error
+    login_page: LoginPage, user: str, password: str, error: str
 ) -> None:
     with pytest.raises(RuntimeError) as exception:
         login_page.login(username=user, password=password)

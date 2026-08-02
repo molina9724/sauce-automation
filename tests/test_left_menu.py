@@ -3,16 +3,15 @@ from typing import Union
 
 import pytest
 
-from .shared_fixtures_names import (EMPTY_FIXTURES,
-                                    FIXTURES_WITH_ITEM,
-                                    PAGE_FIXTURE)
-
 from po.pages.base_page import INVENTORY_URL, LOGIN_URL
 from po.pages.cart_page import CartPage
 from po.pages.checkout_step_1_page import CheckoutStepOnePage
 from po.pages.checkout_step_2_page import CheckoutStepTwoPage
 from po.pages.inventory_page import InventoryPage
 from po.pages.login_page import LoginPage
+
+from .shared_fixtures_names import (EMPTY_FIXTURES, FIXTURES_WITH_ITEM,
+                                    PAGE_FIXTURE)
 
 #fmt:on
 
@@ -22,7 +21,7 @@ from po.pages.login_page import LoginPage
     EMPTY_FIXTURES,
 )
 def test_logout_from_all_menu_pages(
-    page_fixture, request: pytest.FixtureRequest
+    page_fixture: str, request: pytest.FixtureRequest
 ) -> None:
     page: Union[InventoryPage, CartPage, CheckoutStepOnePage, CheckoutStepTwoPage] = (
         request.getfixturevalue(page_fixture)
@@ -36,7 +35,7 @@ def test_logout_from_all_menu_pages(
     EMPTY_FIXTURES,
 )
 def test_all_items_from_all_menu_pages_with_empty_cart(
-    page_fixture, request: pytest.FixtureRequest
+    page_fixture: str, request: pytest.FixtureRequest
 ) -> None:
     page: Union[InventoryPage, CartPage, CheckoutStepOnePage, CheckoutStepTwoPage] = (
         request.getfixturevalue(page_fixture)
@@ -51,7 +50,7 @@ def test_all_items_from_all_menu_pages_with_empty_cart(
     FIXTURES_WITH_ITEM,
 )
 def test_all_items_from_all_menu_pages_with_item_in_cart(
-    page_fixture, request: pytest.FixtureRequest
+    page_fixture: str, request: pytest.FixtureRequest
 ) -> None:
     page: Union[InventoryPage, CartPage, CheckoutStepOnePage, CheckoutStepTwoPage] = (
         request.getfixturevalue(page_fixture)
