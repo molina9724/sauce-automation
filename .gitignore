@@ -6,3 +6,7 @@ assets/
 .pytest_cache/
 test-results/
 playwright/.auth
+allure-report/
+allure-results/
+allure/
+.DS_Store

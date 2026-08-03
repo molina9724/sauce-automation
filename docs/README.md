@@ -9,12 +9,12 @@ current gaps.
 
 ## Stack
 
-| Tool | Purpose |
-|---|---|
-| Python 3.x | |
-| Playwright | Browser automation |
-| pytest | Test runner, fixtures, parametrization |
-| ruff | Linting and formatting |
+| Tool       | Purpose                                |
+| ---------- | -------------------------------------- |
+| Python 3.x |                                        |
+| Playwright | Browser automation                     |
+| pytest     | Test runner, fixtures, parametrization |
+| black      | Formatting                             |
 
 ## Quick Start
 
@@ -66,10 +66,10 @@ Honest list of what isn't done yet:
 
 ## Roadmap
 
-- [ ] GitHub Actions workflow running the suite on push
-- [ ] Failure artifacts: trace, screenshot, video
-- [ ] Cross-browser via parametrized fixtures
-- [ ] Allure or HTML reporting
+* [X] Allure or HTML reporting
+* [X] Failure artifacts: trace, screenshot, video
+* [ ] GitHub Actions workflow running the suite on push
+* [ ] Cross-browser via parametrized fixtures
 
 ## Notes
 

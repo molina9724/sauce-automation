@@ -23,11 +23,35 @@ code quality feedback is the point of this repo.
 ## Commands
 
 ```bash
-pip install -r requirements.txt   # (create from .venv: pip freeze > requirements.txt)
-playwright install
-pytest               # (no tests use this marker yet — add @pytest.mark.smoke)
-ruff check . && ruff format .
+pip install -r requirements.txt   # install project dependencies (create from .venv: pip freeze > requirements.txt)
+playwright install                # download browser binaries (Chromium/Firefox) needed to run tests
+pytest                            # run the test suite
+allure open                       # view the generated Allure report (requires the allure CLI: npm install -g allure)
+black .                           # format the codebase
 ```
+
+## Reports
+
+- `report.html` — quick report (pytest-html, self-contained). Generated automatically
+  on every run; single-run view of passed/failed tests with logs, no cross-run data.
+  Open it directly in a browser.
+- Allure — historical report with trends, run manually when you want it:
+  ```bash
+  pytest                          # results are collected into allure-results/ on every run
+  rm -rf allure-report            # required — Allure 3 never overwrites an existing report
+  allure generate allure-results  # build the static report (Allure 3, reads allurerc.json)
+  allure open                     # serve it in the browser
+  ```
+
+  History is stored in a single JSONL file (`allure/history.jsonl`, set via
+  `historyPath` in `allurerc.json`) that Allure appends to on every generation — no
+  manual copying; capped at 20 runs (`historyLimit`). Requires the allure CLI
+  (`npm install -g allure`).
+  Warning: if `allure-report/` already contains a report, `allure generate` does not
+  overwrite it — it silently writes the new report into a nested `allure-report/awesome/`
+  and exits 0, so the browser keeps showing the old report (looks "stuck"). Always
+  delete the output directory first; `allure/history.jsonl` is safe (it lives outside
+  the report directory).
 
 ## Conventions
 

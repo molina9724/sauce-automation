@@ -1,0 +1,6 @@
+{
+  "name": "SauceDemo Test Report",
+  "output": "./allure-report",
+  "historyPath": "./allure/history.jsonl",
+  "historyLimit": 20
+}
