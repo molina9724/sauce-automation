@@ -59,8 +59,6 @@ conftest.py  Shared fixtures: browser context, page, auth
 
 ## Known Limitations
 
-Honest list of what isn't done yet:
-
 - [ ] No CI pipeline — tests run locally only
 - [ ] Chromium only; Firefox and WebKit untested
 
