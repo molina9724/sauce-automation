@@ -36,6 +36,7 @@ black .                           # format the codebase
   on every run; single-run view of passed/failed tests with logs, no cross-run data.
   Open it directly in a browser.
 - Allure — historical report with trends, run manually when you want it:
+
   ```bash
   pytest                          # results are collected into allure-results/ on every run
   rm -rf allure-report            # required — Allure 3 never overwrites an existing report
