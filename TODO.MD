@@ -1,6 +1,5 @@
 ## To Do
 
-* [ ] Implement a test reporter
 * [ ] Implement a web page like documentation
 * [ ] Implement a series of global test cases for left menu and its components in the pages it's displayed
 * [ ] Add Docstrings to every method and function
@@ -15,3 +14,7 @@
 ## Done
 
 * [X] All state built through the UI; no `storage_state` reuse
+* [X] Failure artifacts: trace, screenshot, video
+* [X] Allure or HTML reporting (both of them are implemented)
+* [X] GitHub Actions workflow running the suite on push
+* [X] Cross-browser parametrization via pytest.ini (disabled by default because of performance)

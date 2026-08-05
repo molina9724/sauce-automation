@@ -15,30 +15,31 @@ from po.pages.checkout_step_2_page import CheckoutStepTwoPage
 from po.pages.inventory_page import InventoryPage
 from po.pages.login_page import LoginPage
 
-WORKER = os.environ.get("PYTEST_XDIST_WORKER", "master")
-AUTH_FILE = f"./playwright/.auth/user_{WORKER}.json"
+WORKER: str = os.environ.get("PYTEST_XDIST_WORKER", "master")
+
+
+def _auth_file_path(browser: Browser) -> str:
+    return f"./playwright/.auth/user_{WORKER}_{browser.browser_type.name}.json"
 
 
 @pytest.fixture(scope="session", autouse=False)
-def auto_login(browser: Browser) -> Generator[None, Any, None]:
+def auto_login(browser: Browser):
+    AUTH_FILE = _auth_file_path(browser)
     os.makedirs(os.path.dirname(AUTH_FILE), exist_ok=True)
-    login_page: Page = browser.new_page()
+    page: Page = browser.new_page()
+    login_page: LoginPage = LoginPage(page)
     login_page.goto(LOGIN_URL)
-    login_page.get_by_role("textbox", name="Username").fill(DEFAULT_UNLOCKED_USER)
-    login_page.get_by_role("textbox", name="Password").fill(PASSWORD)
-    login_page.get_by_role("button", name="Login").click()
-    expect(login_page).to_have_url(INVENTORY_URL)
-    login_page.context.storage_state(path=AUTH_FILE)
-    login_page.close()
+    login_page.login(DEFAULT_UNLOCKED_USER, PASSWORD)
+    page.context.storage_state(path=AUTH_FILE)
+    page.close()
 
     yield
     os.remove(AUTH_FILE)
 
 
 @pytest.fixture
-def user_page(
-    browser: Browser, auto_login: Generator[None, Any, None]
-) -> Generator[Page, Any, None]:
+def user_page(browser: Browser, auto_login):
+    AUTH_FILE = _auth_file_path(browser)
     context: BrowserContext = browser.new_context(storage_state=AUTH_FILE)
     page: Page = context.new_page()
     yield page
