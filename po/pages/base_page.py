@@ -95,7 +95,6 @@ class BasePage(BaseComponent):
 
         label = str(selector)
         try:
-            self._page.wait_for_load_state("networkidle", timeout=timeout_ms)
             selector.wait_for(state="visible", timeout=timeout_ms)
         except PlaywrightTimeoutError as exception:
             raise RuntimeError(
