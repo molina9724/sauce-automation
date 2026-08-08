@@ -41,7 +41,8 @@ def test_verify_items_remain_in_cart_after_pressing_cancel_in_checkout_step_one_
     assert cart_page.get_all_products_information() == CART_ITEM_DATA
 
 
-def test_verify_exception_when_accessing_checkout_step_1_page_error_without_login(
+@pytest.mark.anonymous
+def test_verify_exception_when_accessing_cart_page_error_without_login(
     login_page: LoginPage,
 ) -> None:
     with pytest.raises(RuntimeError) as exception:

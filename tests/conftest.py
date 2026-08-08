@@ -1,8 +1,8 @@
 import os
-from typing import Any, Generator
+from pathlib import Path
 
 import pytest
-from playwright.sync_api import Browser, BrowserContext, Page, expect
+from playwright.sync_api import Browser, BrowserContext, Page
 
 from data.cart_data import ALL_ITEMS_INDEX
 from data.checkout_step_1_data import FIRST_NAME, LAST_NAME, ZIP_CODE
@@ -18,32 +18,28 @@ from po.pages.login_page import LoginPage
 WORKER: str = os.environ.get("PYTEST_XDIST_WORKER", "master")
 
 
-def _auth_file_path(browser: Browser) -> str:
-    return f"./playwright/.auth/user_{WORKER}_{browser.browser_type.name}.json"
+@pytest.fixture(scope="session")
+def auth_state_path(browser: Browser):
+    path = Path(f"./playwright/.auth/user_{WORKER}_{browser.browser_type.name}.json")
+    path.parent.mkdir(parents=True, exist_ok=True)
 
-
-@pytest.fixture(scope="session", autouse=False)
-def auto_login(browser: Browser):
-    AUTH_FILE = _auth_file_path(browser)
-    os.makedirs(os.path.dirname(AUTH_FILE), exist_ok=True)
-    page: Page = browser.new_page()
-    login_page: LoginPage = LoginPage(page)
+    context: BrowserContext = browser.new_context()
+    login_page: LoginPage = LoginPage(context.new_page())
     login_page.goto(LOGIN_URL)
     login_page.login(DEFAULT_UNLOCKED_USER, PASSWORD)
-    page.context.storage_state(path=AUTH_FILE)
-    page.close()
+    context.storage_state(path=path)
+    context.close()
 
-    yield
-    os.remove(AUTH_FILE)
+    yield path
+    path.unlink(missing_ok=True)
 
 
 @pytest.fixture
-def user_page(browser: Browser, auto_login):
-    AUTH_FILE = _auth_file_path(browser)
-    context: BrowserContext = browser.new_context(storage_state=AUTH_FILE)
-    page: Page = context.new_page()
-    yield page
-    context.close()
+def browser_context_args(browser_context_args, request):
+    if request.node.get_closest_marker("anonymous"):
+        return browser_context_args
+    auth = request.getfixturevalue("auth_state_path")
+    return {**browser_context_args, "storage_state": str(auth)}
 
 
 @pytest.fixture
@@ -54,10 +50,8 @@ def login_page(page: Page) -> LoginPage:
 
 
 @pytest.fixture
-def empty_inventory_page(
-    user_page: Page,
-) -> InventoryPage:
-    inventory_page = InventoryPage(user_page)
+def empty_inventory_page(page: Page) -> InventoryPage:
+    inventory_page = InventoryPage(page)
     inventory_page.goto(
         INVENTORY_URL,
     )
@@ -65,16 +59,16 @@ def empty_inventory_page(
 
 
 @pytest.fixture
-def inventory_page_with_item(user_page: Page) -> InventoryPage:
-    inventory_page = InventoryPage(user_page)
+def inventory_page_with_item(page: Page) -> InventoryPage:
+    inventory_page = InventoryPage(page)
     inventory_page.goto(INVENTORY_URL)
     inventory_page.add_item_to_cart(ITEM_INDEX)
     return inventory_page
 
 
 @pytest.fixture
-def inventory_page_with_all_items(user_page: Page) -> InventoryPage:
-    inventory_page = InventoryPage(user_page)
+def inventory_page_with_all_items(page: Page) -> InventoryPage:
+    inventory_page = InventoryPage(page)
     inventory_page.goto(INVENTORY_URL)
     for index in ALL_ITEMS_INDEX:
         inventory_page.add_item_to_cart(index)

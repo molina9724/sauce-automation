@@ -96,6 +96,7 @@ def test_verify_high_to_low_filter(empty_inventory_page: InventoryPage) -> None:
     assert actual == expected
 
 
+@pytest.mark.anonymous
 def test_verify_exception_when_trying_to_access_inventory_page_without_login(
     login_page: LoginPage,
 ) -> None:

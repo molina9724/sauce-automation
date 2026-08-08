@@ -49,6 +49,7 @@ def test_verify_user_is_taken_to_checkout_step_2_after_successfully_filling_data
     assert checkout_step_1_with_item.get_url() == CHECKOUT_STEP_2_URL
 
 
+@pytest.mark.anonymous
 def test_verify_exception_when_accessing_checkout_step_1_page_error_without_login(
     login_page: LoginPage,
 ) -> None:

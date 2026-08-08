@@ -14,6 +14,8 @@ from .form_validation_helpers import (assert_error_decorations,
 
 # fmt: on
 
+pytestmark: pytest.MarkDecorator = pytest.mark.anonymous
+
 
 def test_verify_document_title(login_page: LoginPage) -> None:
     assert login_page.get_document_title() == DOCUMENT_TITLE
