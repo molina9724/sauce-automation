@@ -11,3 +11,4 @@ allure/
 .wolf*
 report.xml
 html-report/
+test-results/

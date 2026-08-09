@@ -6,6 +6,7 @@ on:
 
 permissions:
   checks: write
+  contents: read
 
 jobs:
   build:
@@ -49,7 +50,7 @@ jobs:
 
       - name: Publish Test Report
         uses: mikepenz/action-junit-report@v6
-        if: steps.test.outcome == 'success' || steps.test.outcome == 'failure'
+        if: ${{ !cancelled() }}
         with:
           report_paths: "junit-results/report.xml"
 
@@ -62,3 +63,4 @@ jobs:
             html-report/report.html
             allure-results/
             junit-results/
+            test-results/
