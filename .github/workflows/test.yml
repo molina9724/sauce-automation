@@ -41,7 +41,14 @@ jobs:
         run: python -m black --check .
 
       - name: Test
+        id: test
         run: python -m pytest
+
+      - name: Publish Test Report
+        uses: mikepenz/action-junit-report@v6
+        if: steps.test.outcome == 'success' || steps.test.outcome == 'failure'
+        with:
+          report_paths: "junit-results/report.xml"
 
       - name: Upload artifacts on failure
         if: failure()
@@ -49,6 +56,6 @@ jobs:
         with:
           name: failure-artifacts
           path: |
-            report.html
+            html-report/report.html
             allure-results/
-            test-results/
+            junit-results/
