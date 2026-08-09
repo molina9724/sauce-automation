@@ -15,15 +15,29 @@ jobs:
           python-version: '3.12'
           architecture: 'x64'
           cache: 'pip'
-          # change to test if caching is working properly
+      - name: Restore cached virtual environment
+        uses: actions/cache/restore@v4
+        with:
+          key: venv-${{runner.os}}-${{steps.setup_python.outputs.python-version}}-${{ hashFiles('requirements.txt') }}
+          path: .venv
       - name: Display Python version
         run: python -c "import sys; print(sys.version)"
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: |
+          python -m venv .venv
+          source .venv/bin/activate
+          pip install -r requirements.txt
+          echo "$VIRTUAL_ENV/bin" >> $GITHUB_PATH
+          echo "VIRTUAL_ENV=$VIRTUAL_ENV" >> $GITHUB_ENV
       - name: Install browser binaries
         run: playwright install
       - name: Format code
         run: black --check .
+      - name: Saved cached virtualenv
+        uses: actions/cache/save@v4
+        with:
+          key: venv-${{runner.os}}-${{steps.setup_python.outputs.python-version}}-${{ hashFiles('requirements.txt') }}
+          path: .venv
       - name: Test
         run: pytest
       - name: Upload artifacts on failure
