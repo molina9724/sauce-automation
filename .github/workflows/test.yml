@@ -1,51 +1,54 @@
 name: Python package
 
-on: [push, workflow_dispatch]
+on:
+  push:
+  workflow_dispatch:
 
 jobs:
   build:
-
     runs-on: macos-latest
+    timeout-minutes: 30
 
     steps:
-      - uses: actions/checkout@v7
+      - name: Checkout
+        uses: actions/checkout@v7
+
       - name: Set up Python
         uses: actions/setup-python@v7
         with:
-          python-version: '3.12'
-          architecture: 'x64'
-          cache: 'pip'
-      - name: Restore cached virtual environment
-        uses: actions/cache/restore@v6
-        with:
-          key: venv-${{runner.os}}-${{steps.setup_python.outputs.python-version}}-${{ hashFiles('requirements.txt') }}
-          path: .venv
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
       - name: Display Python version
-        run: python -c "import sys; print(sys.version)"
-      - name: Install dependencies
         run: |
-          python -m venv .venv
-          source .venv/bin/activate
-          pip install -r requirements.txt
-          echo "$VIRTUAL_ENV/bin" >> $GITHUB_PATH
-          echo "VIRTUAL_ENV=$VIRTUAL_ENV" >> $GITHUB_ENV
-      - name: Install browser binaries
-        run: playwright install
-      - name: Format code
-        run: black --check .
-      - name: Saved cached virtualenv
-        uses: actions/cache/save@v6
+          python --version
+          python -m pip --version
+
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+      
+      - name: Cache Playwright browsers
+        uses: actions/cache@v6
         with:
-          key: venv-${{runner.os}}-${{steps.setup_python.outputs.python-version}}-${{ hashFiles('requirements.txt') }}
-          path: .venv
+          path: ~/Library/Caches/ms-playwright
+          key: playwright-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('**/requirements.txt') }}
+
+      - name: Install browser binaries
+        run: python -m playwright install chromium
+
+      - name: Format code
+        run: python -m black --check .
+
       - name: Test
-        run: pytest
+        run: python -m pytest
+
       - name: Upload artifacts on failure
-        uses: actions/upload-artifact@v7
         if: failure()
+        uses: actions/upload-artifact@v7
         with:
           name: failure-artifacts
-          path: |-
+          path: |
             report.html
             allure-results/
             test-results/
