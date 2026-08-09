@@ -85,4 +85,3 @@ def test_verify_error_dismissal_after_unsuccessful_login_with_locked_account(
 
 def test_verify_password_field_masking(login_page: LoginPage) -> None:
     assert login_page.is_password_masked()
-    assert False
