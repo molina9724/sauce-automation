@@ -50,11 +50,13 @@ jobs:
 
       - name: Test
         id: test
-        run: python -m pytest
+        run: |
+          mkdir -p junit-results
+          python -m pytest --junitxml=junit-results/report.xml
 
       - name: Publish Test Report
+        if: ${{ !cancelled() && steps.test.outcome != 'skipped' }}
         uses: mikepenz/action-junit-report@v6
-        if: ${{ !cancelled() }}
         with:
           report_paths: "junit-results/report.xml"
 
