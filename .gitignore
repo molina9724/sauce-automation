@@ -1,13 +1,14 @@
 .venv
 .vscode
 __pycache__/
-report.html
 assets/
 .pytest_cache/
-test-results/
 playwright/.auth
 allure-report/
 allure-results/
 allure/
 .DS_Store
 .wolf*
+report.xml
+html-report/
+test-results/
