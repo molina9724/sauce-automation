@@ -43,29 +43,29 @@ class InventoryPage(BasePage):
             timeout (int, optional): Default timeout for actions, in milliseconds. Defaults to 10000.
         """
         super().__init__(page, timeout)
-        self._inventory_logo: Locator = self._page.locator(".app_logo")
+        self._inventory_logo: Locator = self.page.locator(".app_logo")
 
-        self._products_title: Locator = self._page.locator(".title")
+        self._products_title: Locator = self.page.locator(".title")
 
-        self._products_filter: Locator = self._page.get_by_role("combobox")
-        self._all_filter_options: Locator = self._page.locator("option")
-        self._selected_filter_option: Locator = self._page.locator(".active_option")
+        self._products_filter: Locator = self.page.get_by_role("combobox")
+        self._all_filter_options: Locator = self.page.locator("option")
+        self._selected_filter_option: Locator = self.page.locator(".active_option")
 
-        self._all_items_container: Locator = self._page.locator(".inventory_list")
-        self._item: Locator = self._page.locator(".inventory_item")
+        self._all_items_container: Locator = self.page.locator(".inventory_list")
+        self._item: Locator = self.page.locator(".inventory_item")
         self._item_name: Locator = self._item.locator(ITEM_NAME)
         self._item_description: Locator = self._item.locator(ITEM_DESCRIPTION)
         self._item_price: Locator = self._item.locator(ITEM_PRICE)
         self._item_image: Locator = self._item.locator(
             "img[class='inventory_item_img']"
         )
-        self.left_menu: LeftMenu = LeftMenu(self._page)
-        self.cart: Cart = Cart(self._page)
+        self.left_menu: LeftMenu = LeftMenu(self.page)
+        self.cart: Cart = Cart(self.page)
 
     def get_document_title(self, timeout: Optional[int] = None) -> str:
         timeout_ms: int = self._timeout_ms(timeout)
         self.get_element(self._inventory_logo, DOCUMENT_TITLE, timeout_ms)
-        return self._page.title().strip()
+        return self.page.title().strip()
 
     def get_logo_text(self, timeout: Optional[int] = None) -> str:
         timeout_ms: int = self._timeout_ms(timeout)

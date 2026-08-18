@@ -6,7 +6,7 @@ from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 
 class BaseComponent:
     def __init__(self, page: Page, timeout: int = 10000) -> None:
-        self._page: Page = page
+        self.page: Page = page
         self._timeout: int = timeout
 
     def _timeout_ms(self, timeout: Optional[int]) -> int:
@@ -57,7 +57,7 @@ class BaseComponent:
         """
         timeout_ms: int = self._timeout_ms(timeout)
         try:
-            self._page.wait_for_url(expected_url, timeout=timeout_ms)
+            self.page.wait_for_url(expected_url, timeout=timeout_ms)
         except PlaywrightTimeoutError as e:
             raise RuntimeError(
                 f"Timed out waiting for URL {expected_url} after {timeout_ms} ms"

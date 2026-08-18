@@ -53,7 +53,7 @@ class BasePage(BaseComponent):
             Locator: A Playwright Locator object corresponding to the selector or the provided Locator.
         """
         if isinstance(selector_or_locator, str):
-            return self._page.locator(selector_or_locator)
+            return self.page.locator(selector_or_locator)
         else:
             return selector_or_locator
 
@@ -87,7 +87,7 @@ class BasePage(BaseComponent):
             selector = self.locator(READY_SELECTOR)
 
         try:
-            self._page.goto(url, timeout=timeout_ms)
+            self.page.goto(url, timeout=timeout_ms)
         except PlaywrightTimeoutError as e:
             raise RuntimeError(
                 f"Navigation to {url} timed out after {timeout_ms} ms"
@@ -102,4 +102,4 @@ class BasePage(BaseComponent):
             ) from exception
 
     def get_url(self) -> str:
-        return self._page.url
+        return self.page.url

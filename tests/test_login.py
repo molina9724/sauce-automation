@@ -19,7 +19,7 @@ pytestmark: pytest.MarkDecorator = pytest.mark.anonymous
 
 
 def test_verify_document_title(login_page: LoginPage) -> None:
-    expect(login_page._page).to_have_title(DOCUMENT_TITLE)
+    expect(login_page.page).to_have_title(DOCUMENT_TITLE)
 
 
 def test_verify_page_title(login_page: LoginPage) -> None:
@@ -60,7 +60,7 @@ def test_verify_successful_login(
     login_page: LoginPage, user: str, password: str
 ) -> None:
     inventory_page: InventoryPage = login_page.login(username=user, password=password)
-    expect(inventory_page._page).to_have_url(INVENTORY_URL)
+    expect(inventory_page.page).to_have_url(INVENTORY_URL)
 
 
 @pytest.mark.parametrize(LOGIN_ERROR_ARGS, LOGIN_ERROR_PARAMS)

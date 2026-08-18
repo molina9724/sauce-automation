@@ -24,25 +24,25 @@ CREDENTIALS = "Credentials Container"
 class LoginPage(BasePage):
     def __init__(self, page: Page, timeout: int = 10000) -> None:
         super().__init__(page=page, timeout=timeout)
-        self.logo_heading: Locator = self._page.locator(".login_logo")
-        self.usernames_heading: Locator = self._page.get_by_role(
+        self.logo_heading: Locator = self.page.locator(".login_logo")
+        self.usernames_heading: Locator = self.page.get_by_role(
             "heading", name="Accepted usernames are:"
         )
-        self.password_heading: Locator = self._page.get_by_role(
+        self.password_heading: Locator = self.page.get_by_role(
             "heading", name="Password for all users:"
         )
 
-        self.form_validation = FormValidation(self._page)
+        self.form_validation = FormValidation(self.page)
 
-        self.username: Locator = self._page.get_by_role("textbox", name=USERNAME)
-        self.password: Locator = self._page.get_by_role("textbox", name=PASSWORD)
-        self.login_button: Locator = self._page.get_by_role("button", name=LOGIN)
-        self.close_error_button: Locator = self._page.locator(
+        self.username: Locator = self.page.get_by_role("textbox", name=USERNAME)
+        self.password: Locator = self.page.get_by_role("textbox", name=PASSWORD)
+        self.login_button: Locator = self.page.get_by_role("button", name=LOGIN)
+        self.close_error_button: Locator = self.page.locator(
             ".error-message-container.error .error-button"
         )
 
-        self.usernames_container: Locator = self._page.locator("#login_credentials")
-        self.passwords_container: Locator = self._page.locator(".login_password")
+        self.usernames_container: Locator = self.page.locator("#login_credentials")
+        self.passwords_container: Locator = self.page.locator(".login_password")
 
     def get_fields(self) -> tuple[Locator, Locator]:
         username: Locator = self.username
@@ -72,11 +72,11 @@ class LoginPage(BasePage):
             timeout: int = INCREASED_TIMEOUT
         else:
             timeout = self._timeout
-        self._page.wait_for_url(INVENTORY_URL, timeout=timeout)
+        self.page.wait_for_url(INVENTORY_URL, timeout=timeout)
 
         from .inventory_page import InventoryPage
 
-        return InventoryPage(self._page)
+        return InventoryPage(self.page)
 
     def dismiss_error(self) -> None:
         self.close_error_button.click()
