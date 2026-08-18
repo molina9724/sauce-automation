@@ -1,5 +1,6 @@
 # fmt: off
 import pytest
+from playwright.sync_api import expect
 
 from data.cart_data import ACCESS_CART_PAGE_WITHOUT_LOGIN_ERROR, CART_ITEM_DATA
 from po.pages.base_page import CART_URL
@@ -42,9 +43,10 @@ def test_verify_items_remain_in_cart_after_pressing_cancel_in_checkout_step_one_
 
 
 @pytest.mark.anonymous
-def test_verify_exception_when_accessing_cart_page_error_without_login(
+def test_verify_error_when_accessing_cart_page_without_login(
     login_page: LoginPage,
 ) -> None:
-    with pytest.raises(RuntimeError) as exception:
-        login_page.attempt_access_unauthenticated(CART_URL)
-    assert ACCESS_CART_PAGE_WITHOUT_LOGIN_ERROR == str(exception.value)
+    login_page.goto(CART_URL)
+    expect(login_page.form_validation.error_heading).to_have_text(
+        ACCESS_CART_PAGE_WITHOUT_LOGIN_ERROR
+    )
