@@ -5,7 +5,6 @@ from playwright.sync_api import Locator, Page
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 
 from ..components.cart import Cart
-
 from ..components.left_menu import LeftMenu
 from ..pages.base_page import BasePage
 
@@ -32,8 +31,8 @@ class CheckoutStepTwoPage(BasePage):
         self._tax: Locator = self.locator(".summary_tax_label")
         self._total: Locator = self.locator(".summary_total_label")
 
-        self.left_menu: LeftMenu = LeftMenu(self._page)
-        self.cart: Cart = Cart(self._page)
+        self.left_menu: LeftMenu = LeftMenu(self.page)
+        self.cart: Cart = Cart(self.page)
 
     def is_cart_list_displayed(self, timeout: Optional[int] = None) -> bool:
         timeout_ms: int = self._timeout_ms(timeout)

@@ -21,7 +21,7 @@ class Cart(BaseComponent):
 
     def __init__(self, page: Page, timeout: int = 10000) -> None:
         super().__init__(page, timeout)
-        self._cart_button: Locator = self._page.locator(CART_BUTTON)
+        self._cart_button: Locator = self.page.locator(CART_BUTTON)
         self._cart_counter: Locator = self._cart_button.locator(CART_COUNTER_BADGE)
 
     def get_cart_page(self, timeout: Optional[int] = None) -> "CartPage":
@@ -32,7 +32,7 @@ class Cart(BaseComponent):
         cart_button.click()
         from ..pages.cart_page import CartPage
 
-        return CartPage(self._page)
+        return CartPage(self.page)
 
     def get_cart_counter(self, timeout: Optional[int] = None) -> int:
         timeout_ms: int = self._timeout_ms(timeout)

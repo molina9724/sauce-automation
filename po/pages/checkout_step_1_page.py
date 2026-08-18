@@ -44,9 +44,9 @@ class CheckoutStepOnePage(BasePage):
         self._continue_button: Locator = page.get_by_role(
             "button", name=CONTINUE_BUTTON
         )
-        self.left_menu: LeftMenu = LeftMenu(self._page)
-        self.cart: Cart = Cart(self._page)
-        self.form_validation: FormValidation = FormValidation(self._page)
+        self.left_menu: LeftMenu = LeftMenu(self.page)
+        self.cart: Cart = Cart(self.page)
+        self.form_validation: FormValidation = FormValidation(self.page)
 
     def get_first_name_object(self, timeout: Optional[int] = None) -> Locator:
         timeout_ms: int = self._timeout_ms(timeout)
@@ -107,10 +107,10 @@ class CheckoutStepOnePage(BasePage):
             raise RuntimeError(quick_error_message)
 
         try:
-            self._page.wait_for_url(CHECKOUT_STEP_2_URL)
+            self.page.wait_for_url(CHECKOUT_STEP_2_URL)
             from .checkout_step_2_page import CheckoutStepTwoPage
 
-            return CheckoutStepTwoPage(self._page)
+            return CheckoutStepTwoPage(self.page)
         except PlaywrightTimeoutError:
             error_message: str | None = self.form_validation.get_error_text(
                 SHORT_TIMEOUT

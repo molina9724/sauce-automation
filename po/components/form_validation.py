@@ -14,7 +14,7 @@ ERROR_MESSAGE_CONTAINER: str = "Error Message Container"
 class FormValidation(BaseComponent):
     def __init__(self, page: Page, timeout: int = 10000) -> None:
         super().__init__(page, timeout)
-        self.error_message_container: Locator = self._page.locator(
+        self.error_message_container: Locator = self.page.locator(
             ".error-message-container.error"
         )
         self.error_heading: Locator = self.error_message_container.locator(

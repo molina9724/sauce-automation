@@ -34,12 +34,12 @@ class CartPage(BasePage):
             "button", name=REMOVE
         )
 
-        self._continue_shopping_button: Locator = self._page.get_by_role(
+        self._continue_shopping_button: Locator = self.page.get_by_role(
             "button", name=CONTINUE_SHOPPING
         )
-        self._checkout_button: Locator = self._page.get_by_role("button", name=CHECKOUT)
-        self.cart: Cart = Cart(self._page)
-        self.left_menu: LeftMenu = LeftMenu(self._page)
+        self._checkout_button: Locator = self.page.get_by_role("button", name=CHECKOUT)
+        self.cart: Cart = Cart(self.page)
+        self.left_menu: LeftMenu = LeftMenu(self.page)
 
     def get_all_products_names(self, timeout: Optional[int] = None) -> List[str]:
         timeout_ms: int = self._timeout_ms(timeout)
@@ -148,7 +148,7 @@ class CartPage(BasePage):
             self._continue_shopping_button, CONTINUE_SHOPPING, timeout_ms
         )
         continue_shopping_button.click()
-        return InventoryPage(self._page)
+        return InventoryPage(self.page)
 
     def is_checkout_button_displayed(self, timeout: Optional[int] = None) -> bool:
         timeout_ms: int = self._timeout_ms(timeout)
@@ -164,4 +164,4 @@ class CartPage(BasePage):
         checkout_button.click()
         from .checkout_step_1_page import CheckoutStepOnePage
 
-        return CheckoutStepOnePage(self._page)
+        return CheckoutStepOnePage(self.page)
