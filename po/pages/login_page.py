@@ -107,13 +107,3 @@ class LoginPage(BasePage):
         else:
             password: list[str] = lines
         return password[0]
-
-    def attempt_access_unauthenticated(self, url: str) -> None:
-        self._page.goto(url)
-        if self.form_validation.error_heading.is_visible():
-            error_message: str | None = self.form_validation.get_error_text()
-            raise RuntimeError(error_message)
-        else:
-            raise RuntimeError(
-                f"No error displayed after accessing {url} without authenticating."
-            )

@@ -1,5 +1,6 @@
 # fmt: off
 import pytest
+from playwright.sync_api import expect
 
 from data.checkout_step_1_data import (
     ACCESS_CHECKOUT_STEP_1_PAGE_WITHOUT_LOGIN_ERROR, CHECKOUT_ARGS,
@@ -50,9 +51,10 @@ def test_verify_user_is_taken_to_checkout_step_2_after_successfully_filling_data
 
 
 @pytest.mark.anonymous
-def test_verify_exception_when_accessing_checkout_step_1_page_error_without_login(
+def test_verify_error_when_accessing_checkout_step_1_page_without_login(
     login_page: LoginPage,
 ) -> None:
-    with pytest.raises(RuntimeError) as exception:
-        login_page.attempt_access_unauthenticated(CHECKOUT_STEP_1_URL)
-    assert ACCESS_CHECKOUT_STEP_1_PAGE_WITHOUT_LOGIN_ERROR == str(exception.value)
+    login_page.goto(CHECKOUT_STEP_1_URL)
+    expect(login_page.form_validation.error_heading).to_have_text(
+        ACCESS_CHECKOUT_STEP_1_PAGE_WITHOUT_LOGIN_ERROR
+    )

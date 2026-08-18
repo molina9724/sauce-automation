@@ -43,7 +43,7 @@ def test_verify_items_remain_in_cart_after_pressing_cancel_in_checkout_step_one_
 
 
 @pytest.mark.anonymous
-def a_test_verify_exception_when_accessing_cart_page_error_without_login(
+def test_verify_error_when_accessing_cart_page_without_login(
     login_page: LoginPage,
 ) -> None:
     login_page.goto(CART_URL)
