@@ -32,13 +32,11 @@ class Menu(BaseComponent):
         self._hamburger_button: Locator = self.page.get_by_role(
             "button", name="Open Menu"
         )
-        self.left_menu: Locator = self.page.locator(".bm-menu-wrap")
-        self.item: Locator = self.left_menu.locator(LEFT_MENU_ITEM)
-        self.logout_link: Locator = self.left_menu.get_by_role("link", name=LOGOUT)
-        self.all_items_link: Locator = self.left_menu.get_by_role(
-            "link", name=ALL_ITEMS
-        )
-        self.close_button: Locator = self.left_menu.locator(".bm-cross-button")
+        self.panel: Locator = self.page.locator(".bm-menu-wrap")
+        self.item: Locator = self.panel.locator(LEFT_MENU_ITEM)
+        self.logout_link: Locator = self.panel.get_by_role("link", name=LOGOUT)
+        self.all_items_link: Locator = self.panel.get_by_role("link", name=ALL_ITEMS)
+        self.close_button: Locator = self.panel.locator(".bm-cross-button")
 
     def get_hamburger_button(self, timeout: Optional[int] = None) -> Locator:
         timeout_ms: int = self._timeout_ms(timeout)
@@ -80,15 +78,15 @@ class Menu(BaseComponent):
 
     def is_left_menu_displayed(self, timeout: Optional[int] = None) -> bool:
         timeout_ms: int = self._timeout_ms(timeout)
-        return self._is_item_displayed(self.left_menu, timeout_ms)
+        return self._is_item_displayed(self.panel, timeout_ms)
 
     def is_left_menu_hidden(self, timeout: Optional[int] = None) -> bool:
         timeout_ms: int = self._timeout_ms(timeout)
-        return self._is_item_hidden(self.left_menu, timeout_ms)
+        return self._is_item_hidden(self.panel, timeout_ms)
 
     def get_left_menu_elements(self, timeout: Optional[int] = None) -> list[str]:
         timeout_ms: int = self._timeout_ms(timeout)
-        left_menu: Locator = self.get_element(self.left_menu, LEFT_MENU, timeout_ms)
+        left_menu: Locator = self.get_element(self.panel, LEFT_MENU, timeout_ms)
         all_items: List[Locator] = left_menu.locator(LEFT_MENU_ITEM).all()
         return [item.inner_text().strip() for item in all_items]
 
