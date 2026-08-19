@@ -3,7 +3,7 @@ from typing import List, Optional
 from playwright.sync_api import Locator, Page
 
 from ..components.cart import Cart
-from ..components.left_menu import LeftMenu
+from ..components.left_menu import Menu
 from .base_page import ITEM, ITEM_DESCRIPTION, ITEM_NAME, ITEM_PRICE, REMOVE, BasePage
 
 # Buttons
@@ -57,7 +57,7 @@ class InventoryPage(BasePage):
         self.item_description: Locator = self.item.locator(ITEM_DESCRIPTION)
         self.item_price: Locator = self.item.locator(ITEM_PRICE)
         self.item_image: Locator = self.item.locator("img[class='inventory_item_img']")
-        self.left_menu: LeftMenu = LeftMenu(self.page)
+        self.left_menu: Menu = Menu(self.page)
         self.cart: Cart = Cart(self.page)
 
     def get_document_title(self, timeout: Optional[int] = None) -> str:

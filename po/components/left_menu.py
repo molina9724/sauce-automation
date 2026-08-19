@@ -25,7 +25,7 @@ LOGOUT_LINK: str = "Logout Link"
 ALL_ITEMS: str = "All Items"
 
 
-class LeftMenu(BaseComponent):
+class Menu(BaseComponent):
 
     def __init__(self, page: Page, timeout: int = 10000) -> None:
         super().__init__(page, timeout)

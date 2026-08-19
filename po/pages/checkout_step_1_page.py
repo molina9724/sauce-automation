@@ -5,7 +5,7 @@ from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 
 from ..components.cart import Cart
 from ..components.form_validation import FormValidation
-from ..components.left_menu import LeftMenu
+from ..components.left_menu import Menu
 from ..pages.base_page import CHECKOUT_STEP_2_URL, BasePage
 
 if TYPE_CHECKING:
@@ -44,7 +44,7 @@ class CheckoutStepOnePage(BasePage):
         self._continue_button: Locator = page.get_by_role(
             "button", name=CONTINUE_BUTTON
         )
-        self.left_menu: LeftMenu = LeftMenu(self.page)
+        self.left_menu: Menu = Menu(self.page)
         self.cart: Cart = Cart(self.page)
         self.form_validation: FormValidation = FormValidation(self.page)
 
