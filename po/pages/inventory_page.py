@@ -9,11 +9,6 @@ from .base_page import ITEM, ITEM_DESCRIPTION, ITEM_NAME, ITEM_PRICE, REMOVE, Ba
 # Buttons
 ADD_TO_CART: str = "Add to cart"
 
-# Labels
-ITEMS_CONTAINER: str = "Items Container"
-PRODUCTS_FILTER: str = "Products Filter"
-PRODUCTS_TITLE: str = "Products Title"
-
 
 class InventoryPage(BasePage):
     """
