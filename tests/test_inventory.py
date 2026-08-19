@@ -7,10 +7,9 @@ from playwright.sync_api import expect
 from data.global_data import ITEM_INDEX
 from data.inventory_data import (ACCESS_INVENTORY_PAGE_ERROR_WITHOUT_LOGIN,
                                  DEFAULT_FILTER_VALUE, DOCUMENT_TITLE,
-                                 FILTER_OPTIONS, HIGH_TO_LOW,
-                                 INVENTORY_ITEMS_DATA, LEFT_MENU_ITEMS,
-                                 LOW_TO_HIGH, PRODUCTS_TITLE, Z_TO_A,
-                                 get_price_value)
+                                 FILTER_ARGS, FILTER_OPTIONS,
+                                 FILTER_VALUES, INVENTORY_ITEMS_DATA,
+                                 LEFT_MENU_ITEMS, PRODUCTS_TITLE, SortKey)
 from po.pages.base_page import INVENTORY_URL
 from po.pages.cart_page import CartPage
 from po.pages.checkout_step_1_page import CheckoutStepOnePage
@@ -53,41 +52,25 @@ def test_verify_all_product_filter_options(
     assert empty_inventory_page.get_products_filter_options() == FILTER_OPTIONS
 
 
-def test_verify_z_to_a_filter(empty_inventory_page: InventoryPage) -> None:
-    empty_inventory_page.set_products_filter(Z_TO_A)
-    z_to_a_ordered_results: dict[str, dict[str, str]] = (
+@pytest.mark.parametrize(
+    FILTER_ARGS,
+    argvalues=FILTER_VALUES,
+    ids=[filter_value[0] for filter_value in FILTER_VALUES],
+)
+def test_verify_all_filter_options(
+    empty_inventory_page: InventoryPage,
+    filter_option: str,
+    key: SortKey,
+    reverse: bool,
+) -> None:
+    empty_inventory_page.set_products_filter(filter_option)
+    ordered_results: dict[str, dict[str, str]] = (
         empty_inventory_page.get_all_products_information()
     )
 
-    actual: List[tuple[str, dict[str, str]]] = list(z_to_a_ordered_results.items())
+    actual: List[tuple[str, dict[str, str]]] = list(ordered_results.items())
     expected: List[tuple[str, dict[str, str]]] = sorted(
-        INVENTORY_ITEMS_DATA.items(), reverse=True
-    )
-    assert actual == expected
-
-
-def test_verify_low_to_high_filter(empty_inventory_page: InventoryPage) -> None:
-    empty_inventory_page.set_products_filter(LOW_TO_HIGH)
-    low_to_high_ordered_results: dict[str, dict[str, str]] = (
-        empty_inventory_page.get_all_products_information()
-    )
-
-    actual: List[tuple[str, dict[str, str]]] = list(low_to_high_ordered_results.items())
-    expected: List[tuple[str, dict[str, str]]] = sorted(
-        INVENTORY_ITEMS_DATA.items(), key=get_price_value
-    )
-    assert actual == expected
-
-
-def test_verify_high_to_low_filter(empty_inventory_page: InventoryPage) -> None:
-    empty_inventory_page.set_products_filter(HIGH_TO_LOW)
-    high_to_low_ordered_results: dict[str, dict[str, str]] = (
-        empty_inventory_page.get_all_products_information()
-    )
-
-    actual: List[tuple[str, dict[str, str]]] = list(high_to_low_ordered_results.items())
-    expected: List[tuple[str, dict[str, str]]] = sorted(
-        INVENTORY_ITEMS_DATA.items(), key=get_price_value, reverse=True
+        INVENTORY_ITEMS_DATA.items(), key=key, reverse=reverse
     )
     assert actual == expected
 

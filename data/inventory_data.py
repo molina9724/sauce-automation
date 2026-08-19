@@ -1,4 +1,6 @@
-from typing import List
+from typing import Callable, List
+
+SortKey = Callable[[tuple[str, dict[str, str]]], str | float]
 
 LEFT_MENU_ITEMS: List[str] = ["All Items", "About", "Logout", "Reset App State"]
 
@@ -56,3 +58,16 @@ def get_price_value(item: tuple[str, dict[str, str]]) -> float:
     _, data = item
     price_text: str = data["price"]
     return float(price_text[1:])
+
+
+def get_name_value(item: tuple[str, dict[str, str]]) -> str:
+    name, _ = item
+    return name
+
+
+FILTER_ARGS: str = "filter_option, key, reverse"
+FILTER_VALUES: list[tuple[str, SortKey, bool]] = [
+    (Z_TO_A, get_name_value, True),
+    (LOW_TO_HIGH, get_price_value, False),
+    (HIGH_TO_LOW, get_price_value, True),
+]
