@@ -8,7 +8,7 @@
 * [ ] Add parameter annotations to all the classes, methods and functions
 * [ ] Implement checkout page
 * [ ] Fixture set grew combinatorially; needs a factory
-* [ ] Make page public
+* [X] Make page public
 
 ## In Progress
 

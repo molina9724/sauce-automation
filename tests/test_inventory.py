@@ -10,7 +10,8 @@ from data.inventory_data import (A_TO_Z,
                                  DEFAULT_FILTER_VALUE, DOCUMENT_TITLE,
                                  FILTER_ARGS, FILTER_OPTIONS, FILTER_VALUES,
                                  INVENTORY_ITEMS_DATA, LEFT_MENU_ITEMS,
-                                 LOGO_TEXT, PRODUCTS_TITLE, Z_TO_A, SortKey)
+                                 LOGO_TEXT, ONE, PRODUCTS_TITLE, Z_TO_A,
+                                 SortKey)
 from po.pages.base_page import INVENTORY_URL
 from po.pages.cart_page import CartPage
 from po.pages.checkout_step_1_page import CheckoutStepOnePage
@@ -56,6 +57,7 @@ def test_verify_all_product_filter_options(
     expect(empty_inventory_page.all_filter_options).to_have_text(FILTER_OPTIONS)
 
 
+# TODO: Split filter sort tests: content verification vs order verification
 @pytest.mark.parametrize(
     FILTER_ARGS,
     argvalues=FILTER_VALUES,
@@ -104,7 +106,7 @@ def test_verify_user_can_add_item_to_cart(
     empty_inventory_page: InventoryPage,
 ) -> None:
     empty_inventory_page.add_item_to_cart(ITEM_INDEX)
-    expect(empty_inventory_page.cart.cart_counter).to_have_text("1")
+    expect(empty_inventory_page.cart.cart_counter).to_have_text(ONE)
 
 
 def test_verify_cart_is_empty_by_default(
@@ -117,14 +119,14 @@ def test_verify_cart_is_empty_after_adding_item_and_removing_it(
     empty_inventory_page: InventoryPage,
 ) -> None:
     empty_inventory_page.add_item_to_cart(ITEM_INDEX)
-    expect(empty_inventory_page.cart.cart_counter).to_have_text("1")
+    expect(empty_inventory_page.cart.cart_counter).to_have_text(ONE)
     empty_inventory_page.remove_item_from_cart(ITEM_INDEX)
     expect(empty_inventory_page.cart.cart_counter).to_be_hidden()
 
 
 def test_go_back_to_continue_shopping(cart_page_with_item: CartPage) -> None:
     inventory_page: InventoryPage = cart_page_with_item.get_inventory_page()
-    expect(inventory_page.cart.cart_counter).to_have_text("1")
+    expect(inventory_page.cart.cart_counter).to_have_text(ONE)
 
 
 def test_verify_item_remain_in_cart_after_pressing_cancel_in_checkout_step_one_page(
@@ -132,7 +134,7 @@ def test_verify_item_remain_in_cart_after_pressing_cancel_in_checkout_step_one_p
 ) -> None:
     cart_page: CartPage = checkout_step_1_with_item.cancel()
     inventory_page: InventoryPage = cart_page.get_inventory_page()
-    expect(inventory_page.cart.cart_counter).to_have_text("1")
+    expect(inventory_page.cart.cart_counter).to_have_text(ONE)
 
 
 def test_verify_left_menu_is_closed(

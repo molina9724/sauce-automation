@@ -72,3 +72,5 @@ FILTER_VALUES: list[tuple[str, SortKey, bool]] = [
     (LOW_TO_HIGH, get_price_value, False),
     (HIGH_TO_LOW, get_price_value, True),
 ]
+
+ONE: str = "1"
