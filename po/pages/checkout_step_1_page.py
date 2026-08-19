@@ -44,7 +44,7 @@ class CheckoutStepOnePage(BasePage):
         self._continue_button: Locator = page.get_by_role(
             "button", name=CONTINUE_BUTTON
         )
-        self.left_menu: Menu = Menu(self.page)
+        self.menu: Menu = Menu(self.page)
         self.cart: Cart = Cart(self.page)
         self.form_validation: FormValidation = FormValidation(self.page)
 

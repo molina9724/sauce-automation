@@ -39,7 +39,7 @@ class CartPage(BasePage):
         )
         self._checkout_button: Locator = self.page.get_by_role("button", name=CHECKOUT)
         self.cart: Cart = Cart(self.page)
-        self.left_menu: Menu = Menu(self.page)
+        self.menu: Menu = Menu(self.page)
 
     def get_all_products_names(self, timeout: Optional[int] = None) -> List[str]:
         timeout_ms: int = self._timeout_ms(timeout)

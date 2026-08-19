@@ -31,7 +31,7 @@ class CheckoutStepTwoPage(BasePage):
         self._tax: Locator = self.locator(".summary_tax_label")
         self._total: Locator = self.locator(".summary_total_label")
 
-        self.left_menu: Menu = Menu(self.page)
+        self.menu: Menu = Menu(self.page)
         self.cart: Cart = Cart(self.page)
 
     def is_cart_list_displayed(self, timeout: Optional[int] = None) -> bool:
