@@ -29,9 +29,9 @@ def test_verify_page_title(empty_inventory_page: InventoryPage) -> None:
 
 
 def test_verify_left_menu_components(empty_inventory_page: InventoryPage) -> None:
-    empty_inventory_page.left_menu.open()
-    assert empty_inventory_page.left_menu.is_left_menu_displayed()
-    left_menu_items: List[str] = empty_inventory_page.left_menu.get_left_menu_elements()
+    empty_inventory_page.menu.open()
+    assert empty_inventory_page.menu.is_left_menu_displayed()
+    left_menu_items: List[str] = empty_inventory_page.menu.get_left_menu_elements()
     assert left_menu_items == LEFT_MENU_ITEMS
 
 
@@ -147,10 +147,10 @@ def test_verify_item_remain_in_cart_after_pressing_cancel_in_checkout_step_one_p
 def test_verify_left_menu_is_closed(
     empty_inventory_page: InventoryPage,
 ) -> None:
-    assert empty_inventory_page.left_menu.is_left_menu_hidden()
+    assert empty_inventory_page.menu.is_left_menu_hidden()
 
-    empty_inventory_page.left_menu.open()
-    assert empty_inventory_page.left_menu.is_left_menu_displayed()
+    empty_inventory_page.menu.open()
+    assert empty_inventory_page.menu.is_left_menu_displayed()
 
-    empty_inventory_page.left_menu.close()
-    assert empty_inventory_page.left_menu.is_left_menu_hidden()
+    empty_inventory_page.menu.close()
+    assert empty_inventory_page.menu.is_left_menu_hidden()

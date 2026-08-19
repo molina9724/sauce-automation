@@ -32,11 +32,13 @@ class Menu(BaseComponent):
         self._hamburger_button: Locator = self.page.get_by_role(
             "button", name="Open Menu"
         )
-        self._left_menu: Locator = self.page.locator(".bm-menu-wrap")
-        self._item: Locator = self._left_menu.locator(LEFT_MENU_ITEM)
-        self._logout: Locator = self._left_menu.get_by_role("link", name=LOGOUT)
-        self._all_items: Locator = self._left_menu.get_by_role("link", name=ALL_ITEMS)
-        self._close: Locator = self._left_menu.locator(".bm-cross-button")
+        self.left_menu: Locator = self.page.locator(".bm-menu-wrap")
+        self.item: Locator = self.left_menu.locator(LEFT_MENU_ITEM)
+        self.logout_link: Locator = self.left_menu.get_by_role("link", name=LOGOUT)
+        self.all_items_link: Locator = self.left_menu.get_by_role(
+            "link", name=ALL_ITEMS
+        )
+        self.close_button: Locator = self.left_menu.locator(".bm-cross-button")
 
     def get_hamburger_button(self, timeout: Optional[int] = None) -> Locator:
         timeout_ms: int = self._timeout_ms(timeout)
@@ -60,31 +62,33 @@ class Menu(BaseComponent):
     def close(self, timeout: Optional[int] = None) -> None:
         timeout_ms: int = self._timeout_ms(timeout)
         close_button: Locator = self.get_element(
-            self._close, CLOSE_ERROR_BUTTON, timeout_ms
+            self.close_button, CLOSE_ERROR_BUTTON, timeout_ms
         )
         close_button.click()
 
     def get_logout(self, timeout: Optional[int] = None) -> Locator:
         timeout_ms: int = self._timeout_ms(timeout)
-        logout: Locator = self.get_element(self._logout, LOGOUT_LINK, timeout_ms)
+        logout: Locator = self.get_element(self.logout_link, LOGOUT_LINK, timeout_ms)
         return logout
 
     def get_all_items(self, timeout: Optional[int] = None) -> Locator:
         timeout_ms: int = self._timeout_ms(timeout)
-        all_items: Locator = self.get_element(self._all_items, ALL_ITEMS, timeout_ms)
+        all_items: Locator = self.get_element(
+            self.all_items_link, ALL_ITEMS, timeout_ms
+        )
         return all_items
 
     def is_left_menu_displayed(self, timeout: Optional[int] = None) -> bool:
         timeout_ms: int = self._timeout_ms(timeout)
-        return self._is_item_displayed(self._left_menu, timeout_ms)
+        return self._is_item_displayed(self.left_menu, timeout_ms)
 
     def is_left_menu_hidden(self, timeout: Optional[int] = None) -> bool:
         timeout_ms: int = self._timeout_ms(timeout)
-        return self._is_item_hidden(self._left_menu, timeout_ms)
+        return self._is_item_hidden(self.left_menu, timeout_ms)
 
     def get_left_menu_elements(self, timeout: Optional[int] = None) -> list[str]:
         timeout_ms: int = self._timeout_ms(timeout)
-        left_menu: Locator = self.get_element(self._left_menu, LEFT_MENU, timeout_ms)
+        left_menu: Locator = self.get_element(self.left_menu, LEFT_MENU, timeout_ms)
         all_items: List[Locator] = left_menu.locator(LEFT_MENU_ITEM).all()
         return [item.inner_text().strip() for item in all_items]
 

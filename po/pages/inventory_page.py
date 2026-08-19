@@ -57,7 +57,7 @@ class InventoryPage(BasePage):
         self.item_description: Locator = self.item.locator(ITEM_DESCRIPTION)
         self.item_price: Locator = self.item.locator(ITEM_PRICE)
         self.item_image: Locator = self.item.locator("img[class='inventory_item_img']")
-        self.left_menu: Menu = Menu(self.page)
+        self.menu: Menu = Menu(self.page)
         self.cart: Cart = Cart(self.page)
 
     def get_document_title(self, timeout: Optional[int] = None) -> str:
