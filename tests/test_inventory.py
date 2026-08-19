@@ -9,8 +9,8 @@ from data.inventory_data import (ACCESS_INVENTORY_PAGE_ERROR_WITHOUT_LOGIN,
                                  DEFAULT_FILTER_VALUE, DOCUMENT_TITLE,
                                  FILTER_OPTIONS, HIGH_TO_LOW,
                                  INVENTORY_ITEMS_DATA, LEFT_MENU_ITEMS,
-                                 LOGO_TEXT, LOW_TO_HIGH, PRODUCTS_TITLE,
-                                 Z_TO_A, get_price_value)
+                                 LOW_TO_HIGH, PRODUCTS_TITLE, Z_TO_A,
+                                 get_price_value)
 from po.pages.base_page import INVENTORY_URL
 from po.pages.cart_page import CartPage
 from po.pages.checkout_step_1_page import CheckoutStepOnePage
@@ -21,15 +21,11 @@ from po.pages.login_page import LoginPage
 
 
 def test_verify_inventory_url(empty_inventory_page: InventoryPage) -> None:
-    assert empty_inventory_page.get_url() == INVENTORY_URL
-
-
-def test_verify_document_title(empty_inventory_page: InventoryPage) -> None:
-    assert empty_inventory_page.get_document_title() == DOCUMENT_TITLE
+    expect(empty_inventory_page.page).to_have_url(INVENTORY_URL)
 
 
 def test_verify_page_title(empty_inventory_page: InventoryPage) -> None:
-    assert empty_inventory_page.get_logo_text() == LOGO_TEXT
+    expect(empty_inventory_page.inventory_logo).to_have_text(DOCUMENT_TITLE)
 
 
 def test_verify_left_menu_components(empty_inventory_page: InventoryPage) -> None:
