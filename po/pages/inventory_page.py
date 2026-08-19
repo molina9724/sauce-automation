@@ -1,10 +1,10 @@
-from typing import List, Optional
+from typing import List
 
 from playwright.sync_api import Locator, Page
 
 from ..components.cart import Cart
 from ..components.left_menu import Menu
-from .base_page import ITEM, ITEM_DESCRIPTION, ITEM_NAME, ITEM_PRICE, REMOVE, BasePage
+from .base_page import ITEM_DESCRIPTION, ITEM_NAME, ITEM_PRICE, REMOVE, BasePage
 
 # Buttons
 ADD_TO_CART: str = "Add to cart"
@@ -55,52 +55,23 @@ class InventoryPage(BasePage):
     def set_products_filter(self, option: str) -> None:
         self.products_filter.select_option(option)
 
-    # get_all_products_names, get_all_products_descriptions, get_all_products_prices aren't refactored since data might change in the future
-    def get_all_products_names(self, timeout: Optional[int] = None) -> List[str]:
-        timeout_ms: int = self._timeout_ms(timeout)
-        names: List[str] = []
-        for index, item in enumerate(self.item.all()):
-            name: Locator = self.get_element(
-                item.locator(ITEM_NAME),
-                f"{ITEM_NAME} for {ITEM}{index}",
-                timeout_ms,
-            )
-            names.append(name.inner_text().strip())
-        return names
+    def get_all_products_names(self) -> List[str]:
+        return self.item.locator(ITEM_NAME).all_inner_texts()
 
-    def get_all_products_descriptions(self, timeout: Optional[int] = None) -> List[str]:
-        timeout_ms: int = self._timeout_ms(timeout)
-        descriptions: List[str] = []
-        for index, item in enumerate(self.item.all()):
-            description: Locator = self.get_element(
-                item.locator(ITEM_DESCRIPTION),
-                f"{ITEM_DESCRIPTION} for {ITEM}{index}",
-                timeout_ms,
-            )
-            descriptions.append(description.inner_text().strip())
-        return descriptions
+    def get_all_products_descriptions(self) -> List[str]:
+        return self.item.locator(ITEM_DESCRIPTION).all_inner_texts()
 
-    def get_all_products_prices(self, timeout: Optional[int] = None) -> List[str]:
-        timeout_ms: int = self._timeout_ms(timeout)
-        prices: List[str] = []
-        for index, item in enumerate(self.item.all()):
-            price: Locator = self.get_element(
-                item.locator(ITEM_PRICE), f"{ITEM_PRICE} for {ITEM}{index}", timeout_ms
-            )
-            prices.append(price.inner_text().strip())
-        return prices
+    def get_all_products_prices(self) -> List[str]:
+        return self.item.locator(ITEM_PRICE).all_inner_texts()
 
     # TODO: This method should include images and add/remove buttons to consistently test the whole item object
     # TODO: Investigate how to to test images properly
-    def get_all_products_information(
-        self, timeout: Optional[int] = None
-    ) -> dict[str, dict[str, str]]:
-        timeout_ms: int = self._timeout_ms(timeout)
-        all_inventory_items_names: List[str] = self.get_all_products_names(timeout_ms)
+    def get_all_products_information(self) -> dict[str, dict[str, str]]:
+        all_inventory_items_names: List[str] = self.get_all_products_names()
         all_inventory_items_descriptions: List[str] = (
-            self.get_all_products_descriptions(timeout_ms)
+            self.get_all_products_descriptions()
         )
-        all_inventory_items_prices: List[str] = self.get_all_products_prices(timeout_ms)
+        all_inventory_items_prices: List[str] = self.get_all_products_prices()
 
         inventory_items_data: dict[str, dict[str, str]] = dict()
         try:
