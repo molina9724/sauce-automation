@@ -30,21 +30,20 @@ def test_verify_page_title(empty_inventory_page: InventoryPage) -> None:
 
 def test_verify_left_menu_components(empty_inventory_page: InventoryPage) -> None:
     empty_inventory_page.menu.open()
-    assert empty_inventory_page.menu.is_left_menu_displayed()
+    expect(empty_inventory_page.menu.left_menu).to_be_visible()
     left_menu_items: List[str] = empty_inventory_page.menu.get_left_menu_elements()
     assert left_menu_items == LEFT_MENU_ITEMS
 
 
 def test_verify_products_title(empty_inventory_page: InventoryPage) -> None:
-    assert empty_inventory_page.get_products_title() == PRODUCTS_TITLE
+    expect(empty_inventory_page.products_title).to_have_text(PRODUCTS_TITLE)
 
 
 def test_verify_default_product_filter_options(
     empty_inventory_page: InventoryPage,
 ) -> None:
-    assert (
-        empty_inventory_page.get_products_filter_selected_option()
-        == DEFAULT_FILTER_VALUE
+    expect(empty_inventory_page.selected_filter_option).to_have_text(
+        DEFAULT_FILTER_VALUE
     )
 
 
