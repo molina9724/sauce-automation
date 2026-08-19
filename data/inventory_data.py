@@ -67,6 +67,7 @@ def get_name_value(item: tuple[str, dict[str, str]]) -> str:
 
 FILTER_ARGS: str = "filter_option, key, reverse"
 FILTER_VALUES: list[tuple[str, SortKey, bool]] = [
+    (A_TO_Z, get_name_value, False),
     (Z_TO_A, get_name_value, True),
     (LOW_TO_HIGH, get_price_value, False),
     (HIGH_TO_LOW, get_price_value, True),

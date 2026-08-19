@@ -7,9 +7,9 @@ from playwright.sync_api import expect
 from data.global_data import ITEM_INDEX
 from data.inventory_data import (ACCESS_INVENTORY_PAGE_ERROR_WITHOUT_LOGIN,
                                  DEFAULT_FILTER_VALUE, DOCUMENT_TITLE,
-                                 FILTER_ARGS, FILTER_OPTIONS,
-                                 FILTER_VALUES, INVENTORY_ITEMS_DATA,
-                                 LEFT_MENU_ITEMS, PRODUCTS_TITLE, SortKey)
+                                 FILTER_ARGS, FILTER_OPTIONS, FILTER_VALUES,
+                                 INVENTORY_ITEMS_DATA, LEFT_MENU_ITEMS,
+                                 PRODUCTS_TITLE, SortKey)
 from po.pages.base_page import INVENTORY_URL
 from po.pages.cart_page import CartPage
 from po.pages.checkout_step_1_page import CheckoutStepOnePage
@@ -57,7 +57,7 @@ def test_verify_all_product_filter_options(
     argvalues=FILTER_VALUES,
     ids=[filter_value[0] for filter_value in FILTER_VALUES],
 )
-def test_verify_all_filter_options(
+def test_verify_products_are_sorted_after_selecting_filter(
     empty_inventory_page: InventoryPage,
     filter_option: str,
     key: SortKey,
@@ -85,37 +85,38 @@ def test_verify_error_when_trying_to_access_inventory_page_without_login(
     )
 
 
-def test_verify_items_images_are_displayed(
-    empty_inventory_page: InventoryPage,
-) -> None:
-    assert empty_inventory_page.are_items_images_displayed()
+def test_verify_items_images_are_displayed(empty_inventory_page: InventoryPage) -> None:
+    item_images = empty_inventory_page.item_image
+    expect(item_images).to_have_count(len(INVENTORY_ITEMS_DATA))
+    for index in range(len(INVENTORY_ITEMS_DATA)):
+        expect(item_images.nth(index)).to_be_visible()
 
 
 def test_verify_user_can_add_item_to_cart(
     empty_inventory_page: InventoryPage,
 ) -> None:
     empty_inventory_page.add_item_to_cart(ITEM_INDEX)
-    assert empty_inventory_page.cart.get_cart_counter() == 1
+    expect(empty_inventory_page.cart.cart_counter).to_have_text("1")
 
 
 def test_verify_cart_is_empty_by_default(
     empty_inventory_page: InventoryPage,
 ) -> None:
-    assert empty_inventory_page.cart.is_cart_empty()
+    expect(empty_inventory_page.cart.cart_counter).to_be_hidden()
 
 
 def test_verify_cart_is_empty_after_adding_item_and_removing_it(
     empty_inventory_page: InventoryPage,
 ) -> None:
     empty_inventory_page.add_item_to_cart(ITEM_INDEX)
-    assert empty_inventory_page.cart.get_cart_counter() == 1
+    expect(empty_inventory_page.cart.cart_counter).to_have_text("1")
     empty_inventory_page.remove_item_from_cart(ITEM_INDEX)
-    assert empty_inventory_page.cart.is_cart_empty()
+    expect(empty_inventory_page.cart.cart_counter).to_be_hidden()
 
 
 def test_go_back_to_continue_shopping(cart_page_with_item: CartPage) -> None:
     inventory_page: InventoryPage = cart_page_with_item.get_inventory_page()
-    assert inventory_page.cart.get_cart_counter() == 1
+    expect(inventory_page.cart.cart_counter).to_have_text("1")
 
 
 def test_verify_item_remain_in_cart_after_pressing_cancel_in_checkout_step_one_page(
@@ -123,16 +124,16 @@ def test_verify_item_remain_in_cart_after_pressing_cancel_in_checkout_step_one_p
 ) -> None:
     cart_page: CartPage = checkout_step_1_with_item.cart.get_cart_page()
     inventory_page: InventoryPage = cart_page.get_inventory_page()
-    assert inventory_page.cart.get_cart_counter() == 1
+    expect(inventory_page.cart.cart_counter).to_have_text("1")
 
 
 def test_verify_left_menu_is_closed(
     empty_inventory_page: InventoryPage,
 ) -> None:
-    assert empty_inventory_page.menu.is_left_menu_hidden()
+    expect(empty_inventory_page.menu.left_menu).to_be_hidden()
 
     empty_inventory_page.menu.open()
-    assert empty_inventory_page.menu.is_left_menu_displayed()
+    expect(empty_inventory_page.menu.left_menu).to_be_visible()
 
     empty_inventory_page.menu.close()
-    assert empty_inventory_page.menu.is_left_menu_hidden()
+    expect(empty_inventory_page.menu.left_menu).to_be_hidden()
