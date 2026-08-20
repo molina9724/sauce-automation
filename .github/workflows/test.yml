@@ -1,35 +1,72 @@
 name: Python package
 
-on: [push, workflow_dispatch]
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  pull_request:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+permissions:
+  checks: write
+  contents: read
 
 jobs:
   build:
-
     runs-on: macos-latest
+    timeout-minutes: 30
 
     steps:
-      - uses: actions/checkout@v7
+      - name: Checkout
+        uses: actions/checkout@v7
+
       - name: Set up Python
         uses: actions/setup-python@v7
         with:
-          python-version: '3.12'
-          architecture: 'x64'
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
       - name: Display Python version
-        run: python -c "import sys; print(sys.version)"
+        run: |
+          python --version
+          python -m pip --version
+
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: python -m pip install -r requirements.txt
+      
+      - name: Cache Playwright browsers
+        uses: actions/cache@v6
+        with:
+          path: ~/Library/Caches/ms-playwright
+          key: playwright-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('**/requirements.txt') }}
+
       - name: Install browser binaries
-        run: playwright install
+        run: python -m playwright install chromium
+
       - name: Format code
-        run: black --check .
+        run: python -m black --check .
+
       - name: Test
-        run: pytest
+        id: test
+        run: |
+          mkdir -p junit-results
+          python -m pytest --junitxml=junit-results/report.xml
+
+      - name: Publish Test Report
+        if: ${{ !cancelled() && steps.test.outcome != 'skipped' }}
+        uses: mikepenz/action-junit-report@v6
+        with:
+          report_paths: "junit-results/report.xml"
+
       - name: Upload artifacts on failure
-        uses: actions/upload-artifact@v7
         if: failure()
+        uses: actions/upload-artifact@v7
         with:
           name: failure-artifacts
-          path: |-
-            report.html
+          path: |
+            html-report/report.html
             allure-results/
+            junit-results/
             test-results/
