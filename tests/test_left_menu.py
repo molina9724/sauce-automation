@@ -26,7 +26,7 @@ def test_logout_from_all_menu_pages(
     page: Union[InventoryPage, CartPage, CheckoutStepOnePage, CheckoutStepTwoPage] = (
         request.getfixturevalue(page_fixture)
     )
-    login_page: LoginPage = page.left_menu.logout()
+    login_page: LoginPage = page.menu.logout()
     assert login_page.get_url() == LOGIN_URL
 
 
@@ -40,7 +40,7 @@ def test_all_items_from_all_menu_pages_with_empty_cart(
     page: Union[InventoryPage, CartPage, CheckoutStepOnePage, CheckoutStepTwoPage] = (
         request.getfixturevalue(page_fixture)
     )
-    inventory_page: InventoryPage = page.left_menu.all_items()
+    inventory_page: InventoryPage = page.menu.all_items()
     assert inventory_page.get_url() == INVENTORY_URL
     assert inventory_page.cart.is_cart_empty()
 
@@ -55,6 +55,6 @@ def test_all_items_from_all_menu_pages_with_item_in_cart(
     page: Union[InventoryPage, CartPage, CheckoutStepOnePage, CheckoutStepTwoPage] = (
         request.getfixturevalue(page_fixture)
     )
-    inventory_page: InventoryPage = page.left_menu.all_items()
+    inventory_page: InventoryPage = page.menu.all_items()
     assert inventory_page.get_url() == INVENTORY_URL
     assert inventory_page.cart.get_cart_counter() == 1

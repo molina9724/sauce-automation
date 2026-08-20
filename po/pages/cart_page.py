@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, List, Optional
 from playwright.sync_api import Locator, Page
 
 from ..components.cart import Cart
-from ..components.left_menu import LeftMenu
+from ..components.left_menu import Menu
 # fmt: off
 from .base_page import (DESCRIPTION, ITEM, ITEM_DESCRIPTION, ITEM_NAME,
                         ITEM_PRICE, ITEM_QUANTITY, NAME, PRICE, QUANTITY,
@@ -39,7 +39,7 @@ class CartPage(BasePage):
         )
         self._checkout_button: Locator = self.page.get_by_role("button", name=CHECKOUT)
         self.cart: Cart = Cart(self.page)
-        self.left_menu: LeftMenu = LeftMenu(self.page)
+        self.menu: Menu = Menu(self.page)
 
     def get_all_products_names(self, timeout: Optional[int] = None) -> List[str]:
         timeout_ms: int = self._timeout_ms(timeout)

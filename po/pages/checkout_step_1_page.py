@@ -3,9 +3,11 @@ from typing import TYPE_CHECKING, Optional
 from playwright.sync_api import Locator, Page
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 
+from po.pages.cart_page import CartPage
+
 from ..components.cart import Cart
 from ..components.form_validation import FormValidation
-from ..components.left_menu import LeftMenu
+from ..components.left_menu import Menu
 from ..pages.base_page import CHECKOUT_STEP_2_URL, BasePage
 
 if TYPE_CHECKING:
@@ -40,11 +42,11 @@ class CheckoutStepOnePage(BasePage):
         self._last_name: Locator = page.get_by_role("textbox", name=LAST_NAME)
         self._zip_code: Locator = page.get_by_role("textbox", name=ZIP_CODE)
 
-        self._cancel_button: Locator = page.get_by_role("button", name=CANCEL_BUTTON)
+        self.cancel_button: Locator = page.get_by_role("button", name=CANCEL_BUTTON)
         self._continue_button: Locator = page.get_by_role(
             "button", name=CONTINUE_BUTTON
         )
-        self.left_menu: LeftMenu = LeftMenu(self.page)
+        self.menu: Menu = Menu(self.page)
         self.cart: Cart = Cart(self.page)
         self.form_validation: FormValidation = FormValidation(self.page)
 
@@ -123,4 +125,8 @@ class CheckoutStepOnePage(BasePage):
 
     def is_cancel_button_displayed(self, timeout: Optional[int] = None) -> bool:
         timeout_ms: int = self._timeout_ms(timeout)
-        return self._is_item_displayed(self._cancel_button, timeout_ms)
+        return self._is_item_displayed(self.cancel_button, timeout_ms)
+
+    def cancel(self) -> CartPage:
+        self.cancel_button.click()
+        return CartPage(self.page)

@@ -1,21 +1,11 @@
-from typing import List, Optional
-
 from playwright.sync_api import Locator, Page
 
 from ..components.cart import Cart
-from ..components.left_menu import LeftMenu
-from .base_page import ITEM, ITEM_DESCRIPTION, ITEM_NAME, ITEM_PRICE, REMOVE, BasePage
+from ..components.left_menu import Menu
+from .base_page import ITEM_DESCRIPTION, ITEM_NAME, ITEM_PRICE, REMOVE, BasePage
 
 # Buttons
 ADD_TO_CART: str = "Add to cart"
-
-# Labels
-ITEMS_CONTAINER: str = "Items Container"
-PRODUCTS_FILTER: str = "Products Filter"
-PRODUCTS_TITLE: str = "Products Title"
-LOGO_TEXT: str = "Logo Text"
-DOCUMENT_TITLE: str = "Document Title"
-ADD_TO_CART_LABEL: str = "Add to cart Button"
 
 
 class InventoryPage(BasePage):
@@ -43,125 +33,42 @@ class InventoryPage(BasePage):
             timeout (int, optional): Default timeout for actions, in milliseconds. Defaults to 10000.
         """
         super().__init__(page, timeout)
-        self._inventory_logo: Locator = self.page.locator(".app_logo")
+        self.inventory_logo: Locator = self.page.locator(".app_logo")
 
-        self._products_title: Locator = self.page.locator(".title")
+        self.products_title: Locator = self.page.locator(".title")
 
-        self._products_filter: Locator = self.page.get_by_role("combobox")
-        self._all_filter_options: Locator = self.page.locator("option")
-        self._selected_filter_option: Locator = self.page.locator(".active_option")
+        self.products_filter: Locator = self.page.get_by_role("combobox")
+        self.all_filter_options: Locator = self.page.locator("option")
+        self.selected_filter_option: Locator = self.page.locator(".active_option")
 
-        self._all_items_container: Locator = self.page.locator(".inventory_list")
-        self._item: Locator = self.page.locator(".inventory_item")
-        self._item_name: Locator = self._item.locator(ITEM_NAME)
-        self._item_description: Locator = self._item.locator(ITEM_DESCRIPTION)
-        self._item_price: Locator = self._item.locator(ITEM_PRICE)
-        self._item_image: Locator = self._item.locator(
-            "img[class='inventory_item_img']"
-        )
-        self.left_menu: LeftMenu = LeftMenu(self.page)
+        self.item: Locator = self.page.locator(".inventory_item")
+        self.item_name: Locator = self.item.locator(ITEM_NAME)
+        self.item_description: Locator = self.item.locator(ITEM_DESCRIPTION)
+        self.item_price: Locator = self.item.locator(ITEM_PRICE)
+        self.item_image: Locator = self.item.locator("img[class='inventory_item_img']")
+        self.menu: Menu = Menu(self.page)
         self.cart: Cart = Cart(self.page)
 
-    def get_document_title(self, timeout: Optional[int] = None) -> str:
-        timeout_ms: int = self._timeout_ms(timeout)
-        self.get_element(self._inventory_logo, DOCUMENT_TITLE, timeout_ms)
-        return self.page.title().strip()
+    def set_products_filter(self, option: str) -> None:
+        self.products_filter.select_option(option)
 
-    def get_logo_text(self, timeout: Optional[int] = None) -> str:
-        timeout_ms: int = self._timeout_ms(timeout)
-        logo: Locator = self.get_element(self._inventory_logo, LOGO_TEXT, timeout_ms)
-        return logo.inner_text().strip()
+    def get_all_products_names(self) -> list[str]:
+        return self.item_name.all_inner_texts()
 
-    def get_products_title(self, timeout: Optional[int] = None) -> str:
-        timeout_ms: int = self._timeout_ms(timeout)
-        products_title: Locator = self.get_element(
-            self._products_title, PRODUCTS_TITLE, timeout_ms
-        )
-        return products_title.inner_text().strip()
+    def get_all_products_descriptions(self) -> list[str]:
+        return self.item_description.all_inner_texts()
 
-    def is_products_filter_displayed(self, timeout: Optional[int] = None) -> bool:
-        timeout_ms: int = self._timeout_ms(timeout)
-        return self._is_item_displayed(self._products_filter, timeout_ms)
-
-    def get_products_filter_options(self, timeout: Optional[int] = None) -> List[str]:
-        timeout_ms: int = self._timeout_ms(timeout)
-        sort_filter: Locator = self.get_element(
-            self._products_filter, PRODUCTS_FILTER, timeout_ms
-        )
-        filter_options: List[Locator] = sort_filter.locator(
-            self._all_filter_options
-        ).all()
-        all_prices_filter_options: List[str] = [
-            filter_option.inner_text().strip()
-            for filter_option in filter_options
-            if filter_option.inner_text().strip()
-        ]
-        return all_prices_filter_options
-
-    def get_products_filter_selected_option(self, timeout: Optional[int] = None) -> str:
-        timeout_ms: int = self._timeout_ms(timeout)
-        selected_filter: Locator = self.get_element(
-            self._selected_filter_option, PRODUCTS_FILTER, timeout_ms
-        )
-        return selected_filter.inner_text().strip()
-
-    def set_products_filter(self, option: str, timeout: Optional[int] = None) -> None:
-        timeout_ms: int = self._timeout_ms(timeout)
-        filter_options: Locator = self.get_element(
-            self._products_filter, PRODUCTS_FILTER, timeout_ms
-        )
-        filter_options.select_option(option)
-
-    def is_all_items_container_displayed(self, timeout: Optional[int] = None) -> bool:
-        timeout_ms: int = self._timeout_ms(timeout)
-        return self._is_item_displayed(self._all_items_container, timeout_ms)
-
-    # get_all_products_names, get_all_products_descriptions, get_all_products_prices aren't refactored since data might change in the future
-    def get_all_products_names(self, timeout: Optional[int] = None) -> List[str]:
-        timeout_ms: int = self._timeout_ms(timeout)
-        names: List[str] = []
-        for index, item in enumerate(self._item.all()):
-            name: Locator = self.get_element(
-                item.locator(ITEM_NAME),
-                f"{ITEM_NAME} for {ITEM}{index}",
-                timeout_ms,
-            )
-            names.append(name.inner_text().strip())
-        return names
-
-    def get_all_products_descriptions(self, timeout: Optional[int] = None) -> List[str]:
-        timeout_ms: int = self._timeout_ms(timeout)
-        descriptions: List[str] = []
-        for index, item in enumerate(self._item.all()):
-            description: Locator = self.get_element(
-                item.locator(ITEM_DESCRIPTION),
-                f"{ITEM_DESCRIPTION} for {ITEM}{index}",
-                timeout_ms,
-            )
-            descriptions.append(description.inner_text().strip())
-        return descriptions
-
-    def get_all_products_prices(self, timeout: Optional[int] = None) -> List[str]:
-        timeout_ms: int = self._timeout_ms(timeout)
-        prices: List[str] = []
-        for index, item in enumerate(self._item.all()):
-            price: Locator = self.get_element(
-                item.locator(ITEM_PRICE), f"{ITEM_PRICE} for {ITEM}{index}", timeout_ms
-            )
-            prices.append(price.inner_text().strip())
-        return prices
+    def get_all_products_prices(self) -> list[str]:
+        return self.item_price.all_inner_texts()
 
     # TODO: This method should include images and add/remove buttons to consistently test the whole item object
     # TODO: Investigate how to to test images properly
-    def get_all_products_information(
-        self, timeout: Optional[int] = None
-    ) -> dict[str, dict[str, str]]:
-        timeout_ms: int = self._timeout_ms(timeout)
-        all_inventory_items_names: List[str] = self.get_all_products_names(timeout_ms)
-        all_inventory_items_descriptions: List[str] = (
-            self.get_all_products_descriptions(timeout_ms)
+    def get_all_products_information(self) -> dict[str, dict[str, str]]:
+        all_inventory_items_names: list[str] = self.get_all_products_names()
+        all_inventory_items_descriptions: list[str] = (
+            self.get_all_products_descriptions()
         )
-        all_inventory_items_prices: List[str] = self.get_all_products_prices(timeout_ms)
+        all_inventory_items_prices: list[str] = self.get_all_products_prices()
 
         inventory_items_data: dict[str, dict[str, str]] = dict()
         try:
@@ -181,40 +88,12 @@ class InventoryPage(BasePage):
                 "The arguments (name, description, and price) for zip have different lengths, this means that some inventory items have missing properties."
             ) from exception
 
-    def are_items_images_displayed(self, timeout: Optional[int] = None) -> bool:
-        timeout_ms: int = self._timeout_ms(timeout)
-
-        items_names: List[str] = self.get_all_products_names()
-        is_item_image_displayed: List[bool] = list()
-        for index in range(len(items_names)):
-            visibility_flag: bool = False
-            try:
-                self.get_element(
-                    self._item_image.nth(index), f"{ITEM}{index}", timeout_ms
-                )
-                visibility_flag = True
-            except RuntimeError:
-                visibility_flag = False
-            finally:
-                is_item_image_displayed.append(visibility_flag)
-        return all(is_item_image_displayed)
-
-    def add_item_to_cart(self, index: int, timeout: Optional[int] = None) -> None:
-        timeout_ms: int = self._timeout_ms(timeout)
-        item: Locator = self.get_element(
-            self._item.nth(index),
-            f"{ITEM}{index}",
-            timeout_ms,
-        )
+    def add_item_to_cart(self, index: int) -> None:
+        item: Locator = self.item.nth(index)
         add_button: Locator = item.get_by_role("button", name=ADD_TO_CART)
-        add_button.click(timeout=timeout_ms)
+        add_button.click()
 
-    def remove_item_from_cart(self, index: int, timeout: Optional[int] = None) -> None:
-        timeout_ms: int = self._timeout_ms(timeout)
-        item: Locator = self.get_element(
-            self._item.nth(index),
-            f" {ITEM}{index}",
-            timeout_ms,
-        )
+    def remove_item_from_cart(self, index: int) -> None:
+        item: Locator = self.item.nth(index)
         remove_button: Locator = item.get_by_role("button", name=REMOVE)
-        remove_button.click(timeout=timeout_ms)
+        remove_button.click()
