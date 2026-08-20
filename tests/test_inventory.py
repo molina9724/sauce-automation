@@ -78,12 +78,10 @@ def test_verify_products_are_sorted_after_selecting_filter(
         INVENTORY_ITEMS_DATA.items(), key=sort_key, reverse=reverse
     )
     ordered_names: List[str] = [name for name, _ in ordered_items]
-
-    ordered_descriptions: List[str] = []
-    ordered_prices: List[str] = []
-    for _, dictionary in ordered_items:
-        ordered_descriptions.append(dictionary["description"])
-        ordered_prices.append(dictionary["price"])
+    ordered_descriptions: List[str] = [
+        details["description"] for _, details in ordered_items
+    ]
+    ordered_prices: List[str] = [details["price"] for _, details in ordered_items]
 
     expect(empty_inventory_page.item_name).to_have_text(ordered_names)
     expect(empty_inventory_page.item_description).to_have_text(ordered_descriptions)
