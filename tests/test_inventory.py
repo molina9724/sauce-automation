@@ -1,6 +1,4 @@
 # fmt: off
-from typing import List
-
 import pytest
 from playwright.sync_api import Locator, expect
 
@@ -12,7 +10,7 @@ from data.inventory_data import (A_TO_Z,
                                  INVENTORY_ITEMS_DATA, LEFT_MENU_ITEMS,
                                  LOGO_TEXT, ONE, PRODUCTS_TITLE, Z_TO_A,
                                  SortKey)
-from po.pages.base_page import INVENTORY_URL
+from po.pages.base_page import INVENTORY_URL, LOGIN_URL
 from po.pages.cart_page import CartPage
 from po.pages.checkout_step_1_page import CheckoutStepOnePage
 from po.pages.inventory_page import InventoryPage
@@ -74,14 +72,14 @@ def test_verify_products_are_sorted_after_selecting_filter(
 
     empty_inventory_page.set_products_filter(filter_option)
 
-    ordered_items: List[tuple[str, dict[str, str]]] = sorted(
+    ordered_items: list[tuple[str, dict[str, str]]] = sorted(
         INVENTORY_ITEMS_DATA.items(), key=sort_key, reverse=reverse
     )
-    ordered_names: List[str] = [name for name, _ in ordered_items]
-    ordered_descriptions: List[str] = [
+    ordered_names: list[str] = [name for name, _ in ordered_items]
+    ordered_descriptions: list[str] = [
         details["description"] for _, details in ordered_items
     ]
-    ordered_prices: List[str] = [details["price"] for _, details in ordered_items]
+    ordered_prices: list[str] = [details["price"] for _, details in ordered_items]
 
     expect(empty_inventory_page.item_name).to_have_text(ordered_names)
     expect(empty_inventory_page.item_description).to_have_text(ordered_descriptions)
@@ -96,6 +94,7 @@ def test_verify_error_when_trying_to_access_inventory_page_without_login(
     expect(login_page.form_validation.error_heading).to_have_text(
         ACCESS_INVENTORY_PAGE_ERROR_WITHOUT_LOGIN
     )
+    expect(login_page.page).to_have_url(LOGIN_URL)
 
 
 def test_verify_items_images_are_displayed(empty_inventory_page: InventoryPage) -> None:

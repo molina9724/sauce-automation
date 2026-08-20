@@ -1,5 +1,3 @@
-from typing import List
-
 from playwright.sync_api import Locator, Page
 
 from ..components.cart import Cart
@@ -43,7 +41,6 @@ class InventoryPage(BasePage):
         self.all_filter_options: Locator = self.page.locator("option")
         self.selected_filter_option: Locator = self.page.locator(".active_option")
 
-        self.all_items_container: Locator = self.page.locator(".inventory_list")
         self.item: Locator = self.page.locator(".inventory_item")
         self.item_name: Locator = self.item.locator(ITEM_NAME)
         self.item_description: Locator = self.item.locator(ITEM_DESCRIPTION)
@@ -55,23 +52,23 @@ class InventoryPage(BasePage):
     def set_products_filter(self, option: str) -> None:
         self.products_filter.select_option(option)
 
-    def get_all_products_names(self) -> List[str]:
+    def get_all_products_names(self) -> list[str]:
         return self.item_name.all_inner_texts()
 
-    def get_all_products_descriptions(self) -> List[str]:
+    def get_all_products_descriptions(self) -> list[str]:
         return self.item_description.all_inner_texts()
 
-    def get_all_products_prices(self) -> List[str]:
+    def get_all_products_prices(self) -> list[str]:
         return self.item_price.all_inner_texts()
 
     # TODO: This method should include images and add/remove buttons to consistently test the whole item object
     # TODO: Investigate how to to test images properly
     def get_all_products_information(self) -> dict[str, dict[str, str]]:
-        all_inventory_items_names: List[str] = self.get_all_products_names()
-        all_inventory_items_descriptions: List[str] = (
+        all_inventory_items_names: list[str] = self.get_all_products_names()
+        all_inventory_items_descriptions: list[str] = (
             self.get_all_products_descriptions()
         )
-        all_inventory_items_prices: List[str] = self.get_all_products_prices()
+        all_inventory_items_prices: list[str] = self.get_all_products_prices()
 
         inventory_items_data: dict[str, dict[str, str]] = dict()
         try:
