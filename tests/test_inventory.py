@@ -57,7 +57,6 @@ def test_verify_all_product_filter_options(
     expect(empty_inventory_page.all_filter_options).to_have_text(FILTER_OPTIONS)
 
 
-# TODO: Split filter sort tests: content verification vs order verification
 @pytest.mark.parametrize(
     FILTER_ARGS,
     argvalues=FILTER_VALUES,
@@ -66,7 +65,7 @@ def test_verify_all_product_filter_options(
 def test_verify_products_are_sorted_after_selecting_filter(
     empty_inventory_page: InventoryPage,
     filter_option: str,
-    key: SortKey,
+    sort_key: SortKey,
     reverse: bool,
 ) -> None:
     # A_TO_Z is the default option, so first we need a change in order to verify
@@ -74,15 +73,21 @@ def test_verify_products_are_sorted_after_selecting_filter(
         empty_inventory_page.set_products_filter(Z_TO_A)
 
     empty_inventory_page.set_products_filter(filter_option)
-    ordered_results: dict[str, dict[str, str]] = (
-        empty_inventory_page.get_all_products_information()
-    )
 
-    actual: List[tuple[str, dict[str, str]]] = list(ordered_results.items())
-    expected: List[tuple[str, dict[str, str]]] = sorted(
-        INVENTORY_ITEMS_DATA.items(), key=key, reverse=reverse
+    ordered_items: List[tuple[str, dict[str, str]]] = sorted(
+        INVENTORY_ITEMS_DATA.items(), key=sort_key, reverse=reverse
     )
-    assert actual == expected
+    ordered_names: List[str] = [name for name, _ in ordered_items]
+
+    ordered_descriptions: List[str] = []
+    ordered_prices: List[str] = []
+    for _, dictionary in ordered_items:
+        ordered_descriptions.append(dictionary["description"])
+        ordered_prices.append(dictionary["price"])
+
+    expect(empty_inventory_page.item_name).to_have_text(ordered_names)
+    expect(empty_inventory_page.item_description).to_have_text(ordered_descriptions)
+    expect(empty_inventory_page.item_price).to_have_text(ordered_prices)
 
 
 @pytest.mark.anonymous

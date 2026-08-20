@@ -56,13 +56,13 @@ class InventoryPage(BasePage):
         self.products_filter.select_option(option)
 
     def get_all_products_names(self) -> List[str]:
-        return self.item.locator(ITEM_NAME).all_inner_texts()
+        return self.item_name.all_inner_texts()
 
     def get_all_products_descriptions(self) -> List[str]:
-        return self.item.locator(ITEM_DESCRIPTION).all_inner_texts()
+        return self.item_description.all_inner_texts()
 
     def get_all_products_prices(self) -> List[str]:
-        return self.item.locator(ITEM_PRICE).all_inner_texts()
+        return self.item_price.all_inner_texts()
 
     # TODO: This method should include images and add/remove buttons to consistently test the whole item object
     # TODO: Investigate how to to test images properly
