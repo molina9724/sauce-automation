@@ -23,16 +23,14 @@ CHECKOUT = "Checkout"
 class CartPage(BasePage):
     def __init__(self, page: Page, timeout: int = 10000) -> None:
         super().__init__(page, timeout)
-        self._cart_list: Locator = self.locator(".cart_list")
+        self.cart_list: Locator = self.locator(".cart_list")
 
-        self._item: Locator = self.locator(".cart_item")
-        self._item_quantity: Locator = self._item.locator(ITEM_QUANTITY)
-        self._item_name: Locator = self._item.locator(ITEM_NAME)
-        self._item_description: Locator = self._item.locator(ITEM_DESCRIPTION)
-        self._item_price: Locator = self._item.locator(ITEM_PRICE)
-        self._remove_item_button: Locator = self._item.get_by_role(
-            "button", name=REMOVE
-        )
+        self.item: Locator = self.locator(".cart_item")
+        self.item_quantity: Locator = self.item.locator(ITEM_QUANTITY)
+        self.item_name: Locator = self.item.locator(ITEM_NAME)
+        self.item_description: Locator = self.item.locator(ITEM_DESCRIPTION)
+        self.item_price: Locator = self.item.locator(ITEM_PRICE)
+        self.remove_item_button: Locator = self.item.get_by_role("button", name=REMOVE)
 
         self._continue_shopping_button: Locator = self.page.get_by_role(
             "button", name=CONTINUE_SHOPPING
@@ -44,7 +42,7 @@ class CartPage(BasePage):
     def get_all_products_names(self, timeout: Optional[int] = None) -> List[str]:
         timeout_ms: int = self._timeout_ms(timeout)
         all_products_names: List[str] = list()
-        for index, item in enumerate(self._item.all()):
+        for index, item in enumerate(self.item.all()):
             name: Locator = self.get_element(
                 item.locator(ITEM_NAME), f"{NAME} for {ITEM}{index}", timeout_ms
             )
@@ -54,7 +52,7 @@ class CartPage(BasePage):
     def get_all_products_quantities(self, timeout: Optional[int] = None) -> List[str]:
         timeout_ms: int = self._timeout_ms(timeout)
         all_products_quantities: List[str] = list()
-        for index, item in enumerate(self._item.all()):
+        for index, item in enumerate(self.item.all()):
             quantity: Locator = self.get_element(
                 item.locator(ITEM_QUANTITY), f"{QUANTITY} for {ITEM}{index}", timeout_ms
             )
@@ -64,7 +62,7 @@ class CartPage(BasePage):
     def get_all_products_descriptions(self, timeout: Optional[int] = None) -> List[str]:
         timeout_ms: int = self._timeout_ms(timeout)
         all_products_descriptions: List[str] = list()
-        for index, item in enumerate(self._item.all()):
+        for index, item in enumerate(self.item.all()):
             description: Locator = self.get_element(
                 item.locator(ITEM_DESCRIPTION),
                 f"{DESCRIPTION} for {ITEM}{index}",
@@ -76,7 +74,7 @@ class CartPage(BasePage):
     def get_all_products_prices(self, timeout: Optional[int] = None) -> List[str]:
         timeout_ms: int = self._timeout_ms(timeout)
         all_products_prices: List[str] = list()
-        for index, item in enumerate(self._item.all()):
+        for index, item in enumerate(self.item.all()):
             price: Locator = self.get_element(
                 item.locator(ITEM_PRICE), f"{PRICE} for {ITEM}{index}", timeout_ms
             )
@@ -119,7 +117,7 @@ class CartPage(BasePage):
     def remove_item(self, index: int = 0, timeout: Optional[int] = None) -> None:
         timeout_ms: int = self._timeout_ms(timeout)
         remove_button: Locator = self.get_element(
-            self._remove_item_button.nth(index),
+            self.remove_item_button.nth(index),
             f"{REMOVE_BUTTON_LABEL} for {ITEM}{index}",
             timeout_ms,
         )
@@ -131,8 +129,8 @@ class CartPage(BasePage):
         else:
             timeout_ms = self._timeout_ms(timeout)
         try:
-            self.get_element(self._item.first, ITEM, timeout_ms)
-            return self._item.count()
+            self.get_element(self.item.first, ITEM, timeout_ms)
+            return self.item.count()
         except RuntimeError:
             return 0
 
