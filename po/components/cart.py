@@ -22,24 +22,16 @@ class Cart(BaseComponent):
     def __init__(self, page: Page, timeout: int = 10000) -> None:
         super().__init__(page, timeout)
         self.cart_button: Locator = self.page.locator(CART_BUTTON)
-        self.cart_counter: Locator = self.cart_button.locator(CART_COUNTER_BADGE)
+        self.counter: Locator = self.cart_button.locator(CART_COUNTER_BADGE)
 
-    def get_cart_page(self, timeout: Optional[int] = None) -> "CartPage":
-        timeout_ms: int = self._timeout_ms(timeout)
-        cart_button: Locator = self.get_element(
-            self.cart_button, CART_BUTTON_LABEL, timeout_ms
-        )
-        cart_button.click()
+    def get_cart_page(self) -> "CartPage":
+        self.cart_button.click()
         from ..pages.cart_page import CartPage
 
         return CartPage(self.page)
 
-    def get_cart_counter(self, timeout: Optional[int] = None) -> int:
-        timeout_ms: int = self._timeout_ms(timeout)
-        cart_counter: Locator = self.get_element(
-            self.cart_counter, CART_COUNTER, timeout_ms
-        )
-        counter: str = cart_counter.inner_text().strip()
+    def get_cart_counter(self) -> int:
+        counter: str = self.counter.inner_text().strip()
         try:
             return int(counter)
         except ValueError:
@@ -50,7 +42,7 @@ class Cart(BaseComponent):
     def is_cart_empty(self, timeout: Optional[int] = None) -> bool:
         timeout_ms: int = self._timeout_ms(timeout)
         try:
-            self.cart_counter.wait_for(state="hidden", timeout=timeout_ms)
+            self.counter.wait_for(state="hidden", timeout=timeout_ms)
             return True
         except PlaywrightTimeoutError:
             return False
