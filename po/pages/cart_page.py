@@ -32,10 +32,10 @@ class CartPage(BasePage):
         self.item_price: Locator = self.item.locator(ITEM_PRICE)
         self.remove_item_button: Locator = self.item.get_by_role("button", name=REMOVE)
 
-        self._continue_shopping_button: Locator = self.page.get_by_role(
+        self.continue_shopping_button: Locator = self.page.get_by_role(
             "button", name=CONTINUE_SHOPPING
         )
-        self._checkout_button: Locator = self.page.get_by_role("button", name=CHECKOUT)
+        self.checkout_button: Locator = self.page.get_by_role("button", name=CHECKOUT)
         self.cart: Cart = Cart(self.page)
         self.menu: Menu = Menu(self.page)
 
@@ -114,52 +114,15 @@ class CartPage(BasePage):
                 "The arguments (name, description, price, and quantity) have different lengths, this means that some inventory items have missing properties."
             ) from exception
 
-    def remove_item(self, index: int = 0, timeout: Optional[int] = None) -> None:
-        timeout_ms: int = self._timeout_ms(timeout)
-        remove_button: Locator = self.get_element(
-            self.remove_item_button.nth(index),
-            f"{REMOVE_BUTTON_LABEL} for {ITEM}{index}",
-            timeout_ms,
-        )
-        remove_button.click()
+    def remove_item(self, index: int = 0) -> None:
+        self.remove_item_button.nth(index).click()
 
-    def get_amount_of_items_in_cart(self, timeout: Optional[int] = None) -> int:
-        if timeout is None:
-            timeout_ms: int = SHORT_TIMEOUT
-        else:
-            timeout_ms = self._timeout_ms(timeout)
-        try:
-            self.get_element(self.item.first, ITEM, timeout_ms)
-            return self.item.count()
-        except RuntimeError:
-            return 0
-
-    def is_continue_shopping_button_displayed(
-        self, timeout: Optional[int] = None
-    ) -> bool:
-        timeout_ms: int = self._timeout_ms(timeout)
-        return self._is_item_displayed(self._continue_shopping_button, timeout_ms)
-
-    def get_inventory_page(self, timeout: Optional[int] = None) -> InventoryPage:
-        timeout_ms: int = self._timeout_ms(timeout)
-        continue_shopping_button: Locator = self.get_element(
-            self._continue_shopping_button, CONTINUE_SHOPPING, timeout_ms
-        )
-        continue_shopping_button.click()
+    def get_inventory_page(self) -> InventoryPage:
+        self.continue_shopping_button.click()
         return InventoryPage(self.page)
 
-    def is_checkout_button_displayed(self, timeout: Optional[int] = None) -> bool:
-        timeout_ms: int = self._timeout_ms(timeout)
-        return self._is_item_displayed(self._checkout_button, timeout_ms)
-
-    def get_checkout_step_1_page(
-        self, timeout: Optional[int] = None
-    ) -> "CheckoutStepOnePage":
-        timeout_ms: int = self._timeout_ms(timeout)
-        checkout_button: Locator = self.get_element(
-            self._checkout_button, CHECKOUT, timeout_ms
-        )
-        checkout_button.click()
+    def get_checkout_step_1_page(self) -> "CheckoutStepOnePage":
+        self.checkout_button.click()
         from .checkout_step_1_page import CheckoutStepOnePage
 
         return CheckoutStepOnePage(self.page)
