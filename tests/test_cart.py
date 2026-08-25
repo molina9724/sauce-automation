@@ -25,16 +25,16 @@ def test_verify_correct_item_in_cart(cart_page_with_item: CartPage) -> None:
 
 
 def test_verify_item_is_removed(cart_page_with_item: CartPage) -> None:
-    expect(cart_page_with_item.item).to_have_count(1)
+    expect(cart_page_with_item.item.root).to_have_count(1)
     cart_page_with_item.remove_item(0)
     expect(cart_page_with_item.cart.counter).to_be_hidden()
-    expect(cart_page_with_item.item).to_have_count(0)
+    expect(cart_page_with_item.item.root).to_have_count(0)
 
 
 def test_verify_several_items_can_be_added_to_cart(
     cart_page_with_all_items: CartPage,
 ) -> None:
-    expect(cart_page_with_all_items.item).to_have_count(len(ALL_ITEMS_INDEX))
+    expect(cart_page_with_all_items.item.root).to_have_count(len(ALL_ITEMS_INDEX))
 
 
 def test_verify_items_remain_in_cart_after_pressing_cancel_in_checkout_step_one_page(
