@@ -81,9 +81,9 @@ def test_verify_products_are_sorted_after_selecting_filter(
     ]
     ordered_prices: list[str] = [details["price"] for _, details in ordered_items]
 
-    expect(empty_inventory_page.item_name).to_have_text(ordered_names)
-    expect(empty_inventory_page.item_description).to_have_text(ordered_descriptions)
-    expect(empty_inventory_page.item_price).to_have_text(ordered_prices)
+    expect(empty_inventory_page.item.name).to_have_text(ordered_names)
+    expect(empty_inventory_page.item.description).to_have_text(ordered_descriptions)
+    expect(empty_inventory_page.item.price).to_have_text(ordered_prices)
 
 
 @pytest.mark.anonymous
@@ -98,7 +98,7 @@ def test_verify_error_when_trying_to_access_inventory_page_without_login(
 
 
 def test_verify_items_images_are_displayed(empty_inventory_page: InventoryPage) -> None:
-    item_images: Locator = empty_inventory_page.item_image
+    item_images: Locator = empty_inventory_page.item.image
     expect(item_images).to_have_count(len(INVENTORY_ITEMS_DATA))
     for index in range(len(INVENTORY_ITEMS_DATA)):
         expect(item_images.nth(index)).to_be_visible()

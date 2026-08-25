@@ -1,11 +1,9 @@
 from playwright.sync_api import Locator, Page
 
 from ..components.cart import Cart
+from ..components.inventory_page_item import InventoryItem
 from ..components.left_menu import Menu
-from .base_page import ITEM_DESCRIPTION, ITEM_NAME, ITEM_PRICE, REMOVE, BasePage
-
-# Buttons
-ADD_TO_CART: str = "Add to cart"
+from .base_page import BasePage
 
 
 class InventoryPage(BasePage):
@@ -41,11 +39,7 @@ class InventoryPage(BasePage):
         self.all_filter_options: Locator = self.page.locator("option")
         self.selected_filter_option: Locator = self.page.locator(".active_option")
 
-        self.item: Locator = self.page.locator(".inventory_item")
-        self.item_name: Locator = self.item.locator(ITEM_NAME)
-        self.item_description: Locator = self.item.locator(ITEM_DESCRIPTION)
-        self.item_price: Locator = self.item.locator(ITEM_PRICE)
-        self.item_image: Locator = self.item.locator("img[class='inventory_item_img']")
+        self.item: InventoryItem[Page] = InventoryItem(page)
         self.menu: Menu = Menu(self.page)
         self.cart: Cart = Cart(self.page)
 
@@ -53,13 +47,13 @@ class InventoryPage(BasePage):
         self.products_filter.select_option(option)
 
     def get_all_products_names(self) -> list[str]:
-        return self.item_name.all_inner_texts()
+        return self.item.name.all_inner_texts()
 
     def get_all_products_descriptions(self) -> list[str]:
-        return self.item_description.all_inner_texts()
+        return self.item.description.all_inner_texts()
 
     def get_all_products_prices(self) -> list[str]:
-        return self.item_price.all_inner_texts()
+        return self.item.price.all_inner_texts()
 
     # TODO: This method should include images and add/remove buttons to consistently test the whole item object
     # TODO: Investigate how to to test images properly
@@ -89,11 +83,11 @@ class InventoryPage(BasePage):
             ) from exception
 
     def add_item_to_cart(self, index: int) -> None:
-        item: Locator = self.item.nth(index)
-        add_button: Locator = item.get_by_role("button", name=ADD_TO_CART)
+        item: Locator = self.item.root.nth(index)
+        add_button: Locator = item.get_by_role("button", name="Add to cart")
         add_button.click()
 
     def remove_item_from_cart(self, index: int) -> None:
-        item: Locator = self.item.nth(index)
-        remove_button: Locator = item.get_by_role("button", name=REMOVE)
+        item: Locator = self.item.root.nth(index)
+        remove_button: Locator = item.get_by_role("button", name="Remove")
         remove_button.click()
