@@ -1,23 +1,17 @@
-from typing import TYPE_CHECKING, List, Optional
+from typing import TYPE_CHECKING, List
 
 from playwright.sync_api import Locator, Page
 
 from ..components.cart import Cart
 from ..components.left_menu import Menu
 # fmt: off
-from .base_page import (DESCRIPTION, ITEM, ITEM_DESCRIPTION, ITEM_NAME,
-                        ITEM_PRICE, ITEM_QUANTITY, NAME, PRICE, QUANTITY,
-                        REMOVE, REMOVE_BUTTON_LABEL, SHORT_TIMEOUT, BasePage)
+from .base_page import (ITEM_DESCRIPTION, ITEM_NAME, ITEM_PRICE, ITEM_QUANTITY,
+                        REMOVE, BasePage)
 # fmt: on
 from .inventory_page import InventoryPage
 
 if TYPE_CHECKING:
     from .checkout_step_1_page import CheckoutStepOnePage
-
-
-# Button names
-CONTINUE_SHOPPING = "Continue Shopping"
-CHECKOUT = "Checkout"
 
 
 class CartPage(BasePage):
@@ -33,66 +27,31 @@ class CartPage(BasePage):
         self.remove_item_button: Locator = self.item.get_by_role("button", name=REMOVE)
 
         self.continue_shopping_button: Locator = self.page.get_by_role(
-            "button", name=CONTINUE_SHOPPING
+            "button", name="Continue Shopping"
         )
-        self.checkout_button: Locator = self.page.get_by_role("button", name=CHECKOUT)
+        self.checkout_button: Locator = self.page.get_by_role("button", name="Checkout")
         self.cart: Cart = Cart(self.page)
         self.menu: Menu = Menu(self.page)
 
-    def get_all_products_names(self, timeout: Optional[int] = None) -> List[str]:
-        timeout_ms: int = self._timeout_ms(timeout)
-        all_products_names: List[str] = list()
-        for index, item in enumerate(self.item.all()):
-            name: Locator = self.get_element(
-                item.locator(ITEM_NAME), f"{NAME} for {ITEM}{index}", timeout_ms
-            )
-            all_products_names.append(name.inner_text().strip())
-        return all_products_names
+    def get_all_products_names(self) -> List[str]:
+        return self.item_name.all_inner_texts()
 
-    def get_all_products_quantities(self, timeout: Optional[int] = None) -> List[str]:
-        timeout_ms: int = self._timeout_ms(timeout)
-        all_products_quantities: List[str] = list()
-        for index, item in enumerate(self.item.all()):
-            quantity: Locator = self.get_element(
-                item.locator(ITEM_QUANTITY), f"{QUANTITY} for {ITEM}{index}", timeout_ms
-            )
-            all_products_quantities.append(quantity.inner_text().strip())
-        return all_products_quantities
+    def get_all_products_quantities(self) -> List[str]:
+        return self.item_quantity.all_inner_texts()
 
-    def get_all_products_descriptions(self, timeout: Optional[int] = None) -> List[str]:
-        timeout_ms: int = self._timeout_ms(timeout)
-        all_products_descriptions: List[str] = list()
-        for index, item in enumerate(self.item.all()):
-            description: Locator = self.get_element(
-                item.locator(ITEM_DESCRIPTION),
-                f"{DESCRIPTION} for {ITEM}{index}",
-                timeout_ms,
-            )
-            all_products_descriptions.append(description.inner_text().strip())
-        return all_products_descriptions
+    def get_all_products_descriptions(self) -> List[str]:
+        return self.item_description.all_inner_texts()
 
-    def get_all_products_prices(self, timeout: Optional[int] = None) -> List[str]:
-        timeout_ms: int = self._timeout_ms(timeout)
-        all_products_prices: List[str] = list()
-        for index, item in enumerate(self.item.all()):
-            price: Locator = self.get_element(
-                item.locator(ITEM_PRICE), f"{PRICE} for {ITEM}{index}", timeout_ms
-            )
-            all_products_prices.append(price.inner_text().strip())
-        return all_products_prices
+    def get_all_products_prices(self) -> List[str]:
+        return self.item_price.all_inner_texts()
 
-    def get_all_products_information(
-        self, timeout: Optional[int] = None
-    ) -> dict[str, dict[str, str]]:
-        timeout_ms: int = self._timeout_ms(timeout)
-        all_inventory_items_names: List[str] = self.get_all_products_names(timeout_ms)
+    def get_all_products_information(self) -> dict[str, dict[str, str]]:
+        all_inventory_items_names: List[str] = self.get_all_products_names()
         all_inventory_items_descriptions: List[str] = (
-            self.get_all_products_descriptions(timeout_ms)
+            self.get_all_products_descriptions()
         )
-        all_inventory_items_prices: List[str] = self.get_all_products_prices(timeout_ms)
-        all_inventory_items_quantities: List[str] = self.get_all_products_quantities(
-            timeout_ms
-        )
+        all_inventory_items_prices: List[str] = self.get_all_products_prices()
+        all_inventory_items_quantities: List[str] = self.get_all_products_quantities()
 
         inventory_items_data: dict[str, dict[str, str]] = dict()
         try:
