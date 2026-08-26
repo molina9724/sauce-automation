@@ -39,30 +39,21 @@ class InventoryPage(BasePage):
         self.all_filter_options: Locator = self.page.locator("option")
         self.selected_filter_option: Locator = self.page.locator(".active_option")
 
-        self.item: InventoryItem[Page] = InventoryItem(page)
+        self.item: InventoryItem = InventoryItem(page)
         self.menu: Menu = Menu(self.page)
         self.cart: Cart = Cart(self.page)
 
     def set_products_filter(self, option: str) -> None:
         self.products_filter.select_option(option)
 
-    def get_all_products_names(self) -> list[str]:
-        return self.item.name.all_inner_texts()
-
-    def get_all_products_descriptions(self) -> list[str]:
-        return self.item.description.all_inner_texts()
-
-    def get_all_products_prices(self) -> list[str]:
-        return self.item.price.all_inner_texts()
-
     # TODO: This method should include images and add/remove buttons to consistently test the whole item object
     # TODO: Investigate how to to test images properly
     def get_all_products_information(self) -> dict[str, dict[str, str]]:
-        all_inventory_items_names: list[str] = self.get_all_products_names()
+        all_inventory_items_names: list[str] = self.item.get_all_products_names()
         all_inventory_items_descriptions: list[str] = (
-            self.get_all_products_descriptions()
+            self.item.get_all_products_descriptions()
         )
-        all_inventory_items_prices: list[str] = self.get_all_products_prices()
+        all_inventory_items_prices: list[str] = self.item.get_all_products_prices()
 
         inventory_items_data: dict[str, dict[str, str]] = dict()
         try:

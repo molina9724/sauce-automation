@@ -1,13 +1,22 @@
-from playwright.sync_api import Locator
+from playwright.sync_api import Locator, Page
 
 from ..components.base_component import BaseComponent
 
 
 class BaseItem(BaseComponent):
-    def __init__(self, page, item_selector: str, timeout) -> None:
+    def __init__(self, page: Page, item_selector: str, timeout: int) -> None:
         super().__init__(page, timeout)
         self.root: Locator = self.page.locator(item_selector)
         self.name: Locator = self.root.locator(".inventory_item_name")
         self.price: Locator = self.root.locator(".inventory_item_price")
         self.description: Locator = self.root.locator(".inventory_item_desc")
         self.remove_button: Locator = self.root.get_by_role("button", name="Remove")
+
+    def get_all_products_names(self) -> list[str]:
+        return self.name.all_inner_texts()
+
+    def get_all_products_descriptions(self) -> list[str]:
+        return self.description.all_inner_texts()
+
+    def get_all_products_prices(self) -> list[str]:
+        return self.price.all_inner_texts()

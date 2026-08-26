@@ -19,7 +19,7 @@ class CartPage(BasePage):
         super().__init__(page, timeout)
         self.cart_list: Locator = self.locator(".cart_list")
 
-        self.item: CartItem[Page] = CartItem(page)
+        self.item: CartItem = CartItem(page)
 
         self.continue_shopping_button: Locator = self.page.get_by_role(
             "button", name="Continue Shopping"
@@ -28,24 +28,15 @@ class CartPage(BasePage):
         self.cart: Cart = Cart(self.page)
         self.menu: Menu = Menu(self.page)
 
-    def get_all_products_names(self) -> List[str]:
-        return self.item.name.all_inner_texts()
-
     def get_all_products_quantities(self) -> List[str]:
         return self.item.quantity.all_inner_texts()
 
-    def get_all_products_descriptions(self) -> List[str]:
-        return self.item.description.all_inner_texts()
-
-    def get_all_products_prices(self) -> List[str]:
-        return self.item.price.all_inner_texts()
-
     def get_all_products_information(self) -> dict[str, dict[str, str]]:
-        all_inventory_items_names: List[str] = self.get_all_products_names()
+        all_inventory_items_names: List[str] = self.item.get_all_products_names()
         all_inventory_items_descriptions: List[str] = (
-            self.get_all_products_descriptions()
+            self.item.get_all_products_descriptions()
         )
-        all_inventory_items_prices: List[str] = self.get_all_products_prices()
+        all_inventory_items_prices: List[str] = self.item.get_all_products_prices()
         all_inventory_items_quantities: List[str] = self.get_all_products_quantities()
 
         inventory_items_data: dict[str, dict[str, str]] = dict()
