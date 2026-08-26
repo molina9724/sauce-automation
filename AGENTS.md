@@ -155,10 +155,10 @@ incomplete.
 
 - `LoginPage`
 - `InventoryPage`
+- `CartPage`
 
 **Pending:**
 
-- `CartPage`
 - `CheckoutStepOnePage`
 - `CheckoutStepTwoPage`
 - `Cart` component
