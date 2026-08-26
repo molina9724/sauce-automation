@@ -21,7 +21,15 @@ def test_verify_cart_is_empty(empty_cart_page: CartPage) -> None:
 
 
 def test_verify_correct_item_in_cart(cart_page_with_item: CartPage) -> None:
-    assert cart_page_with_item.get_all_products_information() == CART_ITEM_DATA
+    names: list[str] = list(CART_ITEM_DATA.keys())
+    descriptions: list[str] = [key["description"] for key in CART_ITEM_DATA.values()]
+    prices: list[str] = [key["price"] for key in CART_ITEM_DATA.values()]
+    quantities = [details["quantity"] for details in CART_ITEM_DATA.values()]
+
+    expect(cart_page_with_item.item.name).to_have_text(names)
+    expect(cart_page_with_item.item.description).to_have_text(descriptions)
+    expect(cart_page_with_item.item.price).to_have_text(prices)
+    expect(cart_page_with_item.item.quantity).to_have_text(quantities)
 
 
 def test_verify_item_is_removed(cart_page_with_item: CartPage) -> None:
