@@ -75,7 +75,7 @@ reproduces on the runner can still be inspected locally.
 
 ```
 po/pages/          Page objects — locators, behaviour, navigation
-po/components/     Shared components composed onto pages (Cart, Menu, FormValidation)
+po/components/     Shared components composed onto pages (Cart, Menu, FormValidation, BaseItem, InventoryItem, CartItem)
 tests/             Test modules, one per feature area
 tests/conftest.py  Fixtures: authentication, page-object composition
 data/              Expected values and parametrization data
@@ -148,9 +148,10 @@ This suite does **not** currently do:
 - **Base URL is hardcoded**; no environment configuration layer
 - **No linter or type checker in CI** — static analysis is editor-only
 - **CI runs macOS and Chromium only**
-- **Migration in progress:** `LoginPage` and `InventoryPage` use the current
-  assertion patterns; `CartPage`, `CheckoutStepOnePage`, `CheckoutStepTwoPage`
-  and the shared components still use the older wrapper-based approach
+- **Migration in progress:** `LoginPage`, `InventoryPage`, and `CartPage` use
+  public locators with `expect()`. `CheckoutStepOnePage`,
+  `CheckoutStepTwoPage`, `Cart`, and `Menu` still use older wrapper-based
+  patterns.
 
 ## Roadmap
 
