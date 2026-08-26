@@ -3,14 +3,30 @@ import pytest
 from playwright.sync_api import expect
 
 from data.cart_data import (ACCESS_CART_PAGE_WITHOUT_LOGIN_ERROR,
-                            ALL_ITEMS_INDEX)
+                            ALL_ITEMS_INDEX, CART_ITEM_DATA)
+from po.components.cart_page_item import CartItem
 from po.pages.base_page import CART_URL
 from po.pages.cart_page import CartPage
 from po.pages.checkout_step_1_page import CheckoutStepOnePage
 from po.pages.login_page import LoginPage
-from tests.item_validation_helpers import verify_items_data
 
 # fmt: on
+
+
+def verify_items_data(item: CartItem) -> bool:
+    names: list[str] = list(CART_ITEM_DATA.keys())
+    descriptions: list[str] = [key["description"] for key in CART_ITEM_DATA.values()]
+    prices: list[str] = [key["price"] for key in CART_ITEM_DATA.values()]
+    quantities = [details["quantity"] for details in CART_ITEM_DATA.values()]
+
+    try:
+        expect(item.name).to_have_text(names)
+        expect(item.description).to_have_text(descriptions)
+        expect(item.price).to_have_text(prices)
+        expect(item.quantity).to_have_text(quantities)
+        return True
+    except AssertionError:
+        return False
 
 
 def test_verify_cart_url(empty_cart_page: CartPage) -> None:
