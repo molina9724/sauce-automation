@@ -13,20 +13,16 @@ from po.pages.login_page import LoginPage
 # fmt: on
 
 
-def verify_items_data(item: CartItem) -> bool:
+def verify_items_data(item: CartItem):
     names: list[str] = list(CART_ITEM_DATA.keys())
     descriptions: list[str] = [key["description"] for key in CART_ITEM_DATA.values()]
     prices: list[str] = [key["price"] for key in CART_ITEM_DATA.values()]
     quantities = [details["quantity"] for details in CART_ITEM_DATA.values()]
 
-    try:
-        expect(item.name).to_have_text(names)
-        expect(item.description).to_have_text(descriptions)
-        expect(item.price).to_have_text(prices)
-        expect(item.quantity).to_have_text(quantities)
-        return True
-    except AssertionError:
-        return False
+    expect(item.name).to_have_text(names)
+    expect(item.description).to_have_text(descriptions)
+    expect(item.price).to_have_text(prices)
+    expect(item.quantity).to_have_text(quantities)
 
 
 def test_verify_cart_url(empty_cart_page: CartPage) -> None:
@@ -38,7 +34,7 @@ def test_verify_cart_is_empty(empty_cart_page: CartPage) -> None:
 
 
 def test_verify_correct_item_in_cart(cart_page_with_item: CartPage) -> None:
-    assert verify_items_data(cart_page_with_item.item)
+    verify_items_data(cart_page_with_item.item)
 
 
 def test_verify_item_is_removed(cart_page_with_item: CartPage) -> None:
@@ -58,7 +54,7 @@ def test_verify_items_remain_in_cart_after_pressing_cancel_in_checkout_step_one_
     checkout_step_1_with_item: CheckoutStepOnePage,
 ) -> None:
     cart_page: CartPage = checkout_step_1_with_item.cancel()
-    assert verify_items_data(cart_page.item)
+    verify_items_data(cart_page.item)
 
 
 @pytest.mark.anonymous

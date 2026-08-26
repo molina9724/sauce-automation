@@ -46,33 +46,6 @@ class InventoryPage(BasePage):
     def set_products_filter(self, option: str) -> None:
         self.products_filter.select_option(option)
 
-    # TODO: This method should include images and add/remove buttons to consistently test the whole item object
-    # TODO: Investigate how to to test images properly
-    def get_all_products_information(self) -> dict[str, dict[str, str]]:
-        all_inventory_items_names: list[str] = self.item.get_all_products_names()
-        all_inventory_items_descriptions: list[str] = (
-            self.item.get_all_products_descriptions()
-        )
-        all_inventory_items_prices: list[str] = self.item.get_all_products_prices()
-
-        inventory_items_data: dict[str, dict[str, str]] = dict()
-        try:
-            for name, description, price in zip(
-                all_inventory_items_names,
-                all_inventory_items_descriptions,
-                all_inventory_items_prices,
-                strict=True,
-            ):
-                inventory_items_data[name] = {
-                    "description": description,
-                    "price": price,
-                }
-            return inventory_items_data
-        except ValueError as exception:
-            raise RuntimeError(
-                "The arguments (name, description, and price) for zip have different lengths, this means that some inventory items have missing properties."
-            ) from exception
-
     def add_item_to_cart(self, index: int) -> None:
         item: Locator = self.item.root.nth(index)
         add_button: Locator = item.get_by_role("button", name="Add to cart")

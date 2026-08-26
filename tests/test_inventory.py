@@ -55,6 +55,7 @@ def test_verify_all_product_filter_options(
     expect(empty_inventory_page.all_filter_options).to_have_text(FILTER_OPTIONS)
 
 
+# TODO: This test case should include images and add/remove buttons to consistently test the whole item object
 @pytest.mark.parametrize(
     FILTER_ARGS,
     argvalues=FILTER_VALUES,

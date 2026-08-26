@@ -11,12 +11,3 @@ class BaseItem(BaseComponent):
         self.price: Locator = self.root.locator(".inventory_item_price")
         self.description: Locator = self.root.locator(".inventory_item_desc")
         self.remove_button: Locator = self.root.get_by_role("button", name="Remove")
-
-    def get_all_products_names(self) -> list[str]:
-        return self.name.all_inner_texts()
-
-    def get_all_products_descriptions(self) -> list[str]:
-        return self.description.all_inner_texts()
-
-    def get_all_products_prices(self) -> list[str]:
-        return self.price.all_inner_texts()
