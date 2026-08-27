@@ -2,6 +2,9 @@ from playwright.sync_api import Locator, Page
 
 from .base_component import BaseComponent
 
+# Selectors
+ERROR_ICON: str = ".error_icon"
+
 # CSS
 BORDER_BOTTOM_COLOR: str = "border-bottom-color"
 BACKGROUND_COLOR: str = "background-color"
