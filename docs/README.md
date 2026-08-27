@@ -149,7 +149,7 @@ This suite does **not** currently do:
 - **No linter or type checker in CI** — static analysis is editor-only
 - **CI runs macOS and Chromium only**
 - **Migration in progress:** `LoginPage`, `InventoryPage`, `CartPage` and `CheckoutStepOnePage` use
-  public locators with `expect()`.`CheckoutStepTwoPage`, `Cart`, and `Menu` still use older wrapper-based
+  public locators with `expect()`. `CheckoutStepTwoPage`, `Cart`, and `Menu` still use older wrapper-based
   patterns.
 
 ## Roadmap
