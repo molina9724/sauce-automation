@@ -8,30 +8,30 @@ from po.pages.checkout_step_2_page import CheckoutStepTwoPage
 
 
 def test_validate_item_subtotal(
-    checkout_step_2_with_item: CheckoutStepTwoPage,
+    checkout_step_2_page_with_item: CheckoutStepTwoPage,
 ) -> None:
-    assert checkout_step_2_with_item.get_subtotal() == calculate_subtotal(
+    assert checkout_step_2_page_with_item.get_subtotal() == calculate_subtotal(
         CART_ITEM_DATA
     )
 
 
 def test_validate_all_items_total(
-    checkout_step_2_with_all_items: CheckoutStepTwoPage,
+    checkout_step_2_page_with_all_items: CheckoutStepTwoPage,
 ) -> None:
-    assert checkout_step_2_with_all_items.get_subtotal() == calculate_subtotal(
+    assert checkout_step_2_page_with_all_items.get_subtotal() == calculate_subtotal(
         INVENTORY_ITEMS_DATA
     )
 
 
 def test_verify_taxes_calculation_for_single_item(
-    checkout_step_2_with_item: CheckoutStepTwoPage,
+    checkout_step_2_page_with_item: CheckoutStepTwoPage,
 ) -> None:
-    assert checkout_step_2_with_item.get_tax() == calculate_taxes(CART_ITEM_DATA)
+    assert checkout_step_2_page_with_item.get_tax() == calculate_taxes(CART_ITEM_DATA)
 
 
 def test_verify_taxes_calculation_for_all_items(
-    checkout_step_2_with_all_items: CheckoutStepTwoPage,
+    checkout_step_2_page_with_all_items: CheckoutStepTwoPage,
 ) -> None:
-    assert checkout_step_2_with_all_items.get_tax() == calculate_taxes(
+    assert checkout_step_2_page_with_all_items.get_tax() == calculate_taxes(
         INVENTORY_ITEMS_DATA
     )

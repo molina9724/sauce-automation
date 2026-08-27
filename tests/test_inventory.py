@@ -133,9 +133,9 @@ def test_go_back_to_continue_shopping(cart_page_with_item: CartPage) -> None:
 
 
 def test_verify_item_remain_in_cart_after_pressing_cancel_in_checkout_step_one_page(
-    checkout_step_1_with_item: CheckoutStepOnePage,
+    checkout_step_1_page_with_item: CheckoutStepOnePage,
 ) -> None:
-    cart_page: CartPage = checkout_step_1_with_item.cancel()
+    cart_page: CartPage = checkout_step_1_page_with_item.cancel()
     inventory_page: InventoryPage = cart_page.get_inventory_page()
     expect(inventory_page.cart.counter).to_have_text(ONE)
 

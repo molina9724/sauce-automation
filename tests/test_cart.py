@@ -51,9 +51,9 @@ def test_verify_several_items_can_be_added_to_cart(
 
 
 def test_verify_items_remain_in_cart_after_pressing_cancel_in_checkout_step_one_page(
-    checkout_step_1_with_item: CheckoutStepOnePage,
+    checkout_step_1_page_with_item: CheckoutStepOnePage,
 ) -> None:
-    cart_page: CartPage = checkout_step_1_with_item.cancel()
+    cart_page: CartPage = checkout_step_1_page_with_item.cancel()
     verify_items_data(cart_page.item)
 
 
