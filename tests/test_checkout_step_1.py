@@ -38,7 +38,7 @@ def test_verify_cancel_button_takes_user_back_to_cart_page(
     checkout_step_1_with_item: CheckoutStepOnePage,
 ) -> None:
     cart_page: CartPage = checkout_step_1_with_item.cart.get_cart_page()
-    assert cart_page.get_url() == CART_URL
+    expect(cart_page.page).to_have_url(CART_URL)
 
 
 def test_verify_user_is_taken_to_checkout_step_2_after_successfully_filling_data_and_pressing_continue_button(
@@ -47,7 +47,7 @@ def test_verify_user_is_taken_to_checkout_step_2_after_successfully_filling_data
     checkout_step_1_with_item.fill_in_checkout_information(
         first_name=FIRST_NAME, last_name=LAST_NAME, zip_code=ZIP_CODE
     )
-    assert checkout_step_1_with_item.get_url() == CHECKOUT_STEP_2_URL
+    expect(checkout_step_1_with_item.page).to_have_url(CHECKOUT_STEP_2_URL)
 
 
 @pytest.mark.anonymous
