@@ -35,17 +35,15 @@ SHORT_TIMEOUT: int = 600
 class CheckoutStepOnePage(BasePage):
     def __init__(self, page: Page, timeout: int = 10000) -> None:
         super().__init__(page, timeout)
-        self._checkout_information_wrapper: Locator = self.locator(
+        self.checkout_information_wrapper: Locator = self.locator(
             ".checkout_info_wrapper"
         )
-        self._first_name: Locator = page.get_by_role("textbox", name=FIRST_NAME)
-        self._last_name: Locator = page.get_by_role("textbox", name=LAST_NAME)
-        self._zip_code: Locator = page.get_by_role("textbox", name=ZIP_CODE)
+        self.first_name: Locator = page.get_by_role("textbox", name=FIRST_NAME)
+        self.last_name: Locator = page.get_by_role("textbox", name=LAST_NAME)
+        self.zip_code: Locator = page.get_by_role("textbox", name=ZIP_CODE)
 
         self.cancel_button: Locator = page.get_by_role("button", name=CANCEL_BUTTON)
-        self._continue_button: Locator = page.get_by_role(
-            "button", name=CONTINUE_BUTTON
-        )
+        self.continue_button: Locator = page.get_by_role("button", name=CONTINUE_BUTTON)
         self.menu: Menu = Menu(self.page)
         self.cart: Cart = Cart(self.page)
         self.form_validation: FormValidation = FormValidation(self.page)
@@ -53,20 +51,20 @@ class CheckoutStepOnePage(BasePage):
     def get_first_name_object(self, timeout: Optional[int] = None) -> Locator:
         timeout_ms: int = self._timeout_ms(timeout)
         first_name: Locator = self.get_element(
-            self._first_name, FIRST_NAME_LABEL, timeout_ms
+            self.first_name, FIRST_NAME_LABEL, timeout_ms
         )
         return first_name
 
     def get_last_name_object(self, timeout: Optional[int] = None) -> Locator:
         timeout_ms: int = self._timeout_ms(timeout)
         last_name: Locator = self.get_element(
-            self._last_name, LAST_NAME_LABEL, timeout_ms
+            self.last_name, LAST_NAME_LABEL, timeout_ms
         )
         return last_name
 
     def get_zip_code_object(self, timeout: Optional[int] = None) -> Locator:
         timeout_ms: int = self._timeout_ms(timeout)
-        zip_code: Locator = self.get_element(self._zip_code, ZIP_CODE_LABEL, timeout_ms)
+        zip_code: Locator = self.get_element(self.zip_code, ZIP_CODE_LABEL, timeout_ms)
         return zip_code
 
     def get_fields(self) -> tuple[Locator, Locator, Locator]:
@@ -96,10 +94,10 @@ class CheckoutStepOnePage(BasePage):
     ) -> "CheckoutStepTwoPage":
         timeout_ms: int = self._timeout_ms(timeout)
 
-        self._first_name.fill(first_name)
-        self._last_name.fill(last_name)
-        self._zip_code.fill(zip_code)
-        self._continue_button.click()
+        self.first_name.fill(first_name)
+        self.last_name.fill(last_name)
+        self.zip_code.fill(zip_code)
+        self.continue_button.click()
 
         if self.form_validation.is_error_heading_displayed(SHORT_TIMEOUT):
             quick_error_message: str = (
