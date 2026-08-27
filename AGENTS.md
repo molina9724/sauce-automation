@@ -156,10 +156,10 @@ incomplete.
 - `LoginPage`
 - `InventoryPage`
 - `CartPage`
+- `CheckoutStepOnePage`
 
 **Pending:**
 
-- `CheckoutStepOnePage`
 - `CheckoutStepTwoPage`
 - `Cart` component
 - `Menu` component
