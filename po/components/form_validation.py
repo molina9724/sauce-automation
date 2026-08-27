@@ -32,15 +32,3 @@ class FormValidation(BaseComponent):
             self.error_message_container, ERROR_MESSAGE_CONTAINER, timeout_ms
         )
         return error_message_container
-
-    # TODO: Remove on checkout_step_1_page refactor
-    def get_error_text(self, timeout: Optional[int] = None) -> str | None:
-        if self.error_heading.is_visible():
-            return self.error_heading.inner_text().strip()
-        else:
-            return None
-
-    # TODO: Remove on checkout_step_1_page refactor
-    def is_error_heading_displayed(self, timeout: Optional[int] = None) -> bool:
-        timeout_ms: int = self._timeout_ms(timeout)
-        return self._is_item_displayed(self.error_heading, timeout_ms)
