@@ -1,5 +1,3 @@
-from typing import Optional
-
 from playwright.sync_api import Locator, Page
 
 from po.pages.cart_page import CartPage
@@ -19,19 +17,10 @@ ZIP_CODE = "Zip/Postal Code"
 CANCEL_BUTTON = "Cancel"
 CONTINUE_BUTTON = "Continue"
 
-# Labels
-CANCEL_BUTTON_LABEL: str = "Cancel Button"
-FIRST_NAME_LABEL = "First Name Field"
-LAST_NAME_LABEL = "Last Name Field"
-ZIP_CODE_LABEL = "Zip/Postal Code Field"
-
 
 class CheckoutStepOnePage(BasePage):
     def __init__(self, page: Page, timeout: int = 10000) -> None:
         super().__init__(page, timeout)
-        self.checkout_information_wrapper: Locator = self.locator(
-            ".checkout_info_wrapper"
-        )
         self.first_name: Locator = page.get_by_role("textbox", name=FIRST_NAME)
         self.last_name: Locator = page.get_by_role("textbox", name=LAST_NAME)
         self.zip_code: Locator = page.get_by_role("textbox", name=ZIP_CODE)
@@ -42,43 +31,17 @@ class CheckoutStepOnePage(BasePage):
         self.cart: Cart = Cart(self.page)
         self.form_validation: FormValidation = FormValidation(self.page)
 
-    def get_first_name_object(self, timeout: Optional[int] = None) -> Locator:
-        timeout_ms: int = self._timeout_ms(timeout)
-        first_name: Locator = self.get_element(
-            self.first_name, FIRST_NAME_LABEL, timeout_ms
-        )
-        return first_name
-
-    def get_last_name_object(self, timeout: Optional[int] = None) -> Locator:
-        timeout_ms: int = self._timeout_ms(timeout)
-        last_name: Locator = self.get_element(
-            self.last_name, LAST_NAME_LABEL, timeout_ms
-        )
-        return last_name
-
-    def get_zip_code_object(self, timeout: Optional[int] = None) -> Locator:
-        timeout_ms: int = self._timeout_ms(timeout)
-        zip_code: Locator = self.get_element(self.zip_code, ZIP_CODE_LABEL, timeout_ms)
-        return zip_code
-
     def get_fields(self) -> tuple[Locator, Locator, Locator]:
-        first_name: Locator = self.get_first_name_object()
-        last_name: Locator = self.get_last_name_object()
-        zip_code: Locator = self.get_zip_code_object()
-
-        return first_name, last_name, zip_code
+        return self.first_name, self.last_name, self.zip_code
 
     def get_fields_containers(self) -> tuple[Locator, Locator, Locator]:
-        first_name, last_name, zip_code = self.get_fields()
-
         # The error icon is a sibling of the field, not a child of it
-        first_name_parent: Locator = self.get_parent(first_name)
-        last_name_parent: Locator = self.get_parent(last_name)
-        zip_code_parent: Locator = self.get_parent(zip_code)
+        return (
+            self.get_parent(self.first_name),
+            self.get_parent(self.last_name),
+            self.get_parent(self.zip_code),
+        )
 
-        return first_name_parent, last_name_parent, zip_code_parent
-
-    # TODO: Refactor this method and login (Optional)
     def fill_in_checkout_information(
         self,
         first_name: str,
@@ -96,10 +59,6 @@ class CheckoutStepOnePage(BasePage):
         from .checkout_step_2_page import CheckoutStepTwoPage
 
         return CheckoutStepTwoPage(self.page)
-
-    def is_cancel_button_displayed(self, timeout: Optional[int] = None) -> bool:
-        timeout_ms: int = self._timeout_ms(timeout)
-        return self._is_item_displayed(self.cancel_button, timeout_ms)
 
     def cancel(self) -> CartPage:
         self.cancel_button.click()
