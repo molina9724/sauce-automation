@@ -25,7 +25,6 @@ REMOVE_BUTTON_LABEL = "Remove Button"
 
 
 # POM
-SHORT_TIMEOUT: int = 600
 INCREASED_TIMEOUT: int = 20000
 
 
