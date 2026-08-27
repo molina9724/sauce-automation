@@ -10,6 +10,11 @@ ERROR_ICON: str = ".error_icon"
 # Labels
 ERROR_MESSAGE_CONTAINER: str = "Error Message Container"
 
+# CSS
+BORDER_BOTTOM_COLOR: str = "border-bottom-color"
+BACKGROUND_COLOR: str = "background-color"
+COLOR: str = "color"
+
 
 class FormValidation(BaseComponent):
     def __init__(self, page: Page, timeout: int = 10000) -> None:

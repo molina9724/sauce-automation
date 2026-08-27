@@ -24,11 +24,6 @@ QUANTITY: str = "Quantity"
 REMOVE_BUTTON_LABEL = "Remove Button"
 
 
-# CSS
-BORDER_BOTTOM_COLOR: str = "border-bottom-color"
-BACKGROUND_COLOR: str = "background-color"
-COLOR: str = "color"
-
 # POM
 SHORT_TIMEOUT: int = 600
 INCREASED_TIMEOUT: int = 20000
