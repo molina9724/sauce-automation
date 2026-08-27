@@ -1,5 +1,3 @@
-from typing import Optional
-
 from playwright.sync_api import Locator, Page
 
 from .base_component import BaseComponent
@@ -25,10 +23,3 @@ class FormValidation(BaseComponent):
         self.error_heading: Locator = self.error_message_container.locator(
             "h3[data-test='error']"
         )
-
-    def get_error_message_container(self, timeout: Optional[int] = None) -> Locator:
-        timeout_ms: int = self._timeout_ms(timeout)
-        error_message_container: Locator = self.get_element(
-            self.error_message_container, ERROR_MESSAGE_CONTAINER, timeout_ms
-        )
-        return error_message_container

@@ -33,7 +33,7 @@ def assert_error_decorations(page: Union[LoginPage, CheckoutStepOnePage]) -> Non
     for field in page.get_fields():
         expect(field).to_have_css(BORDER_BOTTOM_COLOR, BORDER_BOTTOM)
 
-    expect(page.form_validation.get_error_message_container()).to_have_css(
+    expect(page.form_validation.error_message_container).to_have_css(
         BACKGROUND_COLOR, BACKGROUND
     )
     expect(page.form_validation.error_heading).to_have_css(COLOR, WHITE)
