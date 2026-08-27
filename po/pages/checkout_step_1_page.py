@@ -8,25 +8,17 @@ from ..components.form_validation import FormValidation
 from ..components.left_menu import Menu
 from ..pages.base_page import CHECKOUT_STEP_2_URL, BasePage
 
-# Textbox names
-FIRST_NAME = "First Name"
-LAST_NAME = "Last Name"
-ZIP_CODE = "Zip/Postal Code"
-
-# Buttons names
-CANCEL_BUTTON = "Cancel"
-CONTINUE_BUTTON = "Continue"
-
 
 class CheckoutStepOnePage(BasePage):
     def __init__(self, page: Page, timeout: int = 10000) -> None:
         super().__init__(page, timeout)
-        self.first_name: Locator = page.get_by_role("textbox", name=FIRST_NAME)
-        self.last_name: Locator = page.get_by_role("textbox", name=LAST_NAME)
-        self.zip_code: Locator = page.get_by_role("textbox", name=ZIP_CODE)
+        self.first_name: Locator = page.get_by_role("textbox", name="First Name")
+        self.last_name: Locator = page.get_by_role("textbox", name="Last Name")
+        self.zip_code: Locator = page.get_by_role("textbox", name="Zip/Postal Code")
 
-        self.cancel_button: Locator = page.get_by_role("button", name=CANCEL_BUTTON)
-        self.continue_button: Locator = page.get_by_role("button", name=CONTINUE_BUTTON)
+        self.cancel_button: Locator = page.get_by_role("button", name="Cancel")
+        self.continue_button: Locator = page.get_by_role("button", name="Continue")
+
         self.menu: Menu = Menu(self.page)
         self.cart: Cart = Cart(self.page)
         self.form_validation: FormValidation = FormValidation(self.page)
