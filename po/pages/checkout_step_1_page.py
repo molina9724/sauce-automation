@@ -1,17 +1,14 @@
-from typing import TYPE_CHECKING, Optional
+from typing import Optional
 
 from playwright.sync_api import Locator, Page
-from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 
 from po.pages.cart_page import CartPage
+from po.pages.checkout_step_2_page import CheckoutStepTwoPage
 
 from ..components.cart import Cart
 from ..components.form_validation import FormValidation
 from ..components.left_menu import Menu
 from ..pages.base_page import CHECKOUT_STEP_2_URL, BasePage
-
-if TYPE_CHECKING:
-    from .checkout_step_2_page import CheckoutStepTwoPage
 
 # Textbox names
 FIRST_NAME = "First Name"
@@ -27,9 +24,6 @@ CANCEL_BUTTON_LABEL: str = "Cancel Button"
 FIRST_NAME_LABEL = "First Name Field"
 LAST_NAME_LABEL = "Last Name Field"
 ZIP_CODE_LABEL = "Zip/Postal Code Field"
-
-# POM
-SHORT_TIMEOUT: int = 600
 
 
 class CheckoutStepOnePage(BasePage):
@@ -90,36 +84,18 @@ class CheckoutStepOnePage(BasePage):
         first_name: str,
         last_name: str,
         zip_code: str,
-        timeout: Optional[int] = None,
-    ) -> "CheckoutStepTwoPage":
-        timeout_ms: int = self._timeout_ms(timeout)
-
+    ) -> None:
         self.first_name.fill(first_name)
         self.last_name.fill(last_name)
         self.zip_code.fill(zip_code)
         self.continue_button.click()
 
-        if self.form_validation.is_error_heading_displayed(SHORT_TIMEOUT):
-            quick_error_message: str = (
-                self.form_validation.get_error_text(SHORT_TIMEOUT)
-                or "Unknown error in checkout"
-            )
-            raise RuntimeError(quick_error_message)
+    def get_checkout_step_two_page(self) -> CheckoutStepTwoPage:
+        self.page.wait_for_url(CHECKOUT_STEP_2_URL)
 
-        try:
-            self.page.wait_for_url(CHECKOUT_STEP_2_URL)
-            from .checkout_step_2_page import CheckoutStepTwoPage
+        from .checkout_step_2_page import CheckoutStepTwoPage
 
-            return CheckoutStepTwoPage(self.page)
-        except PlaywrightTimeoutError:
-            error_message: str | None = self.form_validation.get_error_text(
-                SHORT_TIMEOUT
-            )
-            if error_message:
-                raise RuntimeError(error_message)
-            raise RuntimeError(
-                f"Timed out waiting for checkout to reach {CHECKOUT_STEP_2_URL} after {timeout_ms} ms"
-            )
+        return CheckoutStepTwoPage(self.page)
 
     def is_cancel_button_displayed(self, timeout: Optional[int] = None) -> bool:
         timeout_ms: int = self._timeout_ms(timeout)
