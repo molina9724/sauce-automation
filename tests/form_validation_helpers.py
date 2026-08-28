@@ -6,8 +6,9 @@ from playwright.sync_api import expect
 from data.form_validation_data import (BACKGROUND, BORDER_BOTTOM,
                                        DEFAULT_BORDER, RED)
 from data.global_data import WHITE
-from po.components.form_validation import ERROR_ICON
-from po.pages.base_page import BACKGROUND_COLOR, BORDER_BOTTOM_COLOR, COLOR
+from po.components.form_validation import (BACKGROUND_COLOR,
+                                           BORDER_BOTTOM_COLOR, COLOR,
+                                           ERROR_ICON)
 from po.pages.checkout_step_1_page import CheckoutStepOnePage
 from po.pages.login_page import LoginPage
 
@@ -32,7 +33,7 @@ def assert_error_decorations(page: Union[LoginPage, CheckoutStepOnePage]) -> Non
     for field in page.get_fields():
         expect(field).to_have_css(BORDER_BOTTOM_COLOR, BORDER_BOTTOM)
 
-    expect(page.form_validation.get_error_message_container()).to_have_css(
+    expect(page.form_validation.error_message_container).to_have_css(
         BACKGROUND_COLOR, BACKGROUND
     )
     expect(page.form_validation.error_heading).to_have_css(COLOR, WHITE)
