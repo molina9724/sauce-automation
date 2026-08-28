@@ -4,8 +4,8 @@ from playwright.sync_api import expect
 
 from data.cart_data import (ACCESS_CART_PAGE_WITHOUT_LOGIN_ERROR,
                             ALL_ITEMS_INDEX, CART_ITEM_DATA)
+from data.routes import CART
 from po.components.cart_page_item import CartItem
-from po.pages.base_page import CART_URL
 from po.pages.cart_page import CartPage
 from po.pages.checkout_step_1_page import CheckoutStepOnePage
 from po.pages.login_page import LoginPage
@@ -26,7 +26,7 @@ def verify_items_data(item: CartItem) -> None:
 
 
 def test_verify_cart_url(empty_cart_page: CartPage) -> None:
-    expect(empty_cart_page.page).to_have_url(CART_URL)
+    expect(empty_cart_page.page).to_have_url(CART)
 
 
 def test_verify_cart_is_empty(empty_cart_page: CartPage) -> None:
@@ -61,7 +61,7 @@ def test_verify_items_remain_in_cart_after_pressing_cancel_in_checkout_step_one_
 def test_verify_error_when_accessing_cart_page_without_login(
     login_page: LoginPage,
 ) -> None:
-    login_page.page.goto(CART_URL)
+    login_page.page.goto(CART)
     expect(login_page.form_validation.error_heading).to_have_text(
         ACCESS_CART_PAGE_WITHOUT_LOGIN_ERROR
     )
