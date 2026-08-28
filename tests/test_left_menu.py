@@ -57,5 +57,5 @@ def test_all_items_from_all_menu_pages_with_item_in_cart(
         request.getfixturevalue(page_fixture)
     )
     inventory_page: InventoryPage = page.menu.all_items()
-    assert inventory_page.get_url() == INVENTORY_URL
-    assert inventory_page.cart.get_cart_counter() == 1
+    expect(inventory_page.page).to_have_url(INVENTORY_URL)
+    expect(inventory_page.cart.counter).to_have_text("1")
