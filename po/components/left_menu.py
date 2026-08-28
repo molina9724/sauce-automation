@@ -26,13 +26,13 @@ class Menu(BaseComponent):
     def logout(self) -> LoginPage:
         self.hamburger_button.click()
         self.logout_link.click()
-        self.wait_for_url(BASE_URL)
+        self.page.wait_for_url(BASE_URL)
         return LoginPage(self.page)
 
     def all_items(self) -> "InventoryPage":
         self.hamburger_button.click()
         self.all_items_link.click()
-        self.wait_for_url(INVENTORY_URL)
+        self.page.wait_for_url(INVENTORY_URL)
         from ..pages.inventory_page import InventoryPage
 
         return InventoryPage(self.page)

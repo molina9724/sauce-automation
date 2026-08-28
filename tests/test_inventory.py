@@ -91,7 +91,7 @@ def test_verify_products_are_sorted_after_selecting_filter(
 def test_verify_error_when_trying_to_access_inventory_page_without_login(
     login_page: LoginPage,
 ) -> None:
-    login_page.goto(INVENTORY_URL)
+    login_page.page.goto(INVENTORY_URL)
     expect(login_page.form_validation.error_heading).to_have_text(
         ACCESS_INVENTORY_PAGE_ERROR_WITHOUT_LOGIN
     )

@@ -1,7 +1,6 @@
-from typing import Optional
+from typing import Union
 
 from playwright.sync_api import Locator, Page
-from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 
 
 class BaseComponent:
@@ -9,56 +8,21 @@ class BaseComponent:
         self.page: Page = page
         self._timeout: int = timeout
 
-    def _timeout_ms(self, timeout: Optional[int]) -> int:
-        """Resolve an optional timeout argument to an int (milliseconds).
-
-        This centralizes the common pattern of using an explicit timeout when
-        provided or falling back to the instance default. Use this from component
-        object methods instead of repeating the conditional everywhere.
-        """
-        return timeout if timeout is not None else self._timeout
-
-    def _is_item_displayed(
-        self, locator: Locator, timeout: Optional[int] = None
-    ) -> bool:
-        timeout_ms: int = self._timeout_ms(timeout)
-        try:
-            locator.wait_for(state="visible", timeout=timeout_ms)
-            return True
-        except PlaywrightTimeoutError:
-            return False
-
-    def _is_item_hidden(self, locator: Locator, timeout: Optional[int] = None) -> bool:
-        timeout_ms: int = self._timeout_ms(timeout)
-        try:
-            locator.wait_for(state="hidden", timeout=timeout_ms)
-            return True
-        except PlaywrightTimeoutError:
-            return False
-
-    def get_element(
-        self, locator: Locator, label: str, timeout: Optional[int] = None
-    ) -> Locator:
-        timeout_ms: int = self._timeout_ms(timeout)
-        if self._is_item_displayed(locator, timeout_ms):
-            return locator
-        raise RuntimeError(
-            f"Timed out waiting for {label} to be displayed after {timeout_ms} ms"
-        )
-
     @staticmethod
     def get_parent(locator: Locator) -> Locator:
         return locator.locator("..")
 
-    def wait_for_url(self, expected_url: str, timeout: Optional[int] = None) -> None:
-        """Wait until the page URL matches expected_url within timeout.
-
-        Raises RuntimeError on timeout to keep behavior consistent with other waits.
+    def locator(self, selector_or_locator: Union[str, Locator]) -> Locator:
         """
-        timeout_ms: int = self._timeout_ms(timeout)
-        try:
-            self.page.wait_for_url(expected_url, timeout=timeout_ms)
-        except PlaywrightTimeoutError as e:
-            raise RuntimeError(
-                f"Timed out waiting for URL {expected_url} after {timeout_ms} ms"
-            ) from e
+        Returns a Playwright Locator object for the given selector or locator.
+
+        Args:
+            selector_or_locator (Union[str, Locator]): A CSS selector string or an existing Locator object.
+
+        Returns:
+            Locator: A Playwright Locator object corresponding to the selector or the provided Locator.
+        """
+        if isinstance(selector_or_locator, str):
+            return self.page.locator(selector_or_locator)
+        else:
+            return selector_or_locator

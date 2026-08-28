@@ -61,7 +61,7 @@ def test_verify_items_remain_in_cart_after_pressing_cancel_in_checkout_step_one_
 def test_verify_error_when_accessing_cart_page_without_login(
     login_page: LoginPage,
 ) -> None:
-    login_page.goto(CART_URL)
+    login_page.page.goto(CART_URL)
     expect(login_page.form_validation.error_heading).to_have_text(
         ACCESS_CART_PAGE_WITHOUT_LOGIN_ERROR
     )

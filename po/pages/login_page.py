@@ -1,24 +1,18 @@
 # fmt: off
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 
 from playwright.sync_api import Locator, Page
 
 from data.login_data import PERFORMANCE_GLITCHED_USER
 
 from ..components.form_validation import FormValidation
-from .base_page import INCREASED_TIMEOUT, INVENTORY_URL, BasePage
+from .base_page import INVENTORY_URL, BasePage
 
 if TYPE_CHECKING:
     from .inventory_page import InventoryPage
 # fmt: on
 
-# Textbox names
-USERNAME: str = "Username"
-PASSWORD: str = "Password"
-LOGIN: str = "Login"
-
-# Labels
-CREDENTIALS = "Credentials Container"
+INCREASED_TIMEOUT: int = 20000
 
 
 class LoginPage(BasePage):
@@ -34,9 +28,9 @@ class LoginPage(BasePage):
 
         self.form_validation = FormValidation(self.page)
 
-        self.username: Locator = self.page.get_by_role("textbox", name=USERNAME)
-        self.password: Locator = self.page.get_by_role("textbox", name=PASSWORD)
-        self.login_button: Locator = self.page.get_by_role("button", name=LOGIN)
+        self.username: Locator = self.page.get_by_role("textbox", name="Username")
+        self.password: Locator = self.page.get_by_role("textbox", name="Password")
+        self.login_button: Locator = self.page.get_by_role("button", name="Login")
         self.close_error_button: Locator = self.page.locator(
             ".error-message-container.error .error-button"
         )
@@ -82,26 +76,18 @@ class LoginPage(BasePage):
         self.close_error_button.click()
         self.form_validation.error_heading.wait_for(state="hidden")
 
-    def get_usernames(self, timeout: Optional[int] = None) -> list[str]:
-        timeout_ms: int = self._timeout_ms(timeout)
-        usernames_container: Locator = self.get_element(
-            self.usernames_container, CREDENTIALS, timeout_ms
-        )
+    def get_usernames(self) -> list[str]:
+        usernames_container: Locator = self.usernames_container
         text: str = usernames_container.inner_text()
         lines: list[str] = [line.strip() for line in text.splitlines() if line.strip()]
-
         if lines and lines[0].lower().startswith("accepted usernames"):
             return lines[1:]
         return lines
 
-    def get_password(self, timeout: Optional[int] = None) -> str:
-        timeout_ms: int = self._timeout_ms(timeout)
-        password_container: Locator = self.get_element(
-            self.passwords_container, CREDENTIALS, timeout_ms
-        )
+    def get_password(self) -> str:
+        password_container: Locator = self.passwords_container
         text: str = password_container.inner_text()
         lines: list[str] = [line.strip() for line in text.splitlines() if line.strip()]
-
         if lines and lines[0].lower().startswith("password"):
             password = lines[1:]
         else:
