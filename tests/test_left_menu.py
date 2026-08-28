@@ -2,6 +2,7 @@
 from typing import Union
 
 import pytest
+from playwright.sync_api import expect
 
 from po.pages.base_page import INVENTORY_URL, LOGIN_URL
 from po.pages.cart_page import CartPage
@@ -27,7 +28,7 @@ def test_logout_from_all_menu_pages(
         request.getfixturevalue(page_fixture)
     )
     login_page: LoginPage = page.menu.logout()
-    assert login_page.get_url() == LOGIN_URL
+    expect(login_page.page).to_have_url(LOGIN_URL)
 
 
 @pytest.mark.parametrize(
@@ -41,8 +42,8 @@ def test_all_items_from_all_menu_pages_with_empty_cart(
         request.getfixturevalue(page_fixture)
     )
     inventory_page: InventoryPage = page.menu.all_items()
-    assert inventory_page.get_url() == INVENTORY_URL
-    assert inventory_page.cart.is_cart_empty()
+    expect(inventory_page.page).to_have_url(INVENTORY_URL)
+    expect(inventory_page.cart.counter).to_be_hidden()
 
 
 @pytest.mark.parametrize(

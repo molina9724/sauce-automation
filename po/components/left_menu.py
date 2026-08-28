@@ -29,7 +29,7 @@ class Menu(BaseComponent):
 
     def __init__(self, page: Page, timeout: int = 10000) -> None:
         super().__init__(page, timeout)
-        self._hamburger_button: Locator = self.page.get_by_role(
+        self.hamburger_button: Locator = self.page.get_by_role(
             "button", name="Open Menu"
         )
         self.panel: Locator = self.page.locator(".bm-menu-wrap")
@@ -41,19 +41,19 @@ class Menu(BaseComponent):
     def get_hamburger_button(self, timeout: Optional[int] = None) -> Locator:
         timeout_ms: int = self._timeout_ms(timeout)
         hamburger_button: Locator = self.get_element(
-            self._hamburger_button, HAMBURGER_BUTTON, timeout_ms
+            self.hamburger_button, HAMBURGER_BUTTON, timeout_ms
         )
         return hamburger_button
 
     def is_hamburger_button_displayed(self, timeout: Optional[int] = None) -> bool:
         timeout_ms: int = self._timeout_ms(timeout)
-        return self._is_item_displayed(self._hamburger_button, timeout_ms)
+        return self._is_item_displayed(self.hamburger_button, timeout_ms)
 
     # This button is a sibling of LeftMenu, not a children
     def open(self, timeout: Optional[int] = None) -> None:
         timeout_ms: int = self._timeout_ms(timeout)
         hamburger_button: Locator = self.get_element(
-            self._hamburger_button, HAMBURGER_BUTTON, timeout_ms
+            self.hamburger_button, HAMBURGER_BUTTON, timeout_ms
         )
         hamburger_button.click()
 
@@ -102,16 +102,10 @@ class Menu(BaseComponent):
                 f"Timed out waiting for logout to reach {BASE_URL} after {timeout_ms} ms"
             ) from exception
 
-    def all_items(self, timeout: Optional[int] = None) -> "InventoryPage":
-        timeout_ms: int = self._timeout_ms(timeout)
-        self.get_hamburger_button(timeout_ms).click()
-        self.get_all_items(timeout_ms).click()
-        try:
-            self.wait_for_url(INVENTORY_URL, timeout_ms)
-            from ..pages.inventory_page import InventoryPage
+    def all_items(self) -> "InventoryPage":
+        self.hamburger_button.click()
+        self.all_items_link.click()
+        self.wait_for_url(INVENTORY_URL)
+        from ..pages.inventory_page import InventoryPage
 
-            return InventoryPage(self.page)
-        except RuntimeError as exception:
-            raise RuntimeError(
-                f"Timed out waiting for {ALL_ITEMS} after {timeout_ms} ms"
-            ) from exception
+        return InventoryPage(self.page)
