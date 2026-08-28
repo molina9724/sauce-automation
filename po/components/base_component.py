@@ -18,24 +18,6 @@ class BaseComponent:
         """
         return timeout if timeout is not None else self._timeout
 
-    def _is_item_displayed(
-        self, locator: Locator, timeout: Optional[int] = None
-    ) -> bool:
-        timeout_ms: int = self._timeout_ms(timeout)
-        try:
-            locator.wait_for(state="visible", timeout=timeout_ms)
-            return True
-        except PlaywrightTimeoutError:
-            return False
-
-    def _is_item_hidden(self, locator: Locator, timeout: Optional[int] = None) -> bool:
-        timeout_ms: int = self._timeout_ms(timeout)
-        try:
-            locator.wait_for(state="hidden", timeout=timeout_ms)
-            return True
-        except PlaywrightTimeoutError:
-            return False
-
     @staticmethod
     def get_parent(locator: Locator) -> Locator:
         return locator.locator("..")
