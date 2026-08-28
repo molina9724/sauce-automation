@@ -1,7 +1,6 @@
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 
 from playwright.sync_api import Locator, Page
-from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 
 from .base_component import BaseComponent
 
@@ -29,20 +28,3 @@ class Cart(BaseComponent):
         from ..pages.cart_page import CartPage
 
         return CartPage(self.page)
-
-    def get_cart_counter(self) -> int:
-        counter: str = self.counter.inner_text().strip()
-        try:
-            return int(counter)
-        except ValueError:
-            raise RuntimeError(
-                f"{CART_COUNTER} is returning a value that cannot be converted to int"
-            )
-
-    def is_cart_empty(self, timeout: Optional[int] = None) -> bool:
-        timeout_ms: int = self._timeout_ms(timeout)
-        try:
-            self.counter.wait_for(state="hidden", timeout=timeout_ms)
-            return True
-        except PlaywrightTimeoutError:
-            return False
