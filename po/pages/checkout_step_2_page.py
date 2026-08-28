@@ -19,17 +19,17 @@ TOTAL: str = "Total"
 class CheckoutStepTwoPage(BasePage):
     def __init__(self, page: Page, timeout: int = 10000) -> None:
         super().__init__(page, timeout)
-        self._cart_list: Locator = self.locator(".cart_list")
+        self.cart_list: Locator = self.locator(".cart_list")
 
-        self._cart_item: Locator = self.locator(".cart_item")
-        self._item_quantity: Locator = self.locator(".cart_quantity")
-        self._item_name: Locator = self.locator(".inventory_item_name")
-        self._item_description: Locator = self.locator(".inventory_item_desc")
-        self._item_price: Locator = self.locator(".inventory_item_price")
+        self.cart_item: Locator = self.locator(".cart_item")
+        self.item_quantity: Locator = self.locator(".cart_quantity")
+        self.item_name: Locator = self.locator(".inventory_item_name")
+        self.item_description: Locator = self.locator(".inventory_item_desc")
+        self.item_price: Locator = self.locator(".inventory_item_price")
 
-        self._subtotal: Locator = self.locator(".summary_subtotal_label")
-        self._tax: Locator = self.locator(".summary_tax_label")
-        self._total: Locator = self.locator(".summary_total_label")
+        self.subtotal: Locator = self.locator(".summary_subtotal_label")
+        self.tax: Locator = self.locator(".summary_tax_label")
+        self.total: Locator = self.locator(".summary_total_label")
 
         self.menu: Menu = Menu(self.page)
         self.cart: Cart = Cart(self.page)
@@ -37,7 +37,7 @@ class CheckoutStepTwoPage(BasePage):
     def is_cart_list_displayed(self, timeout: Optional[int] = None) -> bool:
         timeout_ms: int = self._timeout_ms(timeout)
         try:
-            self._cart_list.wait_for(state="visible", timeout=timeout_ms)
+            self.cart_list.wait_for(state="visible", timeout=timeout_ms)
             return True
         except PlaywrightTimeoutError:
             return False
@@ -62,8 +62,8 @@ class CheckoutStepTwoPage(BasePage):
 
     def get_subtotal(self, timeout: Optional[int] = None) -> str:
         timeout_ms: int = self._timeout_ms(timeout)
-        self.get_element(self._subtotal, SUBTOTAL, timeout_ms)
-        return self._extract_currency_value(self._subtotal, SUBTOTAL)
+        self.get_element(self.subtotal, SUBTOTAL, timeout_ms)
+        return self._extract_currency_value(self.subtotal, SUBTOTAL)
 
     # def get_element(
     #     self, locator: Union[Locator, str], label: str, timeout: Optional[int] = None
@@ -77,16 +77,16 @@ class CheckoutStepTwoPage(BasePage):
 
     def get_tax(self, timeout: Optional[int] = None) -> str:
         timeout_ms: int = self._timeout_ms(timeout)
-        if self._is_item_displayed(self._tax, timeout_ms):
-            return self._extract_currency_value(self._tax, TAX)
+        if self._is_item_displayed(self.tax, timeout_ms):
+            return self._extract_currency_value(self.tax, TAX)
         raise RuntimeError(
             f"Timed out waiting for {TAX} to be displayed after {timeout_ms} ms"
         )
 
     def get_total(self, timeout: Optional[int] = None) -> str:
         timeout_ms: int = self._timeout_ms(timeout)
-        if self._is_item_displayed(self._total, timeout_ms):
-            return self._extract_currency_value(self._total, TOTAL)
+        if self._is_item_displayed(self.total, timeout_ms):
+            return self._extract_currency_value(self.total, TOTAL)
         raise RuntimeError(
             f"Timed out waiting for {TOTAL} to be displayed after {timeout_ms} ms"
         )
