@@ -17,9 +17,6 @@ USERNAME: str = "Username"
 PASSWORD: str = "Password"
 LOGIN: str = "Login"
 
-# Labels
-CREDENTIALS = "Credentials Container"
-
 
 class LoginPage(BasePage):
     def __init__(self, page: Page, timeout: int = 10000) -> None:
@@ -82,26 +79,18 @@ class LoginPage(BasePage):
         self.close_error_button.click()
         self.form_validation.error_heading.wait_for(state="hidden")
 
-    def get_usernames(self, timeout: Optional[int] = None) -> list[str]:
-        timeout_ms: int = self._timeout_ms(timeout)
-        usernames_container: Locator = self.get_element(
-            self.usernames_container, CREDENTIALS, timeout_ms
-        )
+    def get_usernames(self) -> list[str]:
+        usernames_container: Locator = self.usernames_container
         text: str = usernames_container.inner_text()
         lines: list[str] = [line.strip() for line in text.splitlines() if line.strip()]
-
         if lines and lines[0].lower().startswith("accepted usernames"):
             return lines[1:]
         return lines
 
-    def get_password(self, timeout: Optional[int] = None) -> str:
-        timeout_ms: int = self._timeout_ms(timeout)
-        password_container: Locator = self.get_element(
-            self.passwords_container, CREDENTIALS, timeout_ms
-        )
+    def get_password(self) -> str:
+        password_container: Locator = self.passwords_container
         text: str = password_container.inner_text()
         lines: list[str] = [line.strip() for line in text.splitlines() if line.strip()]
-
         if lines and lines[0].lower().startswith("password"):
             password = lines[1:]
         else:
