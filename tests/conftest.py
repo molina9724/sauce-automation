@@ -25,7 +25,7 @@ def auth_state_path(browser: Browser):
 
     context: BrowserContext = browser.new_context()
     login_page: LoginPage = LoginPage(context.new_page())
-    login_page.goto(LOGIN_URL)
+    login_page.page.goto(LOGIN_URL)
     login_page.login(DEFAULT_UNLOCKED_USER, PASSWORD)
     context.storage_state(path=path)
     context.close()
@@ -45,14 +45,14 @@ def browser_context_args(browser_context_args, request):
 @pytest.fixture
 def login_page(page: Page) -> LoginPage:
     login = LoginPage(page)
-    login.goto(LOGIN_URL)
+    login.page.goto(LOGIN_URL)
     return login
 
 
 @pytest.fixture
 def empty_inventory_page(page: Page) -> InventoryPage:
     inventory_page = InventoryPage(page)
-    inventory_page.goto(
+    inventory_page.page.goto(
         INVENTORY_URL,
     )
     return inventory_page
@@ -61,7 +61,7 @@ def empty_inventory_page(page: Page) -> InventoryPage:
 @pytest.fixture
 def inventory_page_with_item(page: Page) -> InventoryPage:
     inventory_page = InventoryPage(page)
-    inventory_page.goto(INVENTORY_URL)
+    inventory_page.page.goto(INVENTORY_URL)
     inventory_page.add_item_to_cart(ITEM_INDEX)
     return inventory_page
 
@@ -69,7 +69,7 @@ def inventory_page_with_item(page: Page) -> InventoryPage:
 @pytest.fixture
 def inventory_page_with_all_items(page: Page) -> InventoryPage:
     inventory_page = InventoryPage(page)
-    inventory_page.goto(INVENTORY_URL)
+    inventory_page.page.goto(INVENTORY_URL)
     for index in ALL_ITEMS_INDEX:
         inventory_page.add_item_to_cart(index)
     return inventory_page

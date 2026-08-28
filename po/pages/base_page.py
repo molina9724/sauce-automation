@@ -1,7 +1,6 @@
-from typing import Optional, Union
+from typing import Union
 
 from playwright.sync_api import Locator
-from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 
 from ..components.base_component import BaseComponent
 
@@ -31,47 +30,3 @@ class BasePage(BaseComponent):
             return self.page.locator(selector_or_locator)
         else:
             return selector_or_locator
-
-    def goto(
-        self,
-        url: str,
-        ready_selector: Optional[Union[Locator, str]] = None,
-        timeout: Optional[int] = None,
-    ) -> None:
-        """
-        Navigates to the specified URL and waits for a specific element to become visible.
-
-        This method loads the given URL, waits for the network to be idle, and then waits for
-        a specified selector or locator to be visible on the page. If no selector is provided,
-        it defaults to waiting for an input field READY_SELECTOR.
-
-        Args:
-            url (str): The URL to navigate to.
-            ready_selector (Optional[Union[Locator, str]], optional): The selector or Locator to wait for visibility.
-                If not provided, defaults to READY_SELECTOR.
-            timeout (Optional[int], optional): Maximum time to wait for navigation and element visibility, in milliseconds.
-                If not provided, uses the instance's default timeout.
-
-        Raises:
-            RuntimeError: If the specified element does not become visible within the timeout period.
-        """
-        timeout_ms: int = self._timeout_ms(timeout)
-        if ready_selector is not None:
-            selector: Locator = self.locator(ready_selector)
-        else:
-            selector = self.locator(READY_SELECTOR)
-
-        try:
-            self.page.goto(url, timeout=timeout_ms)
-        except PlaywrightTimeoutError as e:
-            raise RuntimeError(
-                f"Navigation to {url} timed out after {timeout_ms} ms"
-            ) from e
-
-        label = str(selector)
-        try:
-            selector.wait_for(state="visible", timeout=timeout_ms)
-        except PlaywrightTimeoutError as exception:
-            raise RuntimeError(
-                f"Timed out waiting for selector {label} to be visible after navigating to {url} (after {timeout_ms} ms)"
-            ) from exception

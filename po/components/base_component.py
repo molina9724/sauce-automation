@@ -19,5 +19,4 @@ class BaseComponent:
 
     @staticmethod
     def get_parent(locator: Locator) -> Locator:
-
         return locator.locator("..")

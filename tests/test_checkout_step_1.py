@@ -55,7 +55,7 @@ def test_verify_user_is_taken_to_checkout_step_2_after_successfully_filling_data
 def test_verify_error_when_accessing_checkout_step_1_page_without_login(
     login_page: LoginPage,
 ) -> None:
-    login_page.goto(CHECKOUT_STEP_1_URL)
+    login_page.page.goto(CHECKOUT_STEP_1_URL)
     expect(login_page.form_validation.error_heading).to_have_text(
         ACCESS_CHECKOUT_STEP_1_PAGE_WITHOUT_LOGIN_ERROR
     )
