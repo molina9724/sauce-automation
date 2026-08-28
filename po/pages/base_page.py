@@ -75,6 +75,3 @@ class BasePage(BaseComponent):
             raise RuntimeError(
                 f"Timed out waiting for selector {label} to be visible after navigating to {url} (after {timeout_ms} ms)"
             ) from exception
-
-    def get_url(self) -> str:
-        return self.page.url
