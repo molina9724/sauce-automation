@@ -8,8 +8,6 @@ from .base_component import BaseComponent
 
 if TYPE_CHECKING:
     from ..pages.inventory_page import InventoryPage
-else:
-    _Base = object
 
 
 class Menu(BaseComponent):
