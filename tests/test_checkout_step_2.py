@@ -28,12 +28,12 @@ def test_validate_all_items_total(
 def test_verify_taxes_calculation_for_single_item(
     checkout_step_2_page_with_item: CheckoutStepTwoPage,
 ) -> None:
-    expected_subtotal: str = calculate_taxes(CART_ITEM_DATA)
-    expect(checkout_step_2_page_with_item.tax).to_contain_text(expected_subtotal)
+    expected_taxes: str = calculate_taxes(CART_ITEM_DATA)
+    expect(checkout_step_2_page_with_item.tax).to_contain_text(expected_taxes)
 
 
 def test_verify_taxes_calculation_for_all_items(
     checkout_step_2_page_with_all_items: CheckoutStepTwoPage,
 ) -> None:
-    expected_subtotal: str = calculate_taxes(INVENTORY_ITEMS_DATA)
-    expect(checkout_step_2_page_with_all_items.tax).to_contain_text(expected_subtotal)
+    expected_taxes: str = calculate_taxes(INVENTORY_ITEMS_DATA)
+    expect(checkout_step_2_page_with_all_items.tax).to_contain_text(expected_taxes)

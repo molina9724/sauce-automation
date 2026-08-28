@@ -9,12 +9,12 @@
 * [ ] Add test cases to `test_checkout_step_2`
 * [ ] Implement checkout page
 * [ ] Fixture set grew combinatorially; needs a factory
-* [X] Make page public
 
 ## In Progress
 
 ## Done
 
+* [X] Make page public
 * [X] All state built through the UI; no `storage_state` reuse
 * [X] Failure artifacts: trace, screenshot, video
 * [X] Allure or HTML reporting (both of them are implemented)
