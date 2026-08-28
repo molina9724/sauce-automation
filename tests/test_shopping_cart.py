@@ -2,6 +2,7 @@
 from typing import Union
 
 import pytest
+from playwright.sync_api import expect
 
 from po.pages.cart_page import CartPage
 from po.pages.checkout_step_1_page import CheckoutStepOnePage
@@ -25,7 +26,7 @@ def test_shopping_cart_is_empty_from_all_pages(
     page: Union[InventoryPage, CartPage, CheckoutStepOnePage, CheckoutStepTwoPage] = (
         request.getfixturevalue(page_fixture)
     )
-    assert page.cart.is_cart_empty()
+    expect(page.cart.counter).to_be_hidden()
 
 
 @pytest.mark.parametrize(
@@ -39,4 +40,4 @@ def test_shopping_cart_with_item_from_all_pages(
     page: Union[InventoryPage, CartPage, CheckoutStepOnePage, CheckoutStepTwoPage] = (
         request.getfixturevalue(page_fixture)
     )
-    assert page.cart.get_cart_counter() == 1
+    expect(page.cart.counter).to_have_text("1")
