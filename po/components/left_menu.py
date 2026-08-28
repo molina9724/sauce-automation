@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, List, Optional
+from typing import TYPE_CHECKING
 
 from playwright.sync_api import Locator, Page
 
@@ -11,19 +11,6 @@ if TYPE_CHECKING:
 else:
     _Base = object
 
-# Selectors
-LEFT_MENU_ITEM: str = ".menu-item"
-
-# Textbox names
-LOGOUT: str = "Logout"
-
-# Labels
-HAMBURGER_BUTTON: str = "Hamburger Button"
-CLOSE_ERROR_BUTTON: str = "Close error button"
-LEFT_MENU: str = "Left Menu"
-LOGOUT_LINK: str = "Logout Link"
-ALL_ITEMS: str = "All Items"
-
 
 class Menu(BaseComponent):
 
@@ -33,9 +20,9 @@ class Menu(BaseComponent):
             "button", name="Open Menu"
         )
         self.panel: Locator = self.page.locator(".bm-menu-wrap")
-        self.item: Locator = self.panel.locator(LEFT_MENU_ITEM)
-        self.logout_link: Locator = self.panel.get_by_role("link", name=LOGOUT)
-        self.all_items_link: Locator = self.panel.get_by_role("link", name=ALL_ITEMS)
+        self.item: Locator = self.panel.locator(".menu-item")
+        self.logout_link: Locator = self.panel.get_by_role("link", name="Logout")
+        self.all_items_link: Locator = self.panel.get_by_role("link", name="All Items")
         self.close_button: Locator = self.panel.locator(".bm-cross-button")
 
     def logout(self) -> LoginPage:
