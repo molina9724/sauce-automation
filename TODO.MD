@@ -6,6 +6,7 @@
 * [ ] Add type hint to all constants and variables
 * [ ] Add return type annotations to all the methods and functions
 * [ ] Add parameter annotations to all the classes, methods and functions
+* [ ] Add test cases to `test_checkout_step_2`
 * [ ] Implement checkout page
 * [ ] Fixture set grew combinatorially; needs a factory
 * [X] Make page public

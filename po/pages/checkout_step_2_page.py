@@ -1,5 +1,3 @@
-from decimal import Decimal
-
 from playwright.sync_api import Locator, Page
 
 from po.components.cart_page_item import CartItem
@@ -7,9 +5,6 @@ from po.components.cart_page_item import CartItem
 from ..components.cart import Cart
 from ..components.left_menu import Menu
 from ..pages.base_page import BasePage
-
-TAXES: Decimal = Decimal("0.08")
-CURRENCY = "$"
 
 
 class CheckoutStepTwoPage(BasePage):

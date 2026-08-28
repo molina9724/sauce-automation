@@ -2,9 +2,10 @@ from decimal import Decimal
 
 from data.cart_data import FIRST_ITEM_KEY
 from data.inventory_data import INVENTORY_ITEMS_DATA
-from po.pages.checkout_step_2_page import CURRENCY, TAXES
 
 TOTAL_ITEM_VALUE: str = INVENTORY_ITEMS_DATA[FIRST_ITEM_KEY]["price"]
+TAXES: Decimal = Decimal("0.08")
+CURRENCY: str = "$"
 
 
 def calculate_subtotal(items: dict[str, dict[str, str]]) -> str:
