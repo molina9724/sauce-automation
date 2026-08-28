@@ -38,21 +38,6 @@ class Menu(BaseComponent):
         self.all_items_link: Locator = self.panel.get_by_role("link", name=ALL_ITEMS)
         self.close_button: Locator = self.panel.locator(".bm-cross-button")
 
-    # This button is a sibling of LeftMenu, not a children
-    def open(self, timeout: Optional[int] = None) -> None:
-        timeout_ms: int = self._timeout_ms(timeout)
-        hamburger_button: Locator = self.get_element(
-            self.hamburger_button, HAMBURGER_BUTTON, timeout_ms
-        )
-        hamburger_button.click()
-
-    def close(self, timeout: Optional[int] = None) -> None:
-        timeout_ms: int = self._timeout_ms(timeout)
-        close_button: Locator = self.get_element(
-            self.close_button, CLOSE_ERROR_BUTTON, timeout_ms
-        )
-        close_button.click()
-
     def logout(self) -> LoginPage:
         self.hamburger_button.click()
         self.logout_link.click()

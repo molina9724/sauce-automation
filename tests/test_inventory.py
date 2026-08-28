@@ -32,7 +32,7 @@ def test_verify_page_title(empty_inventory_page: InventoryPage) -> None:
 
 
 def test_verify_left_menu_components(empty_inventory_page: InventoryPage) -> None:
-    empty_inventory_page.menu.open()
+    empty_inventory_page.menu.hamburger_button.click()
     expect(empty_inventory_page.menu.panel).to_be_visible()
     expect(empty_inventory_page.menu.item).to_have_text(LEFT_MENU_ITEMS)
 
@@ -145,8 +145,8 @@ def test_verify_left_menu_is_closed(
 ) -> None:
     expect(empty_inventory_page.menu.panel).to_be_hidden()
 
-    empty_inventory_page.menu.open()
+    empty_inventory_page.menu.hamburger_button.click()
     expect(empty_inventory_page.menu.panel).to_be_visible()
 
-    empty_inventory_page.menu.close()
+    empty_inventory_page.menu.close_button.click()
     expect(empty_inventory_page.menu.panel).to_be_hidden()
