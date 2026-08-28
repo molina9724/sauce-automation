@@ -157,12 +157,12 @@ incomplete.
 - `InventoryPage`
 - `CartPage`
 - `CheckoutStepOnePage`
+- `CheckoutStepTwoPage`
+- `Menu` component
 
 **Pending:**
 
-- `CheckoutStepTwoPage`
 - `Cart` component
-- `Menu` component
 - `BaseComponent` / `BasePage` — expected to shrink to `__init__` plus `goto()`
   once all callers of the removed helpers are gone
 

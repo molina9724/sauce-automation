@@ -148,8 +148,8 @@ This suite does **not** currently do:
 - **Base URL is hardcoded**; no environment configuration layer
 - **No linter or type checker in CI** — static analysis is editor-only
 - **CI runs macOS and Chromium only**
-- **Migration in progress:** `LoginPage`, `InventoryPage`, `CartPage`, `CheckoutStepOnePage`
-  and `CheckoutStepTwoPage` use public locators with `expect()`. `Cart`, and `Menu` still
+- **Migration in progress:** `LoginPage`, `InventoryPage`, `CartPage`, `CheckoutStepOnePage`,
+  `CheckoutStepTwoPage` and `Menu` use public locators with `expect()`. `Cart` still
   use older wrapper-based patterns.
 
 ## Roadmap
