@@ -148,13 +148,9 @@ This suite does **not** currently do:
 - **Base URL is hardcoded**; no environment configuration layer
 - **No linter or type checker in CI** — static analysis is editor-only
 - **CI runs macOS and Chromium only**
-- **Migration in progress:** `LoginPage`, `InventoryPage`, `CartPage`, `CheckoutStepOnePage`
-  and `CheckoutStepTwoPage` use public locators with `expect()`. `Cart`, and `Menu` still
-  use older wrapper-based patterns.
 
 ## Roadmap
 
-- [ ] Finish migrating remaining page objects to public locators + `expect()`
 - [ ] Implement the checkout-complete page and the full purchase flow
 - [ ] Parametrise authentication by user to cover `problem_user` and friends
 - [ ] Replace index-based item selection with name-based locators
