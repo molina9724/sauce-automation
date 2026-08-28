@@ -15,15 +15,6 @@ CHECKOUT_STEP_2_URL: str = BASE_URL + "checkout-step-two.html"
 # Selectors
 READY_SELECTOR: str = "#root"
 
-# Labels
-ITEM: str = "Item #"
-NAME: str = "Name"
-PRICE: str = "Price"
-DESCRIPTION: str = "Description"
-QUANTITY: str = "Quantity"
-REMOVE_BUTTON_LABEL = "Remove Button"
-
-
 # POM
 INCREASED_TIMEOUT: int = 20000
 
