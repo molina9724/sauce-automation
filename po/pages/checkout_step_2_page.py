@@ -54,14 +54,6 @@ class CheckoutStepTwoPage(BasePage):
         self.get_element(self.subtotal, SUBTOTAL, timeout_ms)
         return self._extract_currency_value(self.subtotal, SUBTOTAL)
 
-    def get_tax(self, timeout: Optional[int] = None) -> str:
-        timeout_ms: int = self._timeout_ms(timeout)
-        if self._is_item_displayed(self.tax, timeout_ms):
-            return self._extract_currency_value(self.tax, TAX)
-        raise RuntimeError(
-            f"Timed out waiting for {TAX} to be displayed after {timeout_ms} ms"
-        )
-
     def get_total(self, timeout: Optional[int] = None) -> str:
         timeout_ms: int = self._timeout_ms(timeout)
         if self._is_item_displayed(self.total, timeout_ms):
