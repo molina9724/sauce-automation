@@ -15,9 +15,6 @@ CHECKOUT_STEP_2_URL: str = BASE_URL + "checkout-step-two.html"
 # Selectors
 READY_SELECTOR: str = "#root"
 
-# POM
-INCREASED_TIMEOUT: int = 20000
-
 
 class BasePage(BaseComponent):
     def locator(self, selector_or_locator: Union[str, Locator]) -> Locator:

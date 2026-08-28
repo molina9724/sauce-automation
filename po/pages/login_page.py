@@ -6,11 +6,13 @@ from playwright.sync_api import Locator, Page
 from data.login_data import PERFORMANCE_GLITCHED_USER
 
 from ..components.form_validation import FormValidation
-from .base_page import INCREASED_TIMEOUT, INVENTORY_URL, BasePage
+from .base_page import INVENTORY_URL, BasePage
 
 if TYPE_CHECKING:
     from .inventory_page import InventoryPage
 # fmt: on
+
+INCREASED_TIMEOUT: int = 20000
 
 
 class LoginPage(BasePage):
