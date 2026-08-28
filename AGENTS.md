@@ -158,11 +158,11 @@ incomplete.
 - `CartPage`
 - `CheckoutStepOnePage`
 - `CheckoutStepTwoPage`
-- `Menu` component
+- `LeftMenu` component
+- `Cart` component
 
 **Pending:**
 
-- `Cart` component
 - `BaseComponent` / `BasePage` — expected to shrink to `__init__` plus `goto()`
   once all callers of the removed helpers are gone
 
@@ -190,10 +190,10 @@ Known, accepted, and tracked. Do not re-report.
 - Image tests assert visibility, not that images actually loaded. `problem_user`
   would pass.
 - The authenticated fixture chain is hardcoded to standard_user. Other users
-(problem_user, visual_user, error_user) require an @pytest.mark.anonymous
-test with a manual login(), which forfeits fixture composition — any setup
-beyond the inventory page must be rebuilt by hand. Parametrising auth by user
-would need an auth cache keyed on username.
+  (problem_user, visual_user, error_user) require an @pytest.mark.anonymous
+  test with a manual login(), which forfeits fixture composition — any setup
+  beyond the inventory page must be rebuilt by hand. Parametrising auth by user
+  would need an auth cache keyed on username.
 
 ---
 
