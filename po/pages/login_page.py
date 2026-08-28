@@ -1,5 +1,5 @@
 # fmt: off
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 
 from playwright.sync_api import Locator, Page
 
@@ -11,11 +11,6 @@ from .base_page import INCREASED_TIMEOUT, INVENTORY_URL, BasePage
 if TYPE_CHECKING:
     from .inventory_page import InventoryPage
 # fmt: on
-
-# Textbox names
-USERNAME: str = "Username"
-PASSWORD: str = "Password"
-LOGIN: str = "Login"
 
 
 class LoginPage(BasePage):
@@ -31,9 +26,9 @@ class LoginPage(BasePage):
 
         self.form_validation = FormValidation(self.page)
 
-        self.username: Locator = self.page.get_by_role("textbox", name=USERNAME)
-        self.password: Locator = self.page.get_by_role("textbox", name=PASSWORD)
-        self.login_button: Locator = self.page.get_by_role("button", name=LOGIN)
+        self.username: Locator = self.page.get_by_role("textbox", name="Username")
+        self.password: Locator = self.page.get_by_role("textbox", name="Password")
+        self.login_button: Locator = self.page.get_by_role("button", name="Login")
         self.close_error_button: Locator = self.page.locator(
             ".error-message-container.error .error-button"
         )
