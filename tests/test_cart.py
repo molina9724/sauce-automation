@@ -13,11 +13,11 @@ from po.pages.login_page import LoginPage
 # fmt: on
 
 
-def verify_items_data(item: CartItem):
+def verify_items_data(item: CartItem) -> None:
     names: list[str] = list(CART_ITEM_DATA.keys())
     descriptions: list[str] = [key["description"] for key in CART_ITEM_DATA.values()]
     prices: list[str] = [key["price"] for key in CART_ITEM_DATA.values()]
-    quantities = [details["quantity"] for details in CART_ITEM_DATA.values()]
+    quantities: list[str] = [details["quantity"] for details in CART_ITEM_DATA.values()]
 
     expect(item.name).to_have_text(names)
     expect(item.description).to_have_text(descriptions)
