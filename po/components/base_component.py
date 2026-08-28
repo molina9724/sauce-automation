@@ -36,16 +36,6 @@ class BaseComponent:
         except PlaywrightTimeoutError:
             return False
 
-    def get_element(
-        self, locator: Locator, label: str, timeout: Optional[int] = None
-    ) -> Locator:
-        timeout_ms: int = self._timeout_ms(timeout)
-        if self._is_item_displayed(locator, timeout_ms):
-            return locator
-        raise RuntimeError(
-            f"Timed out waiting for {label} to be displayed after {timeout_ms} ms"
-        )
-
     @staticmethod
     def get_parent(locator: Locator) -> Locator:
         return locator.locator("..")
