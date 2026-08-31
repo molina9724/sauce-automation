@@ -1,12 +1,13 @@
 from playwright.sync_api import Locator, Page
 
+from data.routes import CHECKOUT_STEP_2
 from po.pages.cart_page import CartPage
 from po.pages.checkout_step_2_page import CheckoutStepTwoPage
 
 from ..components.cart import Cart
 from ..components.form_validation import FormValidation
 from ..components.left_menu import Menu
-from ..pages.base_page import CHECKOUT_STEP_2_URL, BasePage
+from ..pages.base_page import BasePage
 
 
 class CheckoutStepOnePage(BasePage):
@@ -46,7 +47,7 @@ class CheckoutStepOnePage(BasePage):
         self.continue_button.click()
 
     def get_checkout_step_two_page(self) -> CheckoutStepTwoPage:
-        self.page.wait_for_url(CHECKOUT_STEP_2_URL)
+        self.page.wait_for_url(CHECKOUT_STEP_2)
 
         from .checkout_step_2_page import CheckoutStepTwoPage
 

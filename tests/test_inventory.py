@@ -10,7 +10,7 @@ from data.inventory_data import (A_TO_Z,
                                  INVENTORY_ITEMS_DATA, LEFT_MENU_ITEMS,
                                  LOGO_TEXT, ONE, PRODUCTS_TITLE, Z_TO_A,
                                  SortKey)
-from po.pages.base_page import INVENTORY_URL, LOGIN_URL
+from data.routes import INVENTORY, ROOT
 from po.pages.cart_page import CartPage
 from po.pages.checkout_step_1_page import CheckoutStepOnePage
 from po.pages.inventory_page import InventoryPage
@@ -24,7 +24,7 @@ def test_verify_document_title(empty_inventory_page: InventoryPage) -> None:
 
 
 def test_verify_inventory_url(empty_inventory_page: InventoryPage) -> None:
-    expect(empty_inventory_page.page).to_have_url(INVENTORY_URL)
+    expect(empty_inventory_page.page).to_have_url(INVENTORY)
 
 
 def test_verify_page_title(empty_inventory_page: InventoryPage) -> None:
@@ -91,11 +91,11 @@ def test_verify_products_are_sorted_after_selecting_filter(
 def test_verify_error_when_trying_to_access_inventory_page_without_login(
     login_page: LoginPage,
 ) -> None:
-    login_page.page.goto(INVENTORY_URL)
+    login_page.page.goto(INVENTORY)
     expect(login_page.form_validation.error_heading).to_have_text(
         ACCESS_INVENTORY_PAGE_ERROR_WITHOUT_LOGIN
     )
-    expect(login_page.page).to_have_url(LOGIN_URL)
+    expect(login_page.page).to_have_url(ROOT)
 
 
 def test_verify_items_images_are_displayed(empty_inventory_page: InventoryPage) -> None:

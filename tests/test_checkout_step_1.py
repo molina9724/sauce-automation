@@ -5,8 +5,7 @@ from playwright.sync_api import expect
 from data.checkout_step_1_data import (
     ACCESS_CHECKOUT_STEP_1_PAGE_WITHOUT_LOGIN_ERROR, CHECKOUT_ARGS,
     CHECKOUT_IDS, CHECKOUT_PARAMS, FIRST_NAME, LAST_NAME, ZIP_CODE)
-from po.pages.base_page import (CART_URL, CHECKOUT_STEP_1_URL,
-                                CHECKOUT_STEP_2_URL)
+from data.routes import CART, CHECKOUT_STEP_1, CHECKOUT_STEP_2
 from po.pages.cart_page import CartPage
 from po.pages.checkout_step_1_page import CheckoutStepOnePage
 from po.pages.login_page import LoginPage
@@ -39,7 +38,7 @@ def test_verify_cancel_button_takes_user_back_to_cart_page(
     checkout_step_1_page_with_item: CheckoutStepOnePage,
 ) -> None:
     cart_page: CartPage = checkout_step_1_page_with_item.cancel()
-    expect(cart_page.page).to_have_url(CART_URL)
+    expect(cart_page.page).to_have_url(CART)
 
 
 def test_verify_user_is_taken_to_checkout_step_2_after_successfully_filling_data_and_pressing_continue_button(
@@ -48,14 +47,14 @@ def test_verify_user_is_taken_to_checkout_step_2_after_successfully_filling_data
     checkout_step_1_page_with_item.fill_in_checkout_information(
         first_name=FIRST_NAME, last_name=LAST_NAME, zip_code=ZIP_CODE
     )
-    expect(checkout_step_1_page_with_item.page).to_have_url(CHECKOUT_STEP_2_URL)
+    expect(checkout_step_1_page_with_item.page).to_have_url(CHECKOUT_STEP_2)
 
 
 @pytest.mark.anonymous
 def test_verify_error_when_accessing_checkout_step_1_page_without_login(
     login_page: LoginPage,
 ) -> None:
-    login_page.page.goto(CHECKOUT_STEP_1_URL)
+    login_page.page.goto(CHECKOUT_STEP_1)
     expect(login_page.form_validation.error_heading).to_have_text(
         ACCESS_CHECKOUT_STEP_1_PAGE_WITHOUT_LOGIN_ERROR
     )

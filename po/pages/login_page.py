@@ -4,9 +4,10 @@ from typing import TYPE_CHECKING
 from playwright.sync_api import Locator, Page
 
 from data.login_data import PERFORMANCE_GLITCHED_USER
+from data.routes import INVENTORY
 
 from ..components.form_validation import FormValidation
-from .base_page import INVENTORY_URL, BasePage
+from .base_page import BasePage
 
 if TYPE_CHECKING:
     from .inventory_page import InventoryPage
@@ -66,7 +67,7 @@ class LoginPage(BasePage):
             timeout: int = INCREASED_TIMEOUT
         else:
             timeout = self._timeout
-        self.page.wait_for_url(INVENTORY_URL, timeout=timeout)
+        self.page.wait_for_url(INVENTORY, timeout=timeout)
 
         from .inventory_page import InventoryPage
 

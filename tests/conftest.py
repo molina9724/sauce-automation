@@ -8,7 +8,7 @@ from data.cart_data import ALL_ITEMS_INDEX
 from data.checkout_step_1_data import FIRST_NAME, LAST_NAME, ZIP_CODE
 from data.global_data import ITEM_INDEX
 from data.login_data import DEFAULT_UNLOCKED_USER, PASSWORD
-from po.pages.base_page import INVENTORY_URL, LOGIN_URL
+from data.routes import INVENTORY, ROOT
 from po.pages.cart_page import CartPage
 from po.pages.checkout_step_1_page import CheckoutStepOnePage
 from po.pages.checkout_step_2_page import CheckoutStepTwoPage
@@ -19,13 +19,13 @@ WORKER: str = os.environ.get("PYTEST_XDIST_WORKER", "master")
 
 
 @pytest.fixture(scope="session")
-def auth_state_path(browser: Browser):
+def auth_state_path(browser: Browser, base_url: str):
     path = Path(f"./playwright/.auth/user_{WORKER}_{browser.browser_type.name}.json")
     path.parent.mkdir(parents=True, exist_ok=True)
 
-    context: BrowserContext = browser.new_context()
+    context: BrowserContext = browser.new_context(base_url=base_url)
     login_page: LoginPage = LoginPage(context.new_page())
-    login_page.page.goto(LOGIN_URL)
+    login_page.page.goto(ROOT)
     login_page.login(DEFAULT_UNLOCKED_USER, PASSWORD)
     context.storage_state(path=path)
     context.close()
@@ -45,23 +45,21 @@ def browser_context_args(browser_context_args, request):
 @pytest.fixture
 def login_page(page: Page) -> LoginPage:
     login = LoginPage(page)
-    login.page.goto(LOGIN_URL)
+    login.page.goto(ROOT)
     return login
 
 
 @pytest.fixture
 def empty_inventory_page(page: Page) -> InventoryPage:
     inventory_page = InventoryPage(page)
-    inventory_page.page.goto(
-        INVENTORY_URL,
-    )
+    inventory_page.page.goto(INVENTORY)
     return inventory_page
 
 
 @pytest.fixture
 def inventory_page_with_item(page: Page) -> InventoryPage:
     inventory_page = InventoryPage(page)
-    inventory_page.page.goto(INVENTORY_URL)
+    inventory_page.page.goto(INVENTORY)
     inventory_page.add_item_to_cart(ITEM_INDEX)
     return inventory_page
 
@@ -69,7 +67,7 @@ def inventory_page_with_item(page: Page) -> InventoryPage:
 @pytest.fixture
 def inventory_page_with_all_items(page: Page) -> InventoryPage:
     inventory_page = InventoryPage(page)
-    inventory_page.page.goto(INVENTORY_URL)
+    inventory_page.page.goto(INVENTORY)
     for index in ALL_ITEMS_INDEX:
         inventory_page.add_item_to_cart(index)
     return inventory_page

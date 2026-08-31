@@ -6,7 +6,7 @@ from data.login_data import (DOCUMENT_TITLE, EMPTY_USERNAME_ERROR,
                              EXPECTED_LOGIN_USERNAMES, LOGIN_ARGS,
                              LOGIN_ERROR_ARGS, LOGIN_ERROR_PARAMS, LOGO_TEXT,
                              PASSWORD, SUCCESS_LOGIN_DATA, UNLOCKED_USERS)
-from po.pages.base_page import INVENTORY_URL
+from data.routes import INVENTORY
 from po.pages.inventory_page import InventoryPage
 from po.pages.login_page import LoginPage
 
@@ -60,7 +60,7 @@ def test_verify_successful_login(
     login_page: LoginPage, user: str, password: str
 ) -> None:
     inventory_page: InventoryPage = login_page.login(username=user, password=password)
-    expect(inventory_page.page).to_have_url(INVENTORY_URL)
+    expect(inventory_page.page).to_have_url(INVENTORY)
 
 
 @pytest.mark.parametrize(LOGIN_ERROR_ARGS, LOGIN_ERROR_PARAMS)
