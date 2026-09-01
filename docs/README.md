@@ -142,8 +142,6 @@ This suite does **not** currently do:
   which forfeits fixture composition
 - **Checkout completion is not implemented** — `/checkout-complete.html` has no
   page object and the purchase flow is never finished
-- **Image assertions verify visibility, not loading.** A broken `<img>` is still
-  visible, so `problem_user`'s broken images would pass
 - **Item selection is index-based**, coupling tests to the default sort order
 - **Base URL is hardcoded**; no environment configuration layer
 - **No linter or type checker in CI** — static analysis is editor-only

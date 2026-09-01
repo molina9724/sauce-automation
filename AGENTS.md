@@ -185,10 +185,7 @@ Known, accepted, and tracked. Do not re-report.
   results directory. Low impact.
 - Index-based item selection (`add_item_to_cart(0)`) couples tests to the
   default sort order.
-- Base URL is hardcoded in `base_page.py`; no environment configuration layer.
 - No linter or type checker in CI. Pylance covers the editor only.
-- Image tests assert visibility, not that images actually loaded. `problem_user`
-  would pass.
 - The authenticated fixture chain is hardcoded to standard_user. Other users
   (problem_user, visual_user, error_user) require an @pytest.mark.anonymous
   test with a manual login(), which forfeits fixture composition — any setup
