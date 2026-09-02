@@ -10,4 +10,7 @@ class BaseItem(BaseComponent):
         self.name: Locator = self.root.locator(".inventory_item_name")
         self.price: Locator = self.root.locator(".inventory_item_price")
         self.description: Locator = self.root.locator(".inventory_item_desc")
-        self.remove_button: Locator = self.root.get_by_role("button", name="Remove")
+
+    def remove(self, index: int) -> None:
+        item: Locator = self.root.nth(index)
+        item.get_by_role("button", name="Remove").click()

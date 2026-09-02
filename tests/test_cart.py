@@ -39,7 +39,7 @@ def test_verify_correct_item_in_cart(cart_page_with_item: CartPage) -> None:
 
 def test_verify_item_is_removed(cart_page_with_item: CartPage) -> None:
     expect(cart_page_with_item.item.root).to_have_count(1)
-    cart_page_with_item.remove_item(0)
+    cart_page_with_item.item.remove(0)
     expect(cart_page_with_item.cart.counter).to_be_hidden()
     expect(cart_page_with_item.item.root).to_have_count(0)
 

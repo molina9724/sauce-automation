@@ -134,7 +134,7 @@ def test_verify_items_images_are_displayed(empty_inventory_page: InventoryPage) 
 def test_verify_user_can_add_item_to_cart(
     empty_inventory_page: InventoryPage,
 ) -> None:
-    empty_inventory_page.add_item_to_cart(ITEM_INDEX)
+    empty_inventory_page.item.add(ITEM_INDEX)
     expect(empty_inventory_page.cart.counter).to_have_text(ONE)
 
 
@@ -147,9 +147,9 @@ def test_verify_cart_is_empty_by_default(
 def test_verify_cart_is_empty_after_adding_item_and_removing_it(
     empty_inventory_page: InventoryPage,
 ) -> None:
-    empty_inventory_page.add_item_to_cart(ITEM_INDEX)
+    empty_inventory_page.item.add(ITEM_INDEX)
     expect(empty_inventory_page.cart.counter).to_have_text(ONE)
-    empty_inventory_page.remove_item_from_cart(ITEM_INDEX)
+    empty_inventory_page.item.remove(ITEM_INDEX)
     expect(empty_inventory_page.cart.counter).to_be_hidden()
 
 

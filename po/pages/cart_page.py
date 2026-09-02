@@ -28,9 +28,6 @@ class CartPage(BasePage):
         self.cart: Cart = Cart(self.page)
         self.menu: Menu = Menu(self.page)
 
-    def remove_item(self, index: int = 0) -> None:
-        self.item.remove_button.nth(index).click()
-
     def get_inventory_page(self) -> InventoryPage:
         self.continue_shopping_button.click()
         return InventoryPage(self.page)

@@ -7,3 +7,7 @@ class InventoryItem(BaseItem):
     def __init__(self, page: Page, timeout: int = 10000) -> None:
         super().__init__(page, ".inventory_item", timeout)
         self.image: Locator = self.root.locator("img[class='inventory_item_img']")
+
+    def add(self, index: int) -> None:
+        item: Locator = self.root.nth(index)
+        item.get_by_role("button", name="Add to cart").click()
