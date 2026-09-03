@@ -134,11 +134,6 @@ is read from the system under test cannot fail.
 Do not recommend these. They exist in the codebase only where migration is
 incomplete.
 
-- `get_element()`, `_is_item_displayed()`, `_is_item_hidden()`,
-  `BaseComponent.wait_for_url()` — Selenium-era wrappers around behaviour
-  Playwright provides natively. Being removed.
-- Boolean `is_*_displayed()` page-object methods.
-- `pytest.raises` for expected application behaviour.
 - `.all()` followed by a list comprehension and a plain `assert` — use
   `expect(locator).to_have_text([...])`, which retries.
 - `Locator.is_visible()` used as a wait. Playwright explicitly ignores its
