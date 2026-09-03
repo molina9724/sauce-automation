@@ -45,13 +45,3 @@ class InventoryPage(BasePage):
 
     def set_products_filter(self, option: str) -> None:
         self.products_filter.select_option(option)
-
-    def add_item_to_cart(self, index: int) -> None:
-        item: Locator = self.item.root.nth(index)
-        add_button: Locator = item.get_by_role("button", name="Add to cart")
-        add_button.click()
-
-    def remove_item_from_cart(self, index: int) -> None:
-        item: Locator = self.item.root.nth(index)
-        remove_button: Locator = item.get_by_role("button", name="Remove")
-        remove_button.click()

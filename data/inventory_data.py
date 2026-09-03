@@ -74,3 +74,5 @@ FILTER_VALUES: list[tuple[str, SortKey, bool]] = [
 ]
 
 ONE: str = "1"
+ADD_TO_CART: str = "Add to cart"
+REMOVE: str = "Remove"

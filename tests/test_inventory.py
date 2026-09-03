@@ -1,15 +1,18 @@
 # fmt: off
+from typing import List
+from urllib.parse import urljoin
+
 import pytest
-from playwright.sync_api import Locator, expect
+from playwright.sync_api import APIResponse, Locator, expect
 
 from data.global_data import ITEM_INDEX
 from data.inventory_data import (A_TO_Z,
                                  ACCESS_INVENTORY_PAGE_ERROR_WITHOUT_LOGIN,
-                                 DEFAULT_FILTER_VALUE, DOCUMENT_TITLE,
-                                 FILTER_ARGS, FILTER_OPTIONS, FILTER_VALUES,
-                                 INVENTORY_ITEMS_DATA, LEFT_MENU_ITEMS,
-                                 LOGO_TEXT, ONE, PRODUCTS_TITLE, Z_TO_A,
-                                 SortKey)
+                                 ADD_TO_CART, DEFAULT_FILTER_VALUE,
+                                 DOCUMENT_TITLE, FILTER_ARGS, FILTER_OPTIONS,
+                                 FILTER_VALUES, INVENTORY_ITEMS_DATA,
+                                 LEFT_MENU_ITEMS, LOGO_TEXT, ONE,
+                                 PRODUCTS_TITLE, REMOVE, Z_TO_A, SortKey)
 from data.routes import INVENTORY, ROOT
 from po.pages.cart_page import CartPage
 from po.pages.checkout_step_1_page import CheckoutStepOnePage
@@ -17,6 +20,21 @@ from po.pages.inventory_page import InventoryPage
 from po.pages.login_page import LoginPage
 
 # fmt: on
+
+
+def assert_images(empty_inventory_page: InventoryPage) -> None:
+    expect(empty_inventory_page.item.image).to_have_count(len(INVENTORY_ITEMS_DATA))
+    images: list[Locator] = empty_inventory_page.item.image.all()
+    for image in images:
+        expect(image).to_be_visible()
+        expect(image).to_have_js_property("complete", True)
+        expect(image).not_to_have_js_property("naturalWidth", 0)
+        source: str | None = image.get_attribute("src")
+        # TODO: Investigate replacing this Python assert with a Playwright attribute assertion
+        assert source
+        image_url: str = urljoin(empty_inventory_page.page.url, source)
+        response: APIResponse = empty_inventory_page.page.request.get(image_url)
+        expect(response).to_be_ok()
 
 
 def test_verify_document_title(empty_inventory_page: InventoryPage) -> None:
@@ -55,36 +73,49 @@ def test_verify_all_product_filter_options(
     expect(empty_inventory_page.all_filter_options).to_have_text(FILTER_OPTIONS)
 
 
-# TODO: This test case should include images and add/remove buttons to consistently test the whole item object
 @pytest.mark.parametrize(
     FILTER_ARGS,
     argvalues=FILTER_VALUES,
     ids=[filter_value[0] for filter_value in FILTER_VALUES],
 )
-def test_verify_products_are_sorted_after_selecting_filter(
-    empty_inventory_page: InventoryPage,
+def test_verify_products_information_after_selecting_filter(
+    inventory_page_with_item: InventoryPage,
     filter_option: str,
     sort_key: SortKey,
     reverse: bool,
 ) -> None:
+    assert_images(inventory_page_with_item)
     # A_TO_Z is the default option, so first we need a change in order to verify
     if filter_option == A_TO_Z:
-        empty_inventory_page.set_products_filter(Z_TO_A)
-
-    empty_inventory_page.set_products_filter(filter_option)
+        inventory_page_with_item.set_products_filter(Z_TO_A)
+    inventory_page_with_item.set_products_filter(filter_option)
 
     ordered_items: list[tuple[str, dict[str, str]]] = sorted(
         INVENTORY_ITEMS_DATA.items(), key=sort_key, reverse=reverse
     )
+
     ordered_names: list[str] = [name for name, _ in ordered_items]
+    expect(inventory_page_with_item.item.name).to_have_text(ordered_names)
+
     ordered_descriptions: list[str] = [
         details["description"] for _, details in ordered_items
     ]
-    ordered_prices: list[str] = [details["price"] for _, details in ordered_items]
+    expect(inventory_page_with_item.item.description).to_have_text(ordered_descriptions)
 
-    expect(empty_inventory_page.item.name).to_have_text(ordered_names)
-    expect(empty_inventory_page.item.description).to_have_text(ordered_descriptions)
-    expect(empty_inventory_page.item.price).to_have_text(ordered_prices)
+    ordered_prices: list[str] = [details["price"] for _, details in ordered_items]
+    expect(inventory_page_with_item.item.price).to_have_text(ordered_prices)
+
+    assert_images(inventory_page_with_item)
+    images: Locator = inventory_page_with_item.item.image
+    expected_image_names: List[str] = [name for name, _ in ordered_items]
+    for index, expected_name in enumerate(expected_image_names):
+        expect(images.nth(index)).to_have_attribute("alt", expected_name)
+
+    selected_name: str = list(INVENTORY_ITEMS_DATA)[ITEM_INDEX]
+    expected_button_labels: List[str] = [
+        REMOVE if name == selected_name else ADD_TO_CART for name, _ in ordered_items
+    ]
+    expect(inventory_page_with_item.item.button).to_have_text(expected_button_labels)
 
 
 @pytest.mark.anonymous
@@ -108,7 +139,7 @@ def test_verify_items_images_are_displayed(empty_inventory_page: InventoryPage) 
 def test_verify_user_can_add_item_to_cart(
     empty_inventory_page: InventoryPage,
 ) -> None:
-    empty_inventory_page.add_item_to_cart(ITEM_INDEX)
+    empty_inventory_page.item.add(ITEM_INDEX)
     expect(empty_inventory_page.cart.counter).to_have_text(ONE)
 
 
@@ -121,9 +152,9 @@ def test_verify_cart_is_empty_by_default(
 def test_verify_cart_is_empty_after_adding_item_and_removing_it(
     empty_inventory_page: InventoryPage,
 ) -> None:
-    empty_inventory_page.add_item_to_cart(ITEM_INDEX)
+    empty_inventory_page.item.add(ITEM_INDEX)
     expect(empty_inventory_page.cart.counter).to_have_text(ONE)
-    empty_inventory_page.remove_item_from_cart(ITEM_INDEX)
+    empty_inventory_page.item.remove(ITEM_INDEX)
     expect(empty_inventory_page.cart.counter).to_be_hidden()
 
 

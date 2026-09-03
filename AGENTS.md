@@ -134,11 +134,6 @@ is read from the system under test cannot fail.
 Do not recommend these. They exist in the codebase only where migration is
 incomplete.
 
-- `get_element()`, `_is_item_displayed()`, `_is_item_hidden()`,
-  `BaseComponent.wait_for_url()` — Selenium-era wrappers around behaviour
-  Playwright provides natively. Being removed.
-- Boolean `is_*_displayed()` page-object methods.
-- `pytest.raises` for expected application behaviour.
 - `.all()` followed by a list comprehension and a plain `assert` — use
   `expect(locator).to_have_text([...])`, which retries.
 - `Locator.is_visible()` used as a wait. Playwright explicitly ignores its
@@ -183,12 +178,9 @@ Known, accepted, and tracked. Do not re-report.
   10× billing applies only if the repository becomes private.
 - `--clean-alluredir` combined with `-n auto` — xdist workers race to clean the
   results directory. Low impact.
-- Index-based item selection (`add_item_to_cart(0)`) couples tests to the
+- Index-based item selection (`add(0)` and `remove(0)`) couples tests to the
   default sort order.
-- Base URL is hardcoded in `base_page.py`; no environment configuration layer.
 - No linter or type checker in CI. Pylance covers the editor only.
-- Image tests assert visibility, not that images actually loaded. `problem_user`
-  would pass.
 - The authenticated fixture chain is hardcoded to standard_user. Other users
   (problem_user, visual_user, error_user) require an @pytest.mark.anonymous
   test with a manual login(), which forfeits fixture composition — any setup
