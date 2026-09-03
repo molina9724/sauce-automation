@@ -78,7 +78,7 @@ def test_verify_all_product_filter_options(
     argvalues=FILTER_VALUES,
     ids=[filter_value[0] for filter_value in FILTER_VALUES],
 )
-def test_verify_products_and_images_after_selecting_filter(
+def test_verify_products_information_after_selecting_filter(
     inventory_page_with_item: InventoryPage,
     filter_option: str,
     sort_key: SortKey,
