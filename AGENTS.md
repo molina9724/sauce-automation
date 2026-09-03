@@ -178,7 +178,7 @@ Known, accepted, and tracked. Do not re-report.
   10× billing applies only if the repository becomes private.
 - `--clean-alluredir` combined with `-n auto` — xdist workers race to clean the
   results directory. Low impact.
-- Index-based item selection (`add_item_to_cart(0)`) couples tests to the
+- Index-based item selection (`add(0)` and `remove(0)`) couples tests to the
   default sort order.
 - No linter or type checker in CI. Pylance covers the editor only.
 - The authenticated fixture chain is hardcoded to standard_user. Other users

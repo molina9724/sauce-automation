@@ -8,11 +8,11 @@ from playwright.sync_api import APIResponse, Locator, expect
 from data.global_data import ITEM_INDEX
 from data.inventory_data import (A_TO_Z,
                                  ACCESS_INVENTORY_PAGE_ERROR_WITHOUT_LOGIN,
-                                 DEFAULT_FILTER_VALUE, DOCUMENT_TITLE,
-                                 FILTER_ARGS, FILTER_OPTIONS, FILTER_VALUES,
-                                 INVENTORY_ITEMS_DATA, LEFT_MENU_ITEMS,
-                                 LOGO_TEXT, ONE, PRODUCTS_TITLE, Z_TO_A,
-                                 SortKey)
+                                 ADD_TO_CART, DEFAULT_FILTER_VALUE,
+                                 DOCUMENT_TITLE, FILTER_ARGS, FILTER_OPTIONS,
+                                 FILTER_VALUES, INVENTORY_ITEMS_DATA,
+                                 LEFT_MENU_ITEMS, LOGO_TEXT, ONE,
+                                 PRODUCTS_TITLE, REMOVE, Z_TO_A, SortKey)
 from data.routes import INVENTORY, ROOT
 from po.pages.cart_page import CartPage
 from po.pages.checkout_step_1_page import CheckoutStepOnePage
@@ -113,8 +113,7 @@ def test_verify_products_and_images_after_selecting_filter(
 
     selected_name: str = list(INVENTORY_ITEMS_DATA)[ITEM_INDEX]
     expected_button_labels: List[str] = [
-        "Remove" if name == selected_name else "Add to cart"
-        for name, _ in ordered_items
+        REMOVE if name == selected_name else ADD_TO_CART for name, _ in ordered_items
     ]
     expect(inventory_page_with_item.item.button).to_have_text(expected_button_labels)
 

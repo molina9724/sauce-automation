@@ -1,5 +1,7 @@
 from playwright.sync_api import Locator, Page
 
+from data.inventory_data import ADD_TO_CART
+
 from ..components.base_item import BaseItem
 
 
@@ -12,4 +14,4 @@ class InventoryItem(BaseItem):
 
     def add(self, index: int) -> None:
         item: Locator = self.root.nth(index)
-        item.get_by_role("button", name="Add to cart").click()
+        item.get_by_role("button", name=ADD_TO_CART).click()

@@ -1,5 +1,7 @@
 from playwright.sync_api import Locator, Page
 
+from data.inventory_data import REMOVE
+
 from ..components.base_component import BaseComponent
 
 
@@ -13,4 +15,4 @@ class BaseItem(BaseComponent):
 
     def remove(self, index: int) -> None:
         item: Locator = self.root.nth(index)
-        item.get_by_role("button", name="Remove").click()
+        item.get_by_role("button", name=REMOVE).click()
