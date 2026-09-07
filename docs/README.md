@@ -68,16 +68,15 @@ Richer than the pytest-html output: keeps history across runs, so it surfaces
 Requires Node (the report generator is invoked via `npx`).
 
 ```bash
-rm -rf allure-report     # generate refuses to overwrite an existing report
-pytest                   # writes raw results to allure-results/
-npx allure generate      # reads allurerc.json
-npx allure open          # serves the report locally
+rm -rf allure-results allure-report     # generate refuses to overwrite an existing report
+pytest                                  # writes raw results to allure-results/
+npx allure generate                     # reads allurerc.json
+npx allure open                         # serves the report locally
 ```
 
-`allure-results/` is cleared automatically on every run. **`allure/history.jsonl`
-is not, and must not be deleted** — it is what makes flaky detection and trend
-charts work, and it accumulates over the last 20 runs (`historyLimit` in
-`allurerc.json`).
+**`allure/history.jsonl` is not, and must not be deleted** — it is what makes
+flaky detection and trend charts work, and it accumulates over the last 20 runs
+(`historyLimit` in `allurerc.json`).
 
 ### Investigating a failure
 
