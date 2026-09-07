@@ -4,11 +4,11 @@ from playwright.sync_api import Locator, Page
 
 from data.routes import INVENTORY, ROOT
 
-from ..pages.login_page import LoginPage
 from .base_component import BaseComponent
 
 if TYPE_CHECKING:
     from ..pages.inventory_page import InventoryPage
+    from ..pages.login_page import LoginPage
 
 
 class Menu(BaseComponent):
@@ -24,10 +24,12 @@ class Menu(BaseComponent):
         self.all_items_link: Locator = self.panel.get_by_role("link", name="All Items")
         self.close_button: Locator = self.panel.locator(".bm-cross-button")
 
-    def logout(self) -> LoginPage:
+    def logout(self) -> "LoginPage":
         self.hamburger_button.click()
         self.logout_link.click()
         self.page.wait_for_url(ROOT)
+        from ..pages.login_page import LoginPage
+
         return LoginPage(self.page)
 
     def all_items(self) -> "InventoryPage":

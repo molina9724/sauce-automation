@@ -62,7 +62,7 @@ Cross-browser runs are configured but disabled by default. See the commented
 
 ### Allure report
 
-Richer than the pytest-html output: keeps history across runs, so it surfaces
+Richer than the pytest-html output: keeps history across runs (locally only, not implemented for CI), so it surfaces
 **flaky tests**, retry patterns and pass-rate trends.
 
 Requires Node (the report generator is invoked via `npx`).

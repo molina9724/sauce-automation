@@ -2,8 +2,8 @@
 import pytest
 from playwright.sync_api import expect
 
-from data.login_data import (DOCUMENT_TITLE, EMPTY_USERNAME_ERROR,
-                             EXPECTED_LOGIN_USERNAMES, LOGIN_ARGS,
+from data.login_data import (DOCUMENT_TITLE, EXPECTED_LOGIN_USERNAMES,
+                             LOCKED_ACCOUNT_ERROR, LOCKED_USERS, LOGIN_ARGS,
                              LOGIN_ERROR_ARGS, LOGIN_ERROR_PARAMS, LOGO_TEXT,
                              PASSWORD, SUCCESS_LOGIN_DATA, UNLOCKED_USERS)
 from data.routes import INVENTORY
@@ -75,8 +75,8 @@ def test_verify_unsuccessful_login(
 def test_verify_error_dismissal_after_unsuccessful_login_with_locked_account(
     login_page: LoginPage,
 ) -> None:
-    login_page.submit_credentials(username="", password="")
-    expect(login_page.form_validation.error_heading).to_have_text(EMPTY_USERNAME_ERROR)
+    login_page.submit_credentials(username=LOCKED_USERS[0], password=PASSWORD)
+    expect(login_page.form_validation.error_heading).to_have_text(LOCKED_ACCOUNT_ERROR)
     assert_error_decorations(login_page)
     login_page.dismiss_error()
     assert_no_error_decorations(login_page)
