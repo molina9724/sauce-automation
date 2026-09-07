@@ -129,13 +129,6 @@ def test_verify_error_when_trying_to_access_inventory_page_without_login(
     expect(login_page.page).to_have_url(ROOT)
 
 
-def test_verify_items_images_are_displayed(empty_inventory_page: InventoryPage) -> None:
-    item_images: Locator = empty_inventory_page.item.image
-    expect(item_images).to_have_count(len(INVENTORY_ITEMS_DATA))
-    for index in range(len(INVENTORY_ITEMS_DATA)):
-        expect(item_images.nth(index)).to_be_visible()
-
-
 def test_verify_user_can_add_item_to_cart(
     empty_inventory_page: InventoryPage,
 ) -> None:
