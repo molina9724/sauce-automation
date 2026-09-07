@@ -60,6 +60,24 @@ pytest -k "cart"             # by keyword
 Cross-browser runs are configured but disabled by default. See the commented
 `--browser` line in `pytest.ini`.
 
+### Allure report
+
+Richer than the pytest-html output: keeps history across runs, so it surfaces
+**flaky tests**, retry patterns and pass-rate trends.
+
+Requires Node (the report generator is invoked via `npx`).
+
+```bash
+rm -rf allure-results allure-report     # generate refuses to overwrite an existing report
+pytest                                  # writes raw results to allure-results/
+npx allure generate                     # reads allurerc.json
+npx allure open                         # serves the report locally
+```
+
+**`allure/history.jsonl` is not, and must not be deleted** — it is what makes
+flaky detection and trend charts work, and it accumulates over the last 20 runs
+(`historyLimit` in `allurerc.json`).
+
 ### Investigating a failure
 
 Failures produce a trace, video and screenshot under `test-results/`:
