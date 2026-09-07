@@ -48,9 +48,6 @@ class CheckoutStepOnePage(BasePage):
 
     def get_checkout_step_two_page(self) -> CheckoutStepTwoPage:
         self.page.wait_for_url(CHECKOUT_STEP_2)
-
-        from .checkout_step_2_page import CheckoutStepTwoPage
-
         return CheckoutStepTwoPage(self.page)
 
     def cancel(self) -> CartPage:
