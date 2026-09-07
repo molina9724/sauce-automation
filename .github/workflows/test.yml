@@ -47,7 +47,7 @@ jobs:
 
       - name: Format code
         run: python -m black --check .
-      
+
       - name: Clear allure results
         run: rm -rf allure-results allure-report
 
