@@ -22,9 +22,9 @@ from po.pages.login_page import LoginPage
 # fmt: on
 
 
-def assert_images(empty_inventory_page: InventoryPage) -> None:
-    expect(empty_inventory_page.item.image).to_have_count(len(INVENTORY_ITEMS_DATA))
-    images: list[Locator] = empty_inventory_page.item.image.all()
+def assert_images(inventory_page: InventoryPage) -> None:
+    expect(inventory_page.item.image).to_have_count(len(INVENTORY_ITEMS_DATA))
+    images: list[Locator] = inventory_page.item.image.all()
     for image in images:
         expect(image).to_be_visible()
         expect(image).to_have_js_property("complete", True)
@@ -32,8 +32,8 @@ def assert_images(empty_inventory_page: InventoryPage) -> None:
         source: str | None = image.get_attribute("src")
         # TODO: Investigate replacing this Python assert with a Playwright attribute assertion
         assert source
-        image_url: str = urljoin(empty_inventory_page.page.url, source)
-        response: APIResponse = empty_inventory_page.page.request.get(image_url)
+        image_url: str = urljoin(inventory_page.page.url, source)
+        response: APIResponse = inventory_page.page.request.get(image_url)
         expect(response).to_be_ok()
 
 
