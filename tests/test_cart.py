@@ -3,7 +3,7 @@ import pytest
 from playwright.sync_api import expect
 
 from data.cart_data import (ACCESS_CART_PAGE_WITHOUT_LOGIN_ERROR,
-                            ALL_ITEMS_INDEX, CART_ITEM_DATA)
+                            ALL_ITEMS_INDEX, CART_ITEM_DATA, CART_ITEMS_DATA)
 from data.routes import CART
 from po.components.cart_page_item import CartItem
 from po.pages.cart_page import CartPage
@@ -13,11 +13,11 @@ from po.pages.login_page import LoginPage
 # fmt: on
 
 
-def verify_items_data(item: CartItem) -> None:
-    names: list[str] = list(CART_ITEM_DATA.keys())
-    descriptions: list[str] = [key["description"] for key in CART_ITEM_DATA.values()]
-    prices: list[str] = [key["price"] for key in CART_ITEM_DATA.values()]
-    quantities: list[str] = [details["quantity"] for details in CART_ITEM_DATA.values()]
+def verify_items_data(item: CartItem, data: dict[str, dict[str, str]]) -> None:
+    names: list[str] = list(data.keys())
+    descriptions: list[str] = [key["description"] for key in data.values()]
+    prices: list[str] = [key["price"] for key in data.values()]
+    quantities: list[str] = [details["quantity"] for details in data.values()]
 
     expect(item.name).to_have_text(names)
     expect(item.description).to_have_text(descriptions)
@@ -33,8 +33,8 @@ def test_verify_cart_is_empty(empty_cart_page: CartPage) -> None:
     expect(empty_cart_page.cart.counter).to_be_hidden()
 
 
-def test_verify_correct_item_in_cart(cart_page_with_item: CartPage) -> None:
-    verify_items_data(cart_page_with_item.item)
+def test_verify_correct_items_in_cart(cart_page_with_all_items: CartPage) -> None:
+    verify_items_data(cart_page_with_all_items.item, CART_ITEMS_DATA)
 
 
 def test_verify_item_is_removed(cart_page_with_item: CartPage) -> None:
@@ -54,7 +54,7 @@ def test_verify_items_remain_in_cart_after_pressing_cancel_in_checkout_step_one_
     checkout_step_1_page_with_item: CheckoutStepOnePage,
 ) -> None:
     cart_page: CartPage = checkout_step_1_page_with_item.cancel()
-    verify_items_data(cart_page.item)
+    verify_items_data(cart_page.item, CART_ITEM_DATA)
 
 
 @pytest.mark.anonymous
