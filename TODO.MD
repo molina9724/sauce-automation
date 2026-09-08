@@ -9,6 +9,7 @@
 * [ ] Add test cases to `test_checkout_step_2`
 * [ ] Implement checkout page
 * [ ] Fixture set grew combinatorially; needs a factory
+* [ ] Refactor test cases that repeat the same steps but with different fixtures
 
 ## In Progress
 

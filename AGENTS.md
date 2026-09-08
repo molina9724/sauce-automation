@@ -184,6 +184,8 @@ Known, accepted, and tracked. Do not re-report.
   test with a manual login(), which forfeits fixture composition — any setup
   beyond the inventory page must be rebuilt by hand. Parametrising auth by user
   would need an auth cache keyed on username.
+- Some test cases are being repeated with different fixtures even though they do
+  the same. They should be parametrized just like `test_left_menu` was.
 
 ---
 

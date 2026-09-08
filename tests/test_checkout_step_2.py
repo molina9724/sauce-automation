@@ -2,7 +2,8 @@
 from playwright.sync_api import expect
 
 from data.cart_data import CART_ITEM_DATA
-from data.checkout_step_2_data import calculate_subtotal, calculate_taxes
+from data.checkout_step_2_data import (calculate_subtotal, calculate_taxes,
+                                       calculate_total)
 from data.inventory_data import INVENTORY_ITEMS_DATA
 from data.routes import CHECKOUT_COMPLETE, INVENTORY
 from po.pages.checkout_complete import CheckoutComplete
@@ -19,13 +20,27 @@ def test_validate_item_subtotal(
     expect(checkout_step_2_page_with_item.subtotal).to_contain_text(expected_subtotal)
 
 
-def test_validate_all_items_total(
+def test_validate_all_items_subtotal(
     checkout_step_2_page_with_all_items: CheckoutStepTwoPage,
 ) -> None:
     expected_subtotal: str = calculate_subtotal(INVENTORY_ITEMS_DATA)
     expect(checkout_step_2_page_with_all_items.subtotal).to_contain_text(
         expected_subtotal
     )
+
+
+def test_validate_item_total(
+    checkout_step_2_page_with_item: CheckoutStepTwoPage,
+) -> None:
+    expected_total: str = calculate_total(CART_ITEM_DATA)
+    expect(checkout_step_2_page_with_item.total).to_contain_text(expected_total)
+
+
+def test_validate_all_items_total(
+    checkout_step_2_page_with_all_items: CheckoutStepTwoPage,
+) -> None:
+    expected_total: str = calculate_total(INVENTORY_ITEMS_DATA)
+    expect(checkout_step_2_page_with_all_items.total).to_contain_text(expected_total)
 
 
 def test_verify_taxes_calculation_for_single_item(

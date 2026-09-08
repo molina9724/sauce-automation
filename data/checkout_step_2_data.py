@@ -17,8 +17,16 @@ def calculate_subtotal(items: dict[str, dict[str, str]]) -> str:
 
 
 def calculate_taxes(items: dict[str, dict[str, str]]) -> str:
-    total: str = calculate_subtotal(items)
-    total_without_currency = Decimal(total[1:])
+    subtotal: str = calculate_subtotal(items)
+    total_without_currency = Decimal(subtotal[1:])
 
     taxes: Decimal = round(total_without_currency * TAXES, 2)
     return f"{CURRENCY}{taxes:.2f}"
+
+
+def calculate_total(items: dict[str, dict[str, str]]) -> str:
+    subtotal = Decimal(calculate_subtotal(items)[1::])
+    taxes = Decimal(calculate_taxes(items)[1::])
+
+    total: Decimal = subtotal + taxes
+    return f"{CURRENCY}{total:.2f}"
