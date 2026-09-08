@@ -1,9 +1,7 @@
 # fmt: off
-from typing import List
-from urllib.parse import urljoin
 
 import pytest
-from playwright.sync_api import APIResponse, Locator, expect
+from playwright.sync_api import Locator, expect
 
 from data.global_data import ITEM_INDEX
 from data.inventory_data import (A_TO_Z,
@@ -18,23 +16,16 @@ from po.pages.cart_page import CartPage
 from po.pages.checkout_step_1_page import CheckoutStepOnePage
 from po.pages.inventory_page import InventoryPage
 from po.pages.login_page import LoginPage
+from tests.test_image import general_image_assert
 
 # fmt: on
 
 
-def assert_images(inventory_page: InventoryPage) -> None:
+def assert_item_images(inventory_page: InventoryPage) -> None:
     expect(inventory_page.item.image).to_have_count(len(INVENTORY_ITEMS_DATA))
     images: list[Locator] = inventory_page.item.image.all()
     for image in images:
-        expect(image).to_be_visible()
-        expect(image).to_have_js_property("complete", True)
-        expect(image).not_to_have_js_property("naturalWidth", 0)
-        source: str | None = image.get_attribute("src")
-        # TODO: Investigate replacing this Python assert with a Playwright attribute assertion
-        assert source
-        image_url: str = urljoin(inventory_page.page.url, source)
-        response: APIResponse = inventory_page.page.request.get(image_url)
-        expect(response).to_be_ok()
+        general_image_assert(inventory_page, image)
 
 
 def test_verify_document_title(empty_inventory_page: InventoryPage) -> None:
@@ -84,7 +75,7 @@ def test_verify_products_information_after_selecting_filter(
     sort_key: SortKey,
     reverse: bool,
 ) -> None:
-    assert_images(inventory_page_with_item)
+    assert_item_images(inventory_page_with_item)
     # A_TO_Z is the default option, so first we need a change in order to verify
     if filter_option == A_TO_Z:
         inventory_page_with_item.set_products_filter(Z_TO_A)
@@ -105,14 +96,14 @@ def test_verify_products_information_after_selecting_filter(
     ordered_prices: list[str] = [details["price"] for _, details in ordered_items]
     expect(inventory_page_with_item.item.price).to_have_text(ordered_prices)
 
-    assert_images(inventory_page_with_item)
+    assert_item_images(inventory_page_with_item)
     images: Locator = inventory_page_with_item.item.image
-    expected_image_names: List[str] = [name for name, _ in ordered_items]
+    expected_image_names: list[str] = [name for name, _ in ordered_items]
     for index, expected_name in enumerate(expected_image_names):
         expect(images.nth(index)).to_have_attribute("alt", expected_name)
 
     selected_name: str = list(INVENTORY_ITEMS_DATA)[ITEM_INDEX]
-    expected_button_labels: List[str] = [
+    expected_button_labels: list[str] = [
         REMOVE if name == selected_name else ADD_TO_CART for name, _ in ordered_items
     ]
     expect(inventory_page_with_item.item.button).to_have_text(expected_button_labels)
