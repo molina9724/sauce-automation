@@ -10,6 +10,7 @@ from data.global_data import ITEM_INDEX
 from data.login_data import DEFAULT_UNLOCKED_USER, PASSWORD
 from data.routes import INVENTORY, ROOT
 from po.pages.cart_page import CartPage
+from po.pages.checkout_complete import CheckoutComplete
 from po.pages.checkout_step_1_page import CheckoutStepOnePage
 from po.pages.checkout_step_2_page import CheckoutStepTwoPage
 from po.pages.inventory_page import InventoryPage
@@ -159,3 +160,11 @@ def checkout_step_2_page_with_all_items(
         checkout_step_1_page_with_all_items.get_checkout_step_two_page()
     )
     return checkout_step_2_all_items
+
+
+@pytest.fixture
+def checkout_complete_page_with_item(
+    checkout_step_2_page_with_item: CheckoutStepTwoPage,
+) -> CheckoutComplete:
+    checkout_complete: CheckoutComplete = checkout_step_2_page_with_item.finish()
+    return checkout_complete
