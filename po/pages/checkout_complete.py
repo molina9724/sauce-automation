@@ -19,9 +19,11 @@ class CheckoutComplete(BasePage):
         )
         self.text: Locator = self.checkout_container.locator(".complete-text")
 
-        self.back_button: Locator = self.page.get_by_role("button", name="Back Home")
+        self.back_home_button: Locator = self.checkout_container.get_by_role(
+            "button", name="Back Home"
+        )
 
     def get_inventory_page(self) -> InventoryPage:
-        self.back_button.click()
+        self.back_home_button.click()
         self.page.wait_for_url(INVENTORY)
         return InventoryPage(self.page)

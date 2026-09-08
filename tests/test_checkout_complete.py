@@ -10,20 +10,20 @@ def test_verify_checkout_complete_message(
     checkout_complete_page_with_item: CheckoutComplete,
 ) -> None:
     expect(checkout_complete_page_with_item.title).to_be_visible()
-    expect(checkout_complete_page_with_item.title).to_have_text("Checkout: Complete!")
 
+    expect(checkout_complete_page_with_item.title).to_have_text("Checkout: Complete!")
     general_image_assert(
         checkout_complete_page_with_item,
         checkout_complete_page_with_item.heavy_check_mark,
     )
-
     expect(checkout_complete_page_with_item.header).to_have_text(
         "Thank you for your order!"
     )
-
     expect(checkout_complete_page_with_item.text).to_have_text(
         "Your order has been dispatched, and will arrive just as fast as the pony can get there!"
     )
+
+    expect(checkout_complete_page_with_item.back_home_button).to_be_visible()
 
 
 def test_verify_back_home_returns_to_empty_inventory_page(
