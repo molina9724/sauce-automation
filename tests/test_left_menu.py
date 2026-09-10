@@ -6,6 +6,7 @@ from playwright.sync_api import expect
 
 from data.routes import INVENTORY, ROOT
 from po.pages.cart_page import CartPage
+from po.pages.checkout_complete import CheckoutComplete
 from po.pages.checkout_step_1_page import CheckoutStepOnePage
 from po.pages.checkout_step_2_page import CheckoutStepTwoPage
 from po.pages.inventory_page import InventoryPage
@@ -53,9 +54,16 @@ def test_all_items_from_all_menu_pages_with_empty_cart(
 def test_all_items_from_all_menu_pages_with_item_in_cart(
     page_fixture: str, request: pytest.FixtureRequest
 ) -> None:
-    page: Union[InventoryPage, CartPage, CheckoutStepOnePage, CheckoutStepTwoPage] = (
-        request.getfixturevalue(page_fixture)
-    )
+    page: Union[
+        InventoryPage,
+        CartPage,
+        CheckoutStepOnePage,
+        CheckoutStepTwoPage,
+        CheckoutComplete,
+    ] = request.getfixturevalue(page_fixture)
     inventory_page: InventoryPage = page.menu.all_items()
     expect(inventory_page.page).to_have_url(INVENTORY)
-    expect(inventory_page.cart.counter).to_have_text("1")
+    if isinstance(page, CheckoutComplete):
+        expect(inventory_page.cart.counter).to_be_hidden()
+    else:
+        expect(inventory_page.cart.counter).to_have_text("1")

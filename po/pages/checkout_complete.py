@@ -4,6 +4,9 @@ from data.routes import INVENTORY
 from po.pages.base_page import BasePage
 from po.pages.inventory_page import InventoryPage
 
+from ..components.cart import Cart
+from ..components.left_menu import Menu
+
 
 class CheckoutComplete(BasePage):
     def __init__(self, page: Page, timeout: int = 10000) -> None:
@@ -22,6 +25,9 @@ class CheckoutComplete(BasePage):
         self.back_home_button: Locator = self.checkout_container.get_by_role(
             "button", name="Back Home"
         )
+
+        self.menu: Menu = Menu(self.page)
+        self.cart: Cart = Cart(self.page)
 
     def get_inventory_page(self) -> InventoryPage:
         self.back_home_button.click()
