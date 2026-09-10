@@ -10,5 +10,7 @@ FIXTURES_WITH_ITEM: list[str] = [
     "cart_page_with_item",
     "checkout_step_1_page_with_item",
     "checkout_step_2_page_with_item",
-    "checkout_complete_page_with_item",
+    "checkout_complete_page",
 ]
+
+ALL_FIXTURES: list[str] = EMPTY_FIXTURES + FIXTURES_WITH_ITEM

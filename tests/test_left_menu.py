@@ -12,46 +12,34 @@ from po.pages.checkout_step_2_page import CheckoutStepTwoPage
 from po.pages.inventory_page import InventoryPage
 from po.pages.login_page import LoginPage
 
-from .shared_fixtures_names import (EMPTY_FIXTURES, FIXTURES_WITH_ITEM,
-                                    PAGE_FIXTURE)
+from .shared_fixtures_names import ALL_FIXTURES, PAGE_FIXTURE
 
 #fmt:on
 
 
 @pytest.mark.parametrize(
     PAGE_FIXTURE,
-    EMPTY_FIXTURES,
+    ALL_FIXTURES,
 )
 def test_logout_from_all_menu_pages(
     page_fixture: str, request: pytest.FixtureRequest
 ) -> None:
-    page: Union[InventoryPage, CartPage, CheckoutStepOnePage, CheckoutStepTwoPage] = (
-        request.getfixturevalue(page_fixture)
-    )
+    page: Union[
+        InventoryPage,
+        CartPage,
+        CheckoutStepOnePage,
+        CheckoutStepTwoPage,
+        CheckoutComplete,
+    ] = request.getfixturevalue(page_fixture)
     login_page: LoginPage = page.menu.logout()
     expect(login_page.page).to_have_url(ROOT)
 
 
 @pytest.mark.parametrize(
     PAGE_FIXTURE,
-    EMPTY_FIXTURES,
+    ALL_FIXTURES,
 )
-def test_all_items_from_all_menu_pages_with_empty_cart(
-    page_fixture: str, request: pytest.FixtureRequest
-) -> None:
-    page: Union[InventoryPage, CartPage, CheckoutStepOnePage, CheckoutStepTwoPage] = (
-        request.getfixturevalue(page_fixture)
-    )
-    inventory_page: InventoryPage = page.menu.all_items()
-    expect(inventory_page.page).to_have_url(INVENTORY)
-    expect(inventory_page.cart.counter).to_be_hidden()
-
-
-@pytest.mark.parametrize(
-    PAGE_FIXTURE,
-    FIXTURES_WITH_ITEM,
-)
-def test_all_items_from_all_menu_pages_with_item_in_cart(
+def test_all_items_from_all_menu_pages(
     page_fixture: str, request: pytest.FixtureRequest
 ) -> None:
     page: Union[
@@ -63,7 +51,7 @@ def test_all_items_from_all_menu_pages_with_item_in_cart(
     ] = request.getfixturevalue(page_fixture)
     inventory_page: InventoryPage = page.menu.all_items()
     expect(inventory_page.page).to_have_url(INVENTORY)
-    if isinstance(page, CheckoutComplete):
-        expect(inventory_page.cart.counter).to_be_hidden()
-    else:
+    if "with_item" in str(page_fixture):
         expect(inventory_page.cart.counter).to_have_text("1")
+    else:
+        expect(inventory_page.cart.counter).to_be_hidden()

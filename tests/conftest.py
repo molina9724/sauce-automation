@@ -163,7 +163,7 @@ def checkout_step_2_page_with_all_items(
 
 
 @pytest.fixture
-def checkout_complete_page_with_item(
+def checkout_complete_page(
     checkout_step_2_page_with_item: CheckoutStepTwoPage,
 ) -> CheckoutComplete:
     checkout_complete: CheckoutComplete = checkout_step_2_page_with_item.finish()
