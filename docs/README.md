@@ -167,8 +167,9 @@ This suite does **not** currently do:
 
 ## Roadmap
 
-- [ ] Implement the checkout-complete page and the full purchase flow
 - [ ] Parametrise authentication by user to cover `problem_user` and friends
+- [ ] Replace CSS locators for interactive elements with Playwright's recommended
+  locators where accessible roles, labels, or text are available
 - [ ] Replace index-based item selection with name-based locators
 - [ ] Environment configuration for base URL
 - [ ] Add static analysis to CI
