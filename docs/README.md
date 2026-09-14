@@ -158,8 +158,6 @@ This suite does **not** currently do:
 - **Authentication is hardcoded to `standard_user`.** Testing `problem_user`,
   `visual_user` or `error_user` requires a manual login in an `anonymous` test,
   which forfeits fixture composition
-- **Checkout completion is not implemented** — `/checkout-complete.html` has no
-  page object and the purchase flow is never finished
 - **Item selection is index-based**, coupling tests to the default sort order
 - **Base URL is hardcoded**; no environment configuration layer
 - **No linter or type checker in CI** — static analysis is editor-only
