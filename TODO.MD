@@ -8,7 +8,11 @@
 * [ ] Add parameter annotations to all the classes, methods and functions
 * [ ] Add test cases to `test_checkout_step_2`
 * [ ] Fixture set grew combinatorially; needs a factory
-* [ ] Refactor test cases that repeat the same steps but with different fixtures
+* [ ] Investigate centralized fixture parametrization ("fixture matrix") for
+  shared test cases across page states; compare parametrized fixtures, indirect
+  parametrization, and `pytest_generate_tests`
+* [ ] Add repeated-purchase coverage for one, two, and three completed purchases
+  without including login tests in that workflow matrix
 
 ## In Progress
 
