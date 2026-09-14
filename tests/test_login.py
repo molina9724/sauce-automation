@@ -2,10 +2,13 @@
 import pytest
 from playwright.sync_api import expect
 
-from data.login_data import (DOCUMENT_TITLE, EXPECTED_LOGIN_USERNAMES,
-                             LOCKED_ACCOUNT_ERROR, LOCKED_USERS, LOGIN_ARGS,
-                             LOGIN_ERROR_ARGS, LOGIN_ERROR_PARAMS, LOGO_TEXT,
-                             PASSWORD, SUCCESS_LOGIN_DATA, UNLOCKED_USERS)
+from data.login_data import (DEFAULT_UNLOCKED_USER, DOCUMENT_TITLE,
+                             EXPECTED_LOGIN_USERNAMES, LOCKED_ACCOUNT_ERROR,
+                             LOCKED_USERS, LOGIN_ARGS, LOGIN_ERROR_ARGS,
+                             LOGIN_ERROR_PARAMS, LOGO_TEXT, PASSWORD,
+                             SUCCESS_LOGIN_DATA, UNLOCKED_USERS,
+                             WRONG_CREDENTIALS_ERROR, WRONG_PASSWORD,
+                             WRONG_USERNAME)
 from data.routes import INVENTORY
 from po.pages.inventory_page import InventoryPage
 from po.pages.login_page import LoginPage
@@ -55,6 +58,52 @@ def test_verify_password(login_page: LoginPage) -> None:
     assert login_page.get_password() == PASSWORD
 
 
+def test_verify_username_textbox_placeholder(login_page: LoginPage) -> None:
+    expect(login_page.username).to_have_attribute(name="placeholder", value="Username")
+
+
+def test_verify_password_textbox_placeholder(login_page: LoginPage) -> None:
+    expect(login_page.password).to_have_attribute(name="placeholder", value="Password")
+
+
+def test_verify_password_field_masking(login_page: LoginPage) -> None:
+    expect(login_page.password).to_have_attribute(name="type", value="password")
+
+
+def test_verify_login_form_can_be_submitted_multiple_times(
+    login_page: LoginPage,
+) -> None:
+    for _ in range(2):
+        login_page.submit_credentials(username=WRONG_USERNAME, password=WRONG_PASSWORD)
+        expect(login_page.form_validation.error_heading).to_have_text(
+            WRONG_CREDENTIALS_ERROR
+        )
+        assert_error_decorations(login_page)
+        login_page.dismiss_error()
+        assert_no_error_decorations(login_page)
+
+
+def test_verify_user_can_login_after_invalid_credentials(login_page: LoginPage) -> None:
+    login_page.submit_credentials(username=WRONG_USERNAME, password=WRONG_PASSWORD)
+    expect(login_page.form_validation.error_heading).to_have_text(
+        WRONG_CREDENTIALS_ERROR
+    )
+    assert_error_decorations(login_page)
+    login_page.dismiss_error()
+    assert_no_error_decorations(login_page)
+    inventory_page: InventoryPage = login_page.login(
+        username=DEFAULT_UNLOCKED_USER, password=PASSWORD
+    )
+    expect(inventory_page.page).to_have_url(INVENTORY)
+
+
+def test_verify_login_using_enter_key(login_page: LoginPage) -> None:
+    inventory_page: InventoryPage = login_page.enter_login(
+        username=DEFAULT_UNLOCKED_USER, password=PASSWORD
+    )
+    expect(inventory_page.page).to_have_url(INVENTORY)
+
+
 @pytest.mark.parametrize(LOGIN_ARGS, argvalues=SUCCESS_LOGIN_DATA, ids=UNLOCKED_USERS)
 def test_verify_successful_login(
     login_page: LoginPage, user: str, password: str
@@ -80,7 +129,3 @@ def test_verify_error_dismissal_after_unsuccessful_login_with_locked_account(
     assert_error_decorations(login_page)
     login_page.dismiss_error()
     assert_no_error_decorations(login_page)
-
-
-def test_verify_password_field_masking(login_page: LoginPage) -> None:
-    expect(login_page.password).to_have_attribute(name="type", value="password")
