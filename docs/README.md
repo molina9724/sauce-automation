@@ -158,8 +158,6 @@ This suite does **not** currently do:
 - **Authentication is hardcoded to `standard_user`.** Testing `problem_user`,
   `visual_user` or `error_user` requires a manual login in an `anonymous` test,
   which forfeits fixture composition
-- **Checkout completion is not implemented** — `/checkout-complete.html` has no
-  page object and the purchase flow is never finished
 - **Item selection is index-based**, coupling tests to the default sort order
 - **Base URL is hardcoded**; no environment configuration layer
 - **No linter or type checker in CI** — static analysis is editor-only
@@ -167,8 +165,9 @@ This suite does **not** currently do:
 
 ## Roadmap
 
-- [ ] Implement the checkout-complete page and the full purchase flow
 - [ ] Parametrise authentication by user to cover `problem_user` and friends
+- [ ] Replace CSS locators for interactive elements with Playwright's recommended
+  locators where accessible roles, labels, or text are available
 - [ ] Replace index-based item selection with name-based locators
 - [ ] Environment configuration for base URL
 - [ ] Add static analysis to CI

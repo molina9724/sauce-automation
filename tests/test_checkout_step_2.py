@@ -2,9 +2,13 @@
 from playwright.sync_api import expect
 
 from data.cart_data import CART_ITEM_DATA
-from data.checkout_step_2_data import calculate_subtotal, calculate_taxes
+from data.checkout_step_2_data import (calculate_subtotal, calculate_taxes,
+                                       calculate_total)
 from data.inventory_data import INVENTORY_ITEMS_DATA
+from data.routes import CHECKOUT_COMPLETE, INVENTORY
+from po.pages.checkout_complete import CheckoutComplete
 from po.pages.checkout_step_2_page import CheckoutStepTwoPage
+from po.pages.inventory_page import InventoryPage
 
 # fmt: on
 
@@ -16,13 +20,27 @@ def test_validate_item_subtotal(
     expect(checkout_step_2_page_with_item.subtotal).to_contain_text(expected_subtotal)
 
 
-def test_validate_all_items_total(
+def test_validate_all_items_subtotal(
     checkout_step_2_page_with_all_items: CheckoutStepTwoPage,
 ) -> None:
     expected_subtotal: str = calculate_subtotal(INVENTORY_ITEMS_DATA)
     expect(checkout_step_2_page_with_all_items.subtotal).to_contain_text(
         expected_subtotal
     )
+
+
+def test_validate_item_total(
+    checkout_step_2_page_with_item: CheckoutStepTwoPage,
+) -> None:
+    expected_total: str = calculate_total(CART_ITEM_DATA)
+    expect(checkout_step_2_page_with_item.total).to_contain_text(expected_total)
+
+
+def test_validate_all_items_total(
+    checkout_step_2_page_with_all_items: CheckoutStepTwoPage,
+) -> None:
+    expected_total: str = calculate_total(INVENTORY_ITEMS_DATA)
+    expect(checkout_step_2_page_with_all_items.total).to_contain_text(expected_total)
 
 
 def test_verify_taxes_calculation_for_single_item(
@@ -37,3 +55,17 @@ def test_verify_taxes_calculation_for_all_items(
 ) -> None:
     expected_taxes: str = calculate_taxes(INVENTORY_ITEMS_DATA)
     expect(checkout_step_2_page_with_all_items.tax).to_contain_text(expected_taxes)
+
+
+def test_verify_cancel_button_takes_user_to_inventory_page(
+    checkout_step_2_page_with_item: CheckoutStepTwoPage,
+) -> None:
+    inventory_page: InventoryPage = checkout_step_2_page_with_item.cancel()
+    expect(inventory_page.page).to_have_url(INVENTORY)
+
+
+def test_verify_finish_button_takes_user_to_checkout_complete_page(
+    checkout_step_2_page_with_item: CheckoutStepTwoPage,
+) -> None:
+    checkout_complete: CheckoutComplete = checkout_step_2_page_with_item.finish()
+    expect(checkout_complete.page).to_have_url(CHECKOUT_COMPLETE)
