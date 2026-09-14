@@ -125,6 +125,7 @@ def test_verify_user_can_add_item_to_cart(
 ) -> None:
     empty_inventory_page.item.add(ITEM_INDEX)
     expect(empty_inventory_page.cart.counter).to_have_text(ONE)
+    expect(empty_inventory_page.item.button.nth(ITEM_INDEX)).to_have_text(REMOVE)
 
 
 def test_verify_cart_is_empty_by_default(
@@ -136,14 +137,21 @@ def test_verify_cart_is_empty_by_default(
 def test_verify_cart_is_empty_after_adding_item_and_removing_it(
     empty_inventory_page: InventoryPage,
 ) -> None:
+    expect(empty_inventory_page.item.button.nth(ITEM_INDEX)).to_have_text(ADD_TO_CART)
     empty_inventory_page.item.add(ITEM_INDEX)
     expect(empty_inventory_page.cart.counter).to_have_text(ONE)
+    expect(empty_inventory_page.item.button.nth(ITEM_INDEX)).to_have_text(REMOVE)
     empty_inventory_page.item.remove(ITEM_INDEX)
+    expect(empty_inventory_page.item.button.nth(ITEM_INDEX)).to_have_text(ADD_TO_CART)
     expect(empty_inventory_page.cart.counter).to_be_hidden()
 
 
-def test_go_back_to_continue_shopping(cart_page_with_item: CartPage) -> None:
+def test_verify_item_remains_in_cart_after_continue_shopping(
+    cart_page_with_item: CartPage,
+) -> None:
     inventory_page: InventoryPage = cart_page_with_item.get_inventory_page()
+    expect(inventory_page.page).to_have_url(INVENTORY)
+    expect(inventory_page.item.button.nth(ITEM_INDEX)).to_have_text(REMOVE)
     expect(inventory_page.cart.counter).to_have_text(ONE)
 
 

@@ -5,8 +5,10 @@ from playwright.sync_api import expect
 from data.login_data import (DEFAULT_UNLOCKED_USER, DOCUMENT_TITLE,
                              EXPECTED_LOGIN_USERNAMES, LOCKED_ACCOUNT_ERROR,
                              LOCKED_USERS, LOGIN_ARGS, LOGIN_ERROR_ARGS,
-                             LOGIN_ERROR_PARAMS, LOGO_TEXT, PASSWORD,
-                             SUCCESS_LOGIN_DATA, UNLOCKED_USERS,
+                             LOGIN_ERROR_PARAMS, LOGO_TEXT,
+                             PASSWORD_INPUT_TYPE, PASSWORD_PLACEHOLDER,
+                             PLACEHOLDER, RIGHT_PASSWORD, SUCCESS_LOGIN_DATA,
+                             TYPE, UNLOCKED_USERS, USERNAME_PLACEHOLDER,
                              WRONG_CREDENTIALS_ERROR, WRONG_PASSWORD,
                              WRONG_USERNAME)
 from data.routes import INVENTORY
@@ -55,19 +57,23 @@ def test_verify_password_heading(login_page: LoginPage) -> None:
 
 
 def test_verify_password(login_page: LoginPage) -> None:
-    assert login_page.get_password() == PASSWORD
+    assert login_page.get_password() == RIGHT_PASSWORD
 
 
 def test_verify_username_textbox_placeholder(login_page: LoginPage) -> None:
-    expect(login_page.username).to_have_attribute(name="placeholder", value="Username")
+    expect(login_page.username).to_have_attribute(
+        name=PLACEHOLDER, value=USERNAME_PLACEHOLDER
+    )
 
 
 def test_verify_password_textbox_placeholder(login_page: LoginPage) -> None:
-    expect(login_page.password).to_have_attribute(name="placeholder", value="Password")
+    expect(login_page.password).to_have_attribute(
+        name=PLACEHOLDER, value=PASSWORD_PLACEHOLDER
+    )
 
 
 def test_verify_password_field_masking(login_page: LoginPage) -> None:
-    expect(login_page.password).to_have_attribute(name="type", value="password")
+    expect(login_page.password).to_have_attribute(name=TYPE, value=PASSWORD_INPUT_TYPE)
 
 
 def test_verify_login_form_can_be_submitted_multiple_times(
@@ -92,14 +98,14 @@ def test_verify_user_can_login_after_invalid_credentials(login_page: LoginPage) 
     login_page.dismiss_error()
     assert_no_error_decorations(login_page)
     inventory_page: InventoryPage = login_page.login(
-        username=DEFAULT_UNLOCKED_USER, password=PASSWORD
+        username=DEFAULT_UNLOCKED_USER, password=RIGHT_PASSWORD
     )
     expect(inventory_page.page).to_have_url(INVENTORY)
 
 
 def test_verify_login_using_enter_key(login_page: LoginPage) -> None:
     inventory_page: InventoryPage = login_page.enter_login(
-        username=DEFAULT_UNLOCKED_USER, password=PASSWORD
+        username=DEFAULT_UNLOCKED_USER, password=RIGHT_PASSWORD
     )
     expect(inventory_page.page).to_have_url(INVENTORY)
 
@@ -124,7 +130,7 @@ def test_verify_unsuccessful_login(
 def test_verify_error_dismissal_after_unsuccessful_login_with_locked_account(
     login_page: LoginPage,
 ) -> None:
-    login_page.submit_credentials(username=LOCKED_USERS[0], password=PASSWORD)
+    login_page.submit_credentials(username=LOCKED_USERS[0], password=RIGHT_PASSWORD)
     expect(login_page.form_validation.error_heading).to_have_text(LOCKED_ACCOUNT_ERROR)
     assert_error_decorations(login_page)
     login_page.dismiss_error()
