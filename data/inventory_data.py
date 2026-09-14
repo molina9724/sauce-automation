@@ -2,7 +2,13 @@ from typing import Callable, List
 
 SortKey = Callable[[tuple[str, dict[str, str]]], str | float]
 
-LEFT_MENU_ITEMS: List[str] = ["All Items", "About", "Logout", "Reset App State"]
+LEFT_MENU_ITEMS: List[str] = [
+    "All Items",
+    "Dynamic Catalog",
+    "About",
+    "Logout",
+    "Reset App State",
+]
 
 # Filter options
 A_TO_Z = "Name (A to Z)"
