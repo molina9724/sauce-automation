@@ -32,8 +32,8 @@ class LoginPage(BasePage):
         self.username: Locator = self.page.get_by_role("textbox", name="Username")
         self.password: Locator = self.page.get_by_role("textbox", name="Password")
         self.login_button: Locator = self.page.get_by_role("button", name="Login")
-        self.close_error_button: Locator = self.page.locator(
-            ".error-message-container.error .error-button"
+        self.close_error_button: Locator = self.page.get_by_role(
+            "button", name="Dismiss error"
         )
 
         self.usernames_container: Locator = self.page.locator("#login_credentials")
