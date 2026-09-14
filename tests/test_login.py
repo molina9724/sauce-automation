@@ -6,7 +6,9 @@ from data.login_data import (DEFAULT_UNLOCKED_USER, DOCUMENT_TITLE,
                              EXPECTED_LOGIN_USERNAMES, LOCKED_ACCOUNT_ERROR,
                              LOCKED_USERS, LOGIN_ARGS, LOGIN_ERROR_ARGS,
                              LOGIN_ERROR_PARAMS, LOGO_TEXT, PASSWORD,
-                             SUCCESS_LOGIN_DATA, UNLOCKED_USERS)
+                             SUCCESS_LOGIN_DATA, UNLOCKED_USERS,
+                             WRONG_CREDENTIALS_ERROR, WRONG_PASSWORD,
+                             WRONG_USERNAME)
 from data.routes import INVENTORY
 from po.pages.inventory_page import InventoryPage
 from po.pages.login_page import LoginPage
@@ -62,6 +64,19 @@ def test_verify_password_textbox_placeholder(login_page: LoginPage) -> None:
 
 def test_verify_username_textbox_placeholder(login_page: LoginPage) -> None:
     expect(login_page.username).to_have_attribute(name="placeholder", value="Username")
+
+
+def test_verify_login_form_can_be_submitted_multiple_times(
+    login_page: LoginPage,
+) -> None:
+    for _ in range(2):
+        login_page.submit_credentials(username=WRONG_USERNAME, password=WRONG_PASSWORD)
+        expect(login_page.form_validation.error_heading).to_have_text(
+            WRONG_CREDENTIALS_ERROR
+        )
+        assert_error_decorations(login_page)
+        login_page.dismiss_error()
+        assert_no_error_decorations(login_page)
 
 
 @pytest.mark.parametrize(LOGIN_ARGS, argvalues=SUCCESS_LOGIN_DATA, ids=UNLOCKED_USERS)
