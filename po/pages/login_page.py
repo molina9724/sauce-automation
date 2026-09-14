@@ -54,15 +54,19 @@ class LoginPage(BasePage):
 
         return username_parent, password_parent
 
-    def submit_credentials(self, username: str, password: str) -> None:
+    def _fill_in(self, username: str, password: str) -> None:
         self.username.fill(username)
         self.password.fill(password)
+
+    def submit_credentials_with_enter(self, username: str, password: str) -> None:
+        self._fill_in(username, password)
+        self.page.keyboard.press("Enter")
+
+    def submit_credentials(self, username: str, password: str) -> None:
+        self._fill_in(username, password)
         self.login_button.click()
 
-    def login(
-        self, username: str, password: str
-    ) -> "InventoryPage":  # keep as a string to avoid runtime evaluation
-        self.submit_credentials(username, password)
+    def _get_inventory_page_after_login(self, username: str) -> "InventoryPage":
         if username == PERFORMANCE_GLITCHED_USER:
             timeout: int = INCREASED_TIMEOUT
         else:
@@ -72,6 +76,14 @@ class LoginPage(BasePage):
         from .inventory_page import InventoryPage
 
         return InventoryPage(self.page)
+
+    def login(self, username: str, password: str) -> "InventoryPage":
+        self.submit_credentials(username, password)
+        return self._get_inventory_page_after_login(username)
+
+    def enter_login(self, username: str, password: str) -> "InventoryPage":
+        self.submit_credentials_with_enter(username, password)
+        return self._get_inventory_page_after_login(username)
 
     def dismiss_error(self) -> None:
         self.close_error_button.click()

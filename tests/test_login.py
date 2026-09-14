@@ -2,10 +2,11 @@
 import pytest
 from playwright.sync_api import expect
 
-from data.login_data import (DOCUMENT_TITLE, EXPECTED_LOGIN_USERNAMES,
-                             LOCKED_ACCOUNT_ERROR, LOCKED_USERS, LOGIN_ARGS,
-                             LOGIN_ERROR_ARGS, LOGIN_ERROR_PARAMS, LOGO_TEXT,
-                             PASSWORD, SUCCESS_LOGIN_DATA, UNLOCKED_USERS)
+from data.login_data import (DEFAULT_UNLOCKED_USER, DOCUMENT_TITLE,
+                             EXPECTED_LOGIN_USERNAMES, LOCKED_ACCOUNT_ERROR,
+                             LOCKED_USERS, LOGIN_ARGS, LOGIN_ERROR_ARGS,
+                             LOGIN_ERROR_PARAMS, LOGO_TEXT, PASSWORD,
+                             SUCCESS_LOGIN_DATA, UNLOCKED_USERS)
 from data.routes import INVENTORY
 from po.pages.inventory_page import InventoryPage
 from po.pages.login_page import LoginPage
@@ -60,6 +61,13 @@ def test_verify_successful_login(
     login_page: LoginPage, user: str, password: str
 ) -> None:
     inventory_page: InventoryPage = login_page.login(username=user, password=password)
+    expect(inventory_page.page).to_have_url(INVENTORY)
+
+
+def test_verify_login_using_enter_key(login_page: LoginPage) -> None:
+    inventory_page: InventoryPage = login_page.enter_login(
+        username=DEFAULT_UNLOCKED_USER, password=PASSWORD
+    )
     expect(inventory_page.page).to_have_url(INVENTORY)
 
 
