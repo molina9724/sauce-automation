@@ -83,6 +83,20 @@ def test_verify_login_form_can_be_submitted_multiple_times(
         assert_no_error_decorations(login_page)
 
 
+def test_verify_user_can_login_after_invalid_credentials(login_page: LoginPage) -> None:
+    login_page.submit_credentials(username=WRONG_USERNAME, password=WRONG_PASSWORD)
+    expect(login_page.form_validation.error_heading).to_have_text(
+        WRONG_CREDENTIALS_ERROR
+    )
+    assert_error_decorations(login_page)
+    login_page.dismiss_error()
+    assert_no_error_decorations(login_page)
+    inventory_page: InventoryPage = login_page.login(
+        username=DEFAULT_UNLOCKED_USER, password=PASSWORD
+    )
+    expect(inventory_page.page).to_have_url(INVENTORY)
+
+
 def test_verify_login_using_enter_key(login_page: LoginPage) -> None:
     inventory_page: InventoryPage = login_page.enter_login(
         username=DEFAULT_UNLOCKED_USER, password=PASSWORD
