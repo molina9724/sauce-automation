@@ -4,6 +4,7 @@ from typing import Union
 import pytest
 from playwright.sync_api import expect
 
+from data.inventory_data import LEFT_MENU_ITEMS
 from data.routes import INVENTORY, ROOT
 from po.pages.cart_page import CartPage
 from po.pages.checkout_complete import CheckoutComplete
@@ -16,6 +17,31 @@ from .shared_fixtures_names import (ALL_FIXTURES, MENU_PAGE_FIXTURES,
                                     PAGE_FIXTURE)
 
 #fmt:on
+
+
+@pytest.mark.parametrize(
+    PAGE_FIXTURE,
+    ALL_FIXTURES,
+)
+def test_verify_left_menu_behavior(
+    page_fixture: str, request: pytest.FixtureRequest
+) -> None:
+    page: Union[
+        InventoryPage,
+        CartPage,
+        CheckoutStepOnePage,
+        CheckoutStepTwoPage,
+        CheckoutComplete,
+    ] = request.getfixturevalue(page_fixture)
+
+    expect(page.menu.panel).to_be_hidden()
+
+    page.menu.hamburger_button.click()
+    expect(page.menu.panel).to_be_visible()
+    expect(page.menu.item).to_have_text(LEFT_MENU_ITEMS)
+
+    page.menu.close_button.click()
+    expect(page.menu.panel).to_be_hidden()
 
 
 @pytest.mark.parametrize(

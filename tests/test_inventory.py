@@ -9,8 +9,8 @@ from data.inventory_data import (A_TO_Z,
                                  ADD_TO_CART, DEFAULT_FILTER_VALUE,
                                  DOCUMENT_TITLE, FILTER_ARGS, FILTER_OPTIONS,
                                  FILTER_VALUES, INVENTORY_ITEMS_DATA,
-                                 LEFT_MENU_ITEMS, LOGO_TEXT, ONE,
-                                 PRODUCTS_TITLE, REMOVE, Z_TO_A, SortKey)
+                                 LOGO_TEXT, ONE, PRODUCTS_TITLE, REMOVE,
+                                 Z_TO_A, SortKey)
 from data.routes import INVENTORY, ROOT
 from po.pages.cart_page import CartPage
 from po.pages.checkout_step_1_page import CheckoutStepOnePage
@@ -38,12 +38,6 @@ def test_verify_inventory_url(empty_inventory_page: InventoryPage) -> None:
 
 def test_verify_page_title(empty_inventory_page: InventoryPage) -> None:
     expect(empty_inventory_page.inventory_logo).to_have_text(LOGO_TEXT)
-
-
-def test_verify_left_menu_components(empty_inventory_page: InventoryPage) -> None:
-    empty_inventory_page.menu.hamburger_button.click()
-    expect(empty_inventory_page.menu.panel).to_be_visible()
-    expect(empty_inventory_page.menu.item).to_have_text(LEFT_MENU_ITEMS)
 
 
 def test_verify_products_title(empty_inventory_page: InventoryPage) -> None:
@@ -161,15 +155,3 @@ def test_verify_item_remain_in_cart_after_pressing_cancel_in_checkout_step_one_p
     cart_page: CartPage = checkout_step_1_page_with_item.cancel()
     inventory_page: InventoryPage = cart_page.get_inventory_page()
     expect(inventory_page.cart.counter).to_have_text(ONE)
-
-
-def test_verify_left_menu_is_closed(
-    empty_inventory_page: InventoryPage,
-) -> None:
-    expect(empty_inventory_page.menu.panel).to_be_hidden()
-
-    empty_inventory_page.menu.hamburger_button.click()
-    expect(empty_inventory_page.menu.panel).to_be_visible()
-
-    empty_inventory_page.menu.close_button.click()
-    expect(empty_inventory_page.menu.panel).to_be_hidden()
