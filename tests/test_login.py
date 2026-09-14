@@ -56,6 +56,14 @@ def test_verify_password(login_page: LoginPage) -> None:
     assert login_page.get_password() == PASSWORD
 
 
+def test_verify_password_textbox_placeholder(login_page: LoginPage) -> None:
+    expect(login_page.password).to_have_attribute(name="placeholder", value="Password")
+
+
+def test_verify_username_textbox_placeholder(login_page: LoginPage) -> None:
+    expect(login_page.username).to_have_attribute(name="placeholder", value="Username")
+
+
 @pytest.mark.parametrize(LOGIN_ARGS, argvalues=SUCCESS_LOGIN_DATA, ids=UNLOCKED_USERS)
 def test_verify_successful_login(
     login_page: LoginPage, user: str, password: str
