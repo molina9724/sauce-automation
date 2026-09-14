@@ -20,8 +20,10 @@ class Menu(BaseComponent):
         )
         self.panel: Locator = self.page.locator(".bm-menu-wrap")
         self.item: Locator = self.panel.locator(".menu-item")
-        self.logout_link: Locator = self.panel.get_by_role("link", name="Logout")
-        self.all_items_link: Locator = self.panel.get_by_role("link", name="All Items")
+        self.logout_link: Locator = self.panel.get_by_role("button", name="Logout")
+        self.all_items_link: Locator = self.panel.get_by_role(
+            "button", name="All Items"
+        )
         self.close_button: Locator = self.panel.locator(".bm-cross-button")
 
     def logout(self) -> "LoginPage":
