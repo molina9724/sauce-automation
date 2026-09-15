@@ -140,7 +140,7 @@ def test_verify_cart_is_empty_after_adding_item_and_removing_it(
     expect(empty_inventory_page.cart.counter).to_be_hidden()
 
 
-def test_verify_item_remains_in_cart_after_continue_shopping(
+def test_verify_item_remains_in_cart_after_pressing_continue_shopping_button(
     cart_page_with_item: CartPage,
 ) -> None:
     inventory_page: InventoryPage = cart_page_with_item.get_inventory_page()
