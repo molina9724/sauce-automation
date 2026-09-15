@@ -1,5 +1,6 @@
 ROOT: str = "/"
 INVENTORY: str = "/inventory.html"
+INVENTORY_ITEM: str = "/inventory-item.html?id="
 CART: str = "/cart.html"
 CHECKOUT_STEP_1: str = "/checkout-step-one.html"
 CHECKOUT_STEP_2: str = "/checkout-step-two.html"
