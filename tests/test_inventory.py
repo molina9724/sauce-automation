@@ -11,9 +11,10 @@ from data.inventory_data import (A_TO_Z,
                                  FILTER_VALUES, INVENTORY_ITEMS_DATA,
                                  LOGO_TEXT, ONE, PRODUCTS_TITLE, REMOVE,
                                  Z_TO_A, SortKey)
-from data.routes import INVENTORY, ROOT
+from data.routes import INVENTORY, INVENTORY_ITEM, ROOT
 from po.pages.cart_page import CartPage
 from po.pages.checkout_step_2_page import CheckoutStepTwoPage
+from po.pages.inventory_item_page import InventoryItemPage
 from po.pages.inventory_page import InventoryPage
 from po.pages.login_page import LoginPage
 from tests.test_image import general_image_assert
@@ -156,3 +157,14 @@ def test_verify_cancel_from_checkout_step_two_preserves_cart_item(
     expect(inventory_page.page).to_have_url(INVENTORY)
     expect(inventory_page.cart.counter).to_have_text(ONE)
     expect(inventory_page.item.button.nth(ITEM_INDEX)).to_have_text(REMOVE)
+
+
+def test_verify_user_can_open_product_details_from_product_name(
+    empty_inventory_page: InventoryPage,
+) -> None:
+    inventory_page = empty_inventory_page
+    for index, item_data in enumerate(INVENTORY_ITEMS_DATA.values()):
+        product_page: InventoryItemPage = inventory_page.open_item_by_name(index)
+        expect(product_page.page).to_have_url(f"{INVENTORY_ITEM}{item_data['id']}")
+        inventory_page: InventoryPage = product_page.back_to_products()
+        expect(inventory_page.page).to_have_url(INVENTORY)
