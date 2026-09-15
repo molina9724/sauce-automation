@@ -13,7 +13,7 @@ from data.inventory_data import (A_TO_Z,
                                  Z_TO_A, SortKey)
 from data.routes import INVENTORY, ROOT
 from po.pages.cart_page import CartPage
-from po.pages.checkout_step_1_page import CheckoutStepOnePage
+from po.pages.checkout_step_2_page import CheckoutStepTwoPage
 from po.pages.inventory_page import InventoryPage
 from po.pages.login_page import LoginPage
 from tests.test_image import general_image_assert
@@ -149,9 +149,10 @@ def test_verify_item_remains_in_cart_after_pressing_continue_shopping_button(
     expect(inventory_page.cart.counter).to_have_text(ONE)
 
 
-def test_verify_item_remain_in_cart_after_pressing_cancel_in_checkout_step_one_page(
-    checkout_step_1_page_with_item: CheckoutStepOnePage,
+def test_verify_cancel_from_checkout_step_two_preserves_cart_item(
+    checkout_step_2_page_with_item: CheckoutStepTwoPage,
 ) -> None:
-    cart_page: CartPage = checkout_step_1_page_with_item.cancel()
-    inventory_page: InventoryPage = cart_page.get_inventory_page()
+    inventory_page: InventoryPage = checkout_step_2_page_with_item.cancel()
+    expect(inventory_page.page).to_have_url(INVENTORY)
     expect(inventory_page.cart.counter).to_have_text(ONE)
+    expect(inventory_page.item.button.nth(ITEM_INDEX)).to_have_text(REMOVE)
