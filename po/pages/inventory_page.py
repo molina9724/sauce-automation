@@ -2,8 +2,8 @@ from playwright.sync_api import Locator, Page
 
 from po.pages.inventory_item_page import InventoryItemPage
 
-from ..components.cart import Cart
-from ..components.inventory_page_item import InventoryItem
+from ..components.cart_component import Cart
+from ..components.inventory_item import InventoryItem
 from ..components.left_menu import Menu
 from .base_page import BasePage
 

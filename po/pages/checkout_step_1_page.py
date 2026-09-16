@@ -4,7 +4,7 @@ from data.routes import CHECKOUT_STEP_2
 from po.pages.cart_page import CartPage
 from po.pages.checkout_step_2_page import CheckoutStepTwoPage
 
-from ..components.cart import Cart
+from ..components.cart_component import Cart
 from ..components.form_validation import FormValidation
 from ..components.left_menu import Menu
 from ..pages.base_page import BasePage
