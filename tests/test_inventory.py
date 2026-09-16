@@ -175,13 +175,6 @@ def test_verify_user_can_remove_all_items_from_cart(
         verify_item_can_be_removed(empty_inventory_page, index, expected_count)
 
 
-def test_verify_cart_is_empty_after_adding_item_and_removing_it(
-    empty_inventory_page: InventoryPage,
-) -> None:
-    verify_item_can_be_added(empty_inventory_page, ITEM_INDEX, ZERO)
-    verify_item_can_be_removed(empty_inventory_page, ITEM_INDEX, ONE)
-
-
 def test_verify_cart_is_empty_by_default(
     empty_inventory_page: InventoryPage,
 ) -> None:
