@@ -48,6 +48,6 @@ class InventoryPage(BasePage):
     def set_products_filter(self, option: str) -> None:
         self.products_filter.select_option(option)
 
-    def open_item_by_name(self, index: int = 0) -> InventoryItemPage:
+    def open_item_by_index(self, index: int = 0) -> InventoryItemPage:
         self.item.name.nth(index).click()
         return InventoryItemPage(self.page)

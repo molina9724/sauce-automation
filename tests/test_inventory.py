@@ -164,7 +164,7 @@ def test_verify_user_can_open_product_details_from_product_name(
 ) -> None:
     inventory_page = empty_inventory_page
     for index, item_data in enumerate(INVENTORY_ITEMS_DATA.values()):
-        product_page: InventoryItemPage = inventory_page.open_item_by_name(index)
+        product_page: InventoryItemPage = inventory_page.open_item_by_index(index)
         expect(product_page.page).to_have_url(f"{INVENTORY_ITEM}{item_data['id']}")
         inventory_page: InventoryPage = product_page.back_to_products()
         expect(inventory_page.page).to_have_url(INVENTORY)
