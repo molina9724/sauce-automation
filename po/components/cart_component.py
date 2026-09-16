@@ -20,3 +20,10 @@ class Cart(BaseComponent):
         from ..pages.cart_page import CartPage
 
         return CartPage(self.page)
+
+    def get_value(self) -> int:
+        if self.counter.is_hidden():
+            current_items_in_cart = 0
+        else:
+            current_items_in_cart = int(self.counter.inner_text())
+        return current_items_in_cart
