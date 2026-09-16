@@ -147,29 +147,29 @@ def test_verify_error_when_trying_to_access_inventory_page_without_login(
 def test_verify_user_can_add_item_to_cart(
     empty_inventory_page: InventoryPage, index: int
 ) -> None:
-    verify_item_can_be_added(empty_inventory_page, index, int(ZERO))
+    verify_item_can_be_added(empty_inventory_page, index, ZERO)
 
 
 @pytest.mark.parametrize(INDEX, argvalues=ALL_ITEMS_INDEX, ids=PRODUCT_DETAIL_IDS)
 def test_verify_user_can_remove_item_after_adding_it(
     empty_inventory_page: InventoryPage, index: int
 ) -> None:
-    verify_item_can_be_added(empty_inventory_page, index, int(ZERO))
-    verify_item_can_be_removed(empty_inventory_page, index, int(ONE))
+    verify_item_can_be_added(empty_inventory_page, index, ZERO)
+    verify_item_can_be_removed(empty_inventory_page, index, ONE)
 
 
 def test_verify_user_can_add_all_items_to_cart(
     empty_inventory_page: InventoryPage,
 ) -> None:
     for index in ALL_ITEMS_INDEX:
-        verify_item_can_be_added(empty_inventory_page, index, int(ZERO) + index)
+        verify_item_can_be_added(empty_inventory_page, index, ZERO + index)
 
 
 def test_verify_user_can_remove_all_items_from_cart(
     empty_inventory_page: InventoryPage,
 ) -> None:
     for index in ALL_ITEMS_INDEX:
-        verify_item_can_be_added(empty_inventory_page, index, int(ZERO) + index)
+        verify_item_can_be_added(empty_inventory_page, index, ZERO + index)
     for index in ALL_ITEMS_INDEX:
         expected_count: int = len(ALL_ITEMS_INDEX) - index
         verify_item_can_be_removed(empty_inventory_page, index, expected_count)
@@ -178,8 +178,8 @@ def test_verify_user_can_remove_all_items_from_cart(
 def test_verify_cart_is_empty_after_adding_item_and_removing_it(
     empty_inventory_page: InventoryPage,
 ) -> None:
-    verify_item_can_be_added(empty_inventory_page, ITEM_INDEX, int(ZERO))
-    verify_item_can_be_removed(empty_inventory_page, ITEM_INDEX, int(ONE))
+    verify_item_can_be_added(empty_inventory_page, ITEM_INDEX, ZERO)
+    verify_item_can_be_removed(empty_inventory_page, ITEM_INDEX, ONE)
 
 
 def test_verify_cart_is_empty_by_default(
