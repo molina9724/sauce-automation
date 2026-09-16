@@ -169,7 +169,22 @@ def test_verify_user_can_open_product_details_from_product_name(
     empty_inventory_page: InventoryPage, index: int, product_id: str
 ) -> None:
     inventory_page = empty_inventory_page
-    product_page: InventoryItemPage = inventory_page.open_item_by_index(index)
+    product_page: InventoryItemPage = inventory_page.open_item_by_name(index)
+    expect(product_page.page).to_have_url(f"{INVENTORY_ITEM}{product_id}")
+    inventory_page: InventoryPage = product_page.back_to_products()
+    expect(inventory_page.page).to_have_url(INVENTORY)
+
+
+@pytest.mark.parametrize(
+    PRODUCT_DETAIL_ARGS,
+    argvalues=PRODUCT_DETAIL_DATA,
+    ids=PRODUCT_DETAIL_IDS,
+)
+def test_verify_user_can_open_product_details_from_product_image(
+    empty_inventory_page: InventoryPage, index: int, product_id: str
+) -> None:
+    inventory_page = empty_inventory_page
+    product_page: InventoryItemPage = inventory_page.open_item_by_image(index)
     expect(product_page.page).to_have_url(f"{INVENTORY_ITEM}{product_id}")
     inventory_page: InventoryPage = product_page.back_to_products()
     expect(inventory_page.page).to_have_url(INVENTORY)
