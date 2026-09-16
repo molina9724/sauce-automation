@@ -11,7 +11,7 @@ from data.inventory_data import (A_TO_Z,
                                  FILTER_VALUES, INDEX, INVENTORY_ITEMS_DATA,
                                  LOGO_TEXT, ONE, PRODUCT_DETAIL_ARGS,
                                  PRODUCT_DETAIL_DATA, PRODUCT_DETAIL_IDS,
-                                 PRODUCTS_TITLE, REMOVE, Z_TO_A, SortKey)
+                                 PRODUCTS_TITLE, REMOVE, Z_TO_A, ZERO, SortKey)
 from data.routes import CART, INVENTORY, INVENTORY_ITEM, ROOT
 from po.pages.cart_page import CartPage
 from po.pages.checkout_step_2_page import CheckoutStepTwoPage
@@ -30,26 +30,30 @@ def assert_item_images(inventory_page: InventoryPage) -> None:
         general_image_assert(inventory_page, image)
 
 
-def verify_item_can_be_added(inventory_page: InventoryPage, index: int) -> None:
+def verify_item_can_be_added(
+    inventory_page: InventoryPage, index: int, expected_count: int
+) -> None:
     expect(inventory_page.item.button.nth(index)).to_have_text(ADD_TO_CART)
 
-    current_items_in_cart: int = inventory_page.cart.get_value()
     inventory_page.item.add(index)
-    current_items_in_cart += 1
-    expect(inventory_page.cart.counter).to_have_text(str(current_items_in_cart))
+    expected_count += 1
+
+    expect(inventory_page.cart.counter).to_have_text(str(expected_count))
     expect(inventory_page.item.button.nth(index)).to_have_text(REMOVE)
 
 
-def verify_idem_can_be_removed(inventory_page: InventoryPage, index: int) -> None:
+def verify_item_can_be_removed(
+    inventory_page: InventoryPage, index: int, expected_count: int
+) -> None:
     expect(inventory_page.item.button.nth(index)).to_have_text(REMOVE)
 
-    current_items_in_cart: int = inventory_page.cart.get_value()
     inventory_page.item.remove(index)
-    current_items_in_cart -= 1
-    if current_items_in_cart == 0:
+    expected_count -= 1
+
+    if expected_count == 0:
         expect(inventory_page.cart.counter).to_be_hidden()
     else:
-        expect(inventory_page.cart.counter).to_have_text(str(current_items_in_cart))
+        expect(inventory_page.cart.counter).to_have_text(str(expected_count))
     expect(inventory_page.item.button.nth(index)).to_have_text(ADD_TO_CART)
 
 
@@ -143,32 +147,44 @@ def test_verify_error_when_trying_to_access_inventory_page_without_login(
 def test_verify_user_can_add_item_to_cart(
     empty_inventory_page: InventoryPage, index: int
 ) -> None:
-    verify_item_can_be_added(empty_inventory_page, index)
+    verify_item_can_be_added(empty_inventory_page, index, int(ZERO))
 
 
 @pytest.mark.parametrize(INDEX, argvalues=ALL_ITEMS_INDEX, ids=PRODUCT_DETAIL_IDS)
 def test_verify_user_can_remove_item_after_adding_it(
     empty_inventory_page: InventoryPage, index: int
 ) -> None:
-    verify_item_can_be_added(empty_inventory_page, index)
-    verify_idem_can_be_removed(empty_inventory_page, index)
+    verify_item_can_be_added(empty_inventory_page, index, int(ZERO))
+    verify_item_can_be_removed(empty_inventory_page, index, int(ONE))
 
 
-def test_verify_cart_is_empty_by_default(
+def test_verify_user_can_add_all_items_to_cart(
     empty_inventory_page: InventoryPage,
 ) -> None:
-    expect(empty_inventory_page.cart.counter).to_be_hidden()
+    for index in ALL_ITEMS_INDEX:
+        verify_item_can_be_added(empty_inventory_page, index, int(ZERO) + index)
+
+
+def test_verify_user_can_remove_all_items_from_cart(
+    empty_inventory_page: InventoryPage,
+) -> None:
+    for index in ALL_ITEMS_INDEX:
+        verify_item_can_be_added(empty_inventory_page, index, int(ZERO) + index)
+    for index in ALL_ITEMS_INDEX:
+        expected_count: int = len(ALL_ITEMS_INDEX) - index
+        verify_item_can_be_removed(empty_inventory_page, index, expected_count)
 
 
 def test_verify_cart_is_empty_after_adding_item_and_removing_it(
     empty_inventory_page: InventoryPage,
 ) -> None:
-    expect(empty_inventory_page.item.button.nth(ITEM_INDEX)).to_have_text(ADD_TO_CART)
-    empty_inventory_page.item.add(ITEM_INDEX)
-    expect(empty_inventory_page.cart.counter).to_have_text(ONE)
-    expect(empty_inventory_page.item.button.nth(ITEM_INDEX)).to_have_text(REMOVE)
-    empty_inventory_page.item.remove(ITEM_INDEX)
-    expect(empty_inventory_page.item.button.nth(ITEM_INDEX)).to_have_text(ADD_TO_CART)
+    verify_item_can_be_added(empty_inventory_page, ITEM_INDEX, int(ZERO))
+    verify_item_can_be_removed(empty_inventory_page, ITEM_INDEX, int(ONE))
+
+
+def test_verify_cart_is_empty_by_default(
+    empty_inventory_page: InventoryPage,
+) -> None:
     expect(empty_inventory_page.cart.counter).to_be_hidden()
 
 
@@ -178,7 +194,7 @@ def test_verify_item_remains_in_cart_after_pressing_continue_shopping_button(
     inventory_page: InventoryPage = cart_page_with_item.get_inventory_page()
     expect(inventory_page.page).to_have_url(INVENTORY)
     expect(inventory_page.item.button.nth(ITEM_INDEX)).to_have_text(REMOVE)
-    expect(inventory_page.cart.counter).to_have_text(ONE)
+    expect(inventory_page.cart.counter).to_have_text(str(ONE))
 
 
 def test_verify_cancel_from_checkout_step_two_preserves_cart_item(
@@ -186,7 +202,7 @@ def test_verify_cancel_from_checkout_step_two_preserves_cart_item(
 ) -> None:
     inventory_page: InventoryPage = checkout_step_2_page_with_item.cancel()
     expect(inventory_page.page).to_have_url(INVENTORY)
-    expect(inventory_page.cart.counter).to_have_text(ONE)
+    expect(inventory_page.cart.counter).to_have_text(str(ONE))
     expect(inventory_page.item.button.nth(ITEM_INDEX)).to_have_text(REMOVE)
 
 

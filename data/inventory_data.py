@@ -93,6 +93,7 @@ FILTER_VALUES: list[tuple[str, SortKey, bool]] = [
     (HIGH_TO_LOW, get_price_value, True),
 ]
 
-ONE: str = "1"
+ZERO: int = 0
+ONE: int = 1
 ADD_TO_CART: str = "Add to cart"
 REMOVE: str = "Remove"
