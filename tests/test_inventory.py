@@ -3,12 +3,12 @@
 import pytest
 from playwright.sync_api import Locator, expect
 
-from data.global_data import ITEM_INDEX
+from data.global_data import ALL_ITEMS_INDEX, ITEM_INDEX
 from data.inventory_data import (A_TO_Z,
                                  ACCESS_INVENTORY_PAGE_ERROR_WITHOUT_LOGIN,
                                  ADD_TO_CART, DEFAULT_FILTER_VALUE,
                                  DOCUMENT_TITLE, FILTER_ARGS, FILTER_OPTIONS,
-                                 FILTER_VALUES, INVENTORY_ITEMS_DATA,
+                                 FILTER_VALUES, INDEX, INVENTORY_ITEMS_DATA,
                                  LOGO_TEXT, ONE, PRODUCT_DETAIL_ARGS,
                                  PRODUCT_DETAIL_DATA, PRODUCT_DETAIL_IDS,
                                  PRODUCTS_TITLE, REMOVE, Z_TO_A, SortKey)
@@ -116,12 +116,24 @@ def test_verify_error_when_trying_to_access_inventory_page_without_login(
     expect(login_page.page).to_have_url(ROOT)
 
 
+@pytest.mark.parametrize(INDEX, argvalues=ALL_ITEMS_INDEX, ids=PRODUCT_DETAIL_IDS)
 def test_verify_user_can_add_item_to_cart(
-    empty_inventory_page: InventoryPage,
+    empty_inventory_page: InventoryPage, index: int
 ) -> None:
-    empty_inventory_page.item.add(ITEM_INDEX)
+    empty_inventory_page.item.add(index)
     expect(empty_inventory_page.cart.counter).to_have_text(ONE)
-    expect(empty_inventory_page.item.button.nth(ITEM_INDEX)).to_have_text(REMOVE)
+    expect(empty_inventory_page.item.button.nth(index)).to_have_text(REMOVE)
+
+
+@pytest.mark.parametrize(INDEX, argvalues=ALL_ITEMS_INDEX, ids=PRODUCT_DETAIL_IDS)
+def test_verify_user_can_remove_item_after_adding_it(
+    empty_inventory_page: InventoryPage, index: int
+) -> None:
+    empty_inventory_page.item.add(index)
+    expect(empty_inventory_page.cart.counter).to_have_text(ONE)
+    expect(empty_inventory_page.item.button.nth(index)).to_have_text(REMOVE)
+    empty_inventory_page.item.remove(index)
+    expect(empty_inventory_page.cart.counter).to_be_hidden()
 
 
 def test_verify_cart_is_empty_by_default(

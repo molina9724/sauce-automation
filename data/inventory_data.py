@@ -57,6 +57,8 @@ INVENTORY_ITEMS_DATA: dict[str, dict[str, str]] = {
     },
 }
 
+INDEX: str = "index"
+
 PRODUCT_DETAIL_ARGS: str = "index, product_id"
 PRODUCT_DETAIL_DATA: list[tuple[int, str]] = [
     (index, item["id"]) for index, item in enumerate(INVENTORY_ITEMS_DATA.values())

@@ -3,7 +3,8 @@ import pytest
 from playwright.sync_api import expect
 
 from data.cart_data import (ACCESS_CART_PAGE_WITHOUT_LOGIN_ERROR,
-                            ALL_ITEMS_INDEX, CART_ITEM_DATA, CART_ITEMS_DATA)
+                            CART_ITEM_DATA, CART_ITEMS_DATA)
+from data.global_data import ALL_ITEMS_INDEX
 from data.routes import CART
 from po.components.cart_item import CartItem
 from po.pages.cart_page import CartPage
