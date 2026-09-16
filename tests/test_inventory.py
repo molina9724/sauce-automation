@@ -9,8 +9,9 @@ from data.inventory_data import (A_TO_Z,
                                  ADD_TO_CART, DEFAULT_FILTER_VALUE,
                                  DOCUMENT_TITLE, FILTER_ARGS, FILTER_OPTIONS,
                                  FILTER_VALUES, INVENTORY_ITEMS_DATA,
-                                 LOGO_TEXT, ONE, PRODUCTS_TITLE, REMOVE,
-                                 Z_TO_A, SortKey)
+                                 LOGO_TEXT, ONE, PRODUCT_DETAIL_ARGS,
+                                 PRODUCT_DETAIL_DATA, PRODUCT_DETAIL_IDS,
+                                 PRODUCTS_TITLE, REMOVE, Z_TO_A, SortKey)
 from data.routes import INVENTORY, INVENTORY_ITEM, ROOT
 from po.pages.cart_page import CartPage
 from po.pages.checkout_step_2_page import CheckoutStepTwoPage
@@ -159,12 +160,16 @@ def test_verify_cancel_from_checkout_step_two_preserves_cart_item(
     expect(inventory_page.item.button.nth(ITEM_INDEX)).to_have_text(REMOVE)
 
 
+@pytest.mark.parametrize(
+    PRODUCT_DETAIL_ARGS,
+    argvalues=PRODUCT_DETAIL_DATA,
+    ids=PRODUCT_DETAIL_IDS,
+)
 def test_verify_user_can_open_product_details_from_product_name(
-    empty_inventory_page: InventoryPage,
+    empty_inventory_page: InventoryPage, index: int, product_id: str
 ) -> None:
     inventory_page = empty_inventory_page
-    for index, item_data in enumerate(INVENTORY_ITEMS_DATA.values()):
-        product_page: InventoryItemPage = inventory_page.open_item_by_index(index)
-        expect(product_page.page).to_have_url(f"{INVENTORY_ITEM}{item_data['id']}")
-        inventory_page: InventoryPage = product_page.back_to_products()
-        expect(inventory_page.page).to_have_url(INVENTORY)
+    product_page: InventoryItemPage = inventory_page.open_item_by_index(index)
+    expect(product_page.page).to_have_url(f"{INVENTORY_ITEM}{product_id}")
+    inventory_page: InventoryPage = product_page.back_to_products()
+    expect(inventory_page.page).to_have_url(INVENTORY)

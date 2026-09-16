@@ -57,6 +57,12 @@ INVENTORY_ITEMS_DATA: dict[str, dict[str, str]] = {
     },
 }
 
+PRODUCT_DETAIL_ARGS: str = "index, product_id"
+PRODUCT_DETAIL_DATA: list[tuple[int, str]] = [
+    (index, item["id"]) for index, item in enumerate(INVENTORY_ITEMS_DATA.values())
+]
+PRODUCT_DETAIL_IDS: list[str] = list(INVENTORY_ITEMS_DATA)
+
 DOCUMENT_TITLE: str = "Swag Labs"
 PRODUCTS_TITLE: str = "Products"
 LOGO_TEXT: str = "Swag Labs"
