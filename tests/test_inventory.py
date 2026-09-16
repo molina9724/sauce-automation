@@ -12,7 +12,7 @@ from data.inventory_data import (A_TO_Z,
                                  LOGO_TEXT, ONE, PRODUCT_DETAIL_ARGS,
                                  PRODUCT_DETAIL_DATA, PRODUCT_DETAIL_IDS,
                                  PRODUCTS_TITLE, REMOVE, Z_TO_A, SortKey)
-from data.routes import INVENTORY, INVENTORY_ITEM, ROOT
+from data.routes import CART, INVENTORY, INVENTORY_ITEM, ROOT
 from po.pages.cart_page import CartPage
 from po.pages.checkout_step_2_page import CheckoutStepTwoPage
 from po.pages.inventory_item_page import InventoryItemPage
@@ -188,3 +188,10 @@ def test_verify_user_can_open_product_details_from_product_image(
     expect(product_page.page).to_have_url(f"{INVENTORY_ITEM}{product_id}")
     inventory_page: InventoryPage = product_page.back_to_products()
     expect(inventory_page.page).to_have_url(INVENTORY)
+
+
+def test_verify_user_can_navigate_to_cart_from_inventory_page(
+    empty_inventory_page: InventoryPage,
+) -> None:
+    cart_page: CartPage = empty_inventory_page.cart.get_cart_page()
+    expect(cart_page.page).to_have_url(CART)
