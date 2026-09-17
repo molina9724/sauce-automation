@@ -3,17 +3,19 @@
 import pytest
 from playwright.sync_api import Locator, expect
 
-from data.global_data import ITEM_INDEX
 from data.inventory_data import (A_TO_Z,
                                  ACCESS_INVENTORY_PAGE_ERROR_WITHOUT_LOGIN,
-                                 ADD_TO_CART, DEFAULT_FILTER_VALUE,
-                                 DOCUMENT_TITLE, FILTER_ARGS, FILTER_OPTIONS,
-                                 FILTER_VALUES, INVENTORY_ITEMS_DATA,
-                                 LEFT_MENU_ITEMS, LOGO_TEXT, ONE,
-                                 PRODUCTS_TITLE, REMOVE, Z_TO_A, SortKey)
-from data.routes import INVENTORY, ROOT
+                                 ADD_TO_CART, ALL_ITEMS_INDEX,
+                                 DEFAULT_FILTER_VALUE, DOCUMENT_TITLE,
+                                 FILTER_ARGS, FILTER_OPTIONS, FILTER_VALUES,
+                                 INDEX, INVENTORY_ITEMS_DATA, ITEM_INDEX,
+                                 LOGO_TEXT, ONE, PRODUCT_DETAIL_ARGS,
+                                 PRODUCT_DETAIL_DATA, PRODUCT_DETAIL_IDS,
+                                 PRODUCTS_TITLE, REMOVE, Z_TO_A, ZERO, SortKey)
+from data.routes import CART, INVENTORY, INVENTORY_ITEM, ROOT
 from po.pages.cart_page import CartPage
-from po.pages.checkout_step_1_page import CheckoutStepOnePage
+from po.pages.checkout_step_2_page import CheckoutStepTwoPage
+from po.pages.inventory_item_page import InventoryItemPage
 from po.pages.inventory_page import InventoryPage
 from po.pages.login_page import LoginPage
 from tests.test_image import general_image_assert
@@ -28,6 +30,33 @@ def assert_item_images(inventory_page: InventoryPage) -> None:
         general_image_assert(inventory_page, image)
 
 
+def verify_item_can_be_added(
+    inventory_page: InventoryPage, index: int, expected_count: int
+) -> None:
+    expect(inventory_page.item.button.nth(index)).to_have_text(ADD_TO_CART)
+
+    inventory_page.item.add(index)
+    expected_count += 1
+
+    expect(inventory_page.cart.counter).to_have_text(str(expected_count))
+    expect(inventory_page.item.button.nth(index)).to_have_text(REMOVE)
+
+
+def verify_item_can_be_removed(
+    inventory_page: InventoryPage, index: int, expected_count: int
+) -> None:
+    expect(inventory_page.item.button.nth(index)).to_have_text(REMOVE)
+
+    inventory_page.item.remove(index)
+    expected_count -= 1
+
+    if expected_count == 0:
+        expect(inventory_page.cart.counter).to_be_hidden()
+    else:
+        expect(inventory_page.cart.counter).to_have_text(str(expected_count))
+    expect(inventory_page.item.button.nth(index)).to_have_text(ADD_TO_CART)
+
+
 def test_verify_document_title(empty_inventory_page: InventoryPage) -> None:
     expect(empty_inventory_page.page).to_have_title(DOCUMENT_TITLE)
 
@@ -38,12 +67,6 @@ def test_verify_inventory_url(empty_inventory_page: InventoryPage) -> None:
 
 def test_verify_page_title(empty_inventory_page: InventoryPage) -> None:
     expect(empty_inventory_page.inventory_logo).to_have_text(LOGO_TEXT)
-
-
-def test_verify_left_menu_components(empty_inventory_page: InventoryPage) -> None:
-    empty_inventory_page.menu.hamburger_button.click()
-    expect(empty_inventory_page.menu.panel).to_be_visible()
-    expect(empty_inventory_page.menu.item).to_have_text(LEFT_MENU_ITEMS)
 
 
 def test_verify_products_title(empty_inventory_page: InventoryPage) -> None:
@@ -120,11 +143,42 @@ def test_verify_error_when_trying_to_access_inventory_page_without_login(
     expect(login_page.page).to_have_url(ROOT)
 
 
+@pytest.mark.parametrize(
+    INDEX,
+    argvalues=ALL_ITEMS_INDEX,
+    ids=PRODUCT_DETAIL_IDS,
+)
 def test_verify_user_can_add_item_to_cart(
+    empty_inventory_page: InventoryPage, index: int
+) -> None:
+    verify_item_can_be_added(empty_inventory_page, index, ZERO)
+
+
+@pytest.mark.parametrize(
+    INDEX,
+    argvalues=ALL_ITEMS_INDEX,
+    ids=PRODUCT_DETAIL_IDS,
+)
+def test_verify_user_can_remove_item_after_adding_it(
+    empty_inventory_page: InventoryPage, index: int
+) -> None:
+    verify_item_can_be_added(empty_inventory_page, index, ZERO)
+    verify_item_can_be_removed(empty_inventory_page, index, ONE)
+
+
+def test_verify_user_can_add_all_items_to_cart(
     empty_inventory_page: InventoryPage,
 ) -> None:
-    empty_inventory_page.item.add(ITEM_INDEX)
-    expect(empty_inventory_page.cart.counter).to_have_text(ONE)
+    for index in ALL_ITEMS_INDEX:
+        verify_item_can_be_added(empty_inventory_page, index, index)
+
+
+def test_verify_user_can_remove_all_items_from_cart(
+    inventory_page_with_all_items: InventoryPage,
+) -> None:
+    for index in ALL_ITEMS_INDEX:
+        expected_count: int = len(ALL_ITEMS_INDEX) - index
+        verify_item_can_be_removed(inventory_page_with_all_items, index, expected_count)
 
 
 def test_verify_cart_is_empty_by_default(
@@ -133,35 +187,56 @@ def test_verify_cart_is_empty_by_default(
     expect(empty_inventory_page.cart.counter).to_be_hidden()
 
 
-def test_verify_cart_is_empty_after_adding_item_and_removing_it(
-    empty_inventory_page: InventoryPage,
+def test_verify_item_remains_in_cart_after_pressing_continue_shopping_button(
+    cart_page_with_item: CartPage,
 ) -> None:
-    empty_inventory_page.item.add(ITEM_INDEX)
-    expect(empty_inventory_page.cart.counter).to_have_text(ONE)
-    empty_inventory_page.item.remove(ITEM_INDEX)
-    expect(empty_inventory_page.cart.counter).to_be_hidden()
-
-
-def test_go_back_to_continue_shopping(cart_page_with_item: CartPage) -> None:
     inventory_page: InventoryPage = cart_page_with_item.get_inventory_page()
-    expect(inventory_page.cart.counter).to_have_text(ONE)
+    expect(inventory_page.page).to_have_url(INVENTORY)
+    expect(inventory_page.item.button.nth(ITEM_INDEX)).to_have_text(REMOVE)
+    expect(inventory_page.cart.counter).to_have_text(str(ONE))
 
 
-def test_verify_item_remain_in_cart_after_pressing_cancel_in_checkout_step_one_page(
-    checkout_step_1_page_with_item: CheckoutStepOnePage,
+def test_verify_cancel_from_checkout_step_two_preserves_cart_item(
+    checkout_step_2_page_with_item: CheckoutStepTwoPage,
 ) -> None:
-    cart_page: CartPage = checkout_step_1_page_with_item.cancel()
-    inventory_page: InventoryPage = cart_page.get_inventory_page()
-    expect(inventory_page.cart.counter).to_have_text(ONE)
+    inventory_page: InventoryPage = checkout_step_2_page_with_item.cancel()
+    expect(inventory_page.page).to_have_url(INVENTORY)
+    expect(inventory_page.cart.counter).to_have_text(str(ONE))
+    expect(inventory_page.item.button.nth(ITEM_INDEX)).to_have_text(REMOVE)
 
 
-def test_verify_left_menu_is_closed(
+@pytest.mark.parametrize(
+    PRODUCT_DETAIL_ARGS,
+    argvalues=PRODUCT_DETAIL_DATA,
+    ids=PRODUCT_DETAIL_IDS,
+)
+def test_verify_user_can_open_product_details_from_product_name(
+    empty_inventory_page: InventoryPage, index: int, product_id: str
+) -> None:
+    inventory_page = empty_inventory_page
+    product_page: InventoryItemPage = inventory_page.open_item_by_name(index)
+    expect(product_page.page).to_have_url(f"{INVENTORY_ITEM}{product_id}")
+    inventory_page: InventoryPage = product_page.back_to_products()
+    expect(inventory_page.page).to_have_url(INVENTORY)
+
+
+@pytest.mark.parametrize(
+    PRODUCT_DETAIL_ARGS,
+    argvalues=PRODUCT_DETAIL_DATA,
+    ids=PRODUCT_DETAIL_IDS,
+)
+def test_verify_user_can_open_product_details_from_product_image(
+    empty_inventory_page: InventoryPage, index: int, product_id: str
+) -> None:
+    inventory_page = empty_inventory_page
+    product_page: InventoryItemPage = inventory_page.open_item_by_image(index)
+    expect(product_page.page).to_have_url(f"{INVENTORY_ITEM}{product_id}")
+    inventory_page: InventoryPage = product_page.back_to_products()
+    expect(inventory_page.page).to_have_url(INVENTORY)
+
+
+def test_verify_user_can_navigate_to_cart_from_inventory_page(
     empty_inventory_page: InventoryPage,
 ) -> None:
-    expect(empty_inventory_page.menu.panel).to_be_hidden()
-
-    empty_inventory_page.menu.hamburger_button.click()
-    expect(empty_inventory_page.menu.panel).to_be_visible()
-
-    empty_inventory_page.menu.close_button.click()
-    expect(empty_inventory_page.menu.panel).to_be_hidden()
+    cart_page: CartPage = empty_inventory_page.cart.get_cart_page()
+    expect(cart_page.page).to_have_url(CART)

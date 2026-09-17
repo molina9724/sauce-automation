@@ -2,8 +2,8 @@ from typing import TYPE_CHECKING
 
 from playwright.sync_api import Locator, Page
 
-from ..components.cart import Cart
-from ..components.cart_page_item import CartItem
+from ..components.cart_component import Cart
+from ..components.cart_item import CartItem
 from ..components.left_menu import Menu
 # fmt: off
 from .base_page import BasePage

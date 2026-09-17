@@ -1,11 +1,11 @@
 from playwright.sync_api import Locator, Page
 
 from data.routes import CHECKOUT_COMPLETE, INVENTORY
-from po.components.cart_page_item import CartItem
+from po.components.cart_item import CartItem
 from po.pages.checkout_complete import CheckoutComplete
 from po.pages.inventory_page import InventoryPage
 
-from ..components.cart import Cart
+from ..components.cart_component import Cart
 from ..components.left_menu import Menu
 from ..pages.base_page import BasePage
 

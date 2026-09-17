@@ -4,7 +4,7 @@ from data.routes import INVENTORY
 from po.pages.base_page import BasePage
 from po.pages.inventory_page import InventoryPage
 
-from ..components.cart import Cart
+from ..components.cart_component import Cart
 from ..components.left_menu import Menu
 
 

@@ -1,7 +1,9 @@
 from playwright.sync_api import Locator, Page
 
-from ..components.cart import Cart
-from ..components.inventory_page_item import InventoryItem
+from po.pages.inventory_item_page import InventoryItemPage
+
+from ..components.cart_component import Cart
+from ..components.inventory_item import InventoryItem
 from ..components.left_menu import Menu
 from .base_page import BasePage
 
@@ -45,3 +47,11 @@ class InventoryPage(BasePage):
 
     def set_products_filter(self, option: str) -> None:
         self.products_filter.select_option(option)
+
+    def open_item_by_name(self, index: int = 0) -> InventoryItemPage:
+        self.item.name.nth(index).click()
+        return InventoryItemPage(self.page)
+
+    def open_item_by_image(self, index: int = 0) -> InventoryItemPage:
+        self.item.image.nth(index).click()
+        return InventoryItemPage(self.page)

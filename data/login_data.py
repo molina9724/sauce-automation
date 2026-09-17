@@ -21,11 +21,11 @@ ALL_USERS = (UNLOCKED_USERS[0],) + LOCKED_USERS + UNLOCKED_USERS[1:]
 
 WRONG_USERNAME: str = "wrong_username"
 
-PASSWORD = "secret_sauce"
+RIGHT_PASSWORD = "secret_sauce"
 WRONG_PASSWORD = "wrong_password"
 
 EXPECTED_LOGIN_USERNAMES = list(ALL_USERS)
-SUCCESS_LOGIN_DATA = [(user, PASSWORD) for user in UNLOCKED_USERS]
+SUCCESS_LOGIN_DATA = [(user, RIGHT_PASSWORD) for user in UNLOCKED_USERS]
 
 EMPTY_USERNAME_ERROR: str = "Epic sadface: Username is required"
 EMPTY_PASSWORD_ERROR: str = "Epic sadface: Password is required"
@@ -41,7 +41,7 @@ LOGIN_ERROR_PARAMS: list[ParameterSet] = [
     # Empty field cases
     pytest.param("", "", EMPTY_USERNAME_ERROR, id="both_fields_empty"),
     pytest.param(DEFAULT_UNLOCKED_USER, "", EMPTY_PASSWORD_ERROR, id="empty_password"),
-    pytest.param("", PASSWORD, EMPTY_USERNAME_ERROR, id="empty_username"),
+    pytest.param("", RIGHT_PASSWORD, EMPTY_USERNAME_ERROR, id="empty_username"),
     # Wrong credentials cases
     pytest.param(
         DEFAULT_UNLOCKED_USER,
@@ -51,7 +51,7 @@ LOGIN_ERROR_PARAMS: list[ParameterSet] = [
     ),
     pytest.param(
         WRONG_USERNAME,
-        PASSWORD,
+        RIGHT_PASSWORD,
         WRONG_CREDENTIALS_ERROR,
         id="wrong_user_valid_password",
     ),
@@ -64,7 +64,7 @@ LOGIN_ERROR_PARAMS: list[ParameterSet] = [
     # Locked account cases
     pytest.param(
         DEFAULT_BLOCKED_USER,
-        PASSWORD,
+        RIGHT_PASSWORD,
         LOCKED_ACCOUNT_ERROR,
         id="locked_user_valid_password",
     ),
@@ -78,3 +78,10 @@ LOGIN_ERROR_PARAMS: list[ParameterSet] = [
         id="locked_user_wrong_password_hides_status",
     ),
 ]
+
+USERNAME_PLACEHOLDER: str = "Username"
+PASSWORD_PLACEHOLDER: str = "Password"
+
+PLACEHOLDER: str = "placeholder"
+TYPE: str = "type"
+PASSWORD_INPUT_TYPE = "password"

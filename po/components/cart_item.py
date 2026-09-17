@@ -1,6 +1,6 @@
 from playwright.sync_api import Locator, Page
 
-from ..components.base_item import BaseItem
+from .base_item import BaseItem
 
 
 class CartItem(BaseItem):
