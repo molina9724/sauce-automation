@@ -8,6 +8,7 @@ from po.pages.cart_page import CartPage
 from po.pages.checkout_complete import CheckoutComplete
 from po.pages.checkout_step_1_page import CheckoutStepOnePage
 from po.pages.checkout_step_2_page import CheckoutStepTwoPage
+from po.pages.inventory_item_page import InventoryItemPage
 from po.pages.inventory_page import InventoryPage
 
 from .shared_fixtures_names import (FIXTURES_WITH_EMPTY_CART,
@@ -26,6 +27,7 @@ def test_shopping_cart_is_empty_from_all_pages(
 ) -> None:
     page: Union[
         InventoryPage,
+        InventoryItemPage,
         CartPage,
         CheckoutStepOnePage,
         CheckoutStepTwoPage,
@@ -44,6 +46,7 @@ def test_shopping_cart_with_item_from_all_pages(
 ) -> None:
     page: Union[
         InventoryPage,
+        InventoryItemPage,
         CartPage,
         CheckoutStepOnePage,
         CheckoutStepTwoPage,
