@@ -143,14 +143,22 @@ def test_verify_error_when_trying_to_access_inventory_page_without_login(
     expect(login_page.page).to_have_url(ROOT)
 
 
-@pytest.mark.parametrize(INDEX, argvalues=ALL_ITEMS_INDEX, ids=PRODUCT_DETAIL_IDS)
+@pytest.mark.parametrize(
+    INDEX,
+    argvalues=ALL_ITEMS_INDEX,
+    ids=PRODUCT_DETAIL_IDS,
+)
 def test_verify_user_can_add_item_to_cart(
     empty_inventory_page: InventoryPage, index: int
 ) -> None:
     verify_item_can_be_added(empty_inventory_page, index, ZERO)
 
 
-@pytest.mark.parametrize(INDEX, argvalues=ALL_ITEMS_INDEX, ids=PRODUCT_DETAIL_IDS)
+@pytest.mark.parametrize(
+    INDEX,
+    argvalues=ALL_ITEMS_INDEX,
+    ids=PRODUCT_DETAIL_IDS,
+)
 def test_verify_user_can_remove_item_after_adding_it(
     empty_inventory_page: InventoryPage, index: int
 ) -> None:

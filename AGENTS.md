@@ -66,7 +66,7 @@ Do not make assumptions silently.
 
 Ask one focused question at a time when clarification is required.
 
-State uncertainty explicitly. Any claim about tool behaviour, library versions,
+State uncertainty explicitly. Any claim about tool behavior, library versions,
 CLI flags, or API specifics must be marked as requiring verification, and
 accompanied by the command that verifies it. Confident wrong answers cost more
 time than admitted uncertainty.
@@ -116,7 +116,7 @@ Native Playwright errors carry the call log, retry count and navigation history.
 Replacing them with a hand-written `RuntimeError` string discards the most
 useful part of the message.
 
-**Expected application behaviour is asserted, never raised.**
+**Expected application behavior is asserted, never raised.**
 A rejected login is an outcome, not an exception. Split the action from the
 outcome: `submit_credentials()` performs the action and promises nothing;
 `login()` promises success and fails loudly if it does not happen.
