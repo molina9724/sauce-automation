@@ -12,6 +12,7 @@ from po.pages.cart_page import CartPage
 from po.pages.checkout_complete import CheckoutComplete
 from po.pages.checkout_step_1_page import CheckoutStepOnePage
 from po.pages.checkout_step_2_page import CheckoutStepTwoPage
+from po.pages.inventory_item_page import InventoryItemPage
 from po.pages.inventory_page import InventoryPage
 from po.pages.login_page import LoginPage
 
@@ -71,6 +72,16 @@ def inventory_page_with_all_items(page: Page) -> InventoryPage:
     for index in ALL_ITEMS_INDEX:
         inventory_page.item.add(index)
     return inventory_page
+
+
+@pytest.fixture
+def inventory_item_page(page: Page) -> InventoryItemPage:
+    inventory_page = InventoryPage(page)
+    inventory_page.page.goto(INVENTORY)
+    inventory_item_page: InventoryItemPage = inventory_page.open_item_by_name(
+        ITEM_INDEX
+    )
+    return inventory_item_page
 
 
 @pytest.fixture

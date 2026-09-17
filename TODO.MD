@@ -13,7 +13,7 @@
   parametrization, and `pytest_generate_tests`
 * [ ] Add repeated-purchase coverage for one, two, and three completed purchases
   without including login tests in that workflow matrix
-* [ ] Implement the test cases for`test_inventory_item`
+* [ ] Implement the test cases for `test_inventory_item`
 
 ## Done
 
