@@ -170,7 +170,7 @@ def test_verify_user_can_add_all_items_to_cart(
     empty_inventory_page: InventoryPage,
 ) -> None:
     for index in ALL_ITEMS_INDEX:
-        verify_item_can_be_added(empty_inventory_page, index, ZERO + index)
+        verify_item_can_be_added(empty_inventory_page, index, index)
 
 
 def test_verify_user_can_remove_all_items_from_cart(
