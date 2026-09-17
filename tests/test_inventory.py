@@ -166,13 +166,11 @@ def test_verify_user_can_add_all_items_to_cart(
 
 
 def test_verify_user_can_remove_all_items_from_cart(
-    empty_inventory_page: InventoryPage,
+    inventory_page_with_all_items: InventoryPage,
 ) -> None:
     for index in ALL_ITEMS_INDEX:
-        verify_item_can_be_added(empty_inventory_page, index, ZERO + index)
-    for index in ALL_ITEMS_INDEX:
         expected_count: int = len(ALL_ITEMS_INDEX) - index
-        verify_item_can_be_removed(empty_inventory_page, index, expected_count)
+        verify_item_can_be_removed(inventory_page_with_all_items, index, expected_count)
 
 
 def test_verify_cart_is_empty_by_default(
