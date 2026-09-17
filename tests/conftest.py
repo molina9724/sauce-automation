@@ -5,7 +5,7 @@ import pytest
 from playwright.sync_api import Browser, BrowserContext, Page
 
 from data.checkout_step_1_data import FIRST_NAME, LAST_NAME, ZIP_CODE
-from data.global_data import ALL_ITEMS_INDEX, ITEM_INDEX
+from data.inventory_data import ALL_ITEMS_INDEX, ITEM_INDEX
 from data.login_data import DEFAULT_UNLOCKED_USER, RIGHT_PASSWORD
 from data.routes import INVENTORY, ROOT
 from po.pages.cart_page import CartPage

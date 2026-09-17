@@ -97,3 +97,7 @@ ZERO: int = 0
 ONE: int = 1
 ADD_TO_CART: str = "Add to cart"
 REMOVE: str = "Remove"
+
+ITEM_INDEX: int = 0
+ITEMS_AMOUNT: int = len(INVENTORY_ITEMS_DATA)
+ALL_ITEMS_INDEX: list[int] = list(range(ITEMS_AMOUNT))

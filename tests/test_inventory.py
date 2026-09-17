@@ -3,12 +3,12 @@
 import pytest
 from playwright.sync_api import Locator, expect
 
-from data.global_data import ALL_ITEMS_INDEX, ITEM_INDEX
 from data.inventory_data import (A_TO_Z,
                                  ACCESS_INVENTORY_PAGE_ERROR_WITHOUT_LOGIN,
-                                 ADD_TO_CART, DEFAULT_FILTER_VALUE,
-                                 DOCUMENT_TITLE, FILTER_ARGS, FILTER_OPTIONS,
-                                 FILTER_VALUES, INDEX, INVENTORY_ITEMS_DATA,
+                                 ADD_TO_CART, ALL_ITEMS_INDEX,
+                                 DEFAULT_FILTER_VALUE, DOCUMENT_TITLE,
+                                 FILTER_ARGS, FILTER_OPTIONS, FILTER_VALUES,
+                                 INDEX, INVENTORY_ITEMS_DATA, ITEM_INDEX,
                                  LOGO_TEXT, ONE, PRODUCT_DETAIL_ARGS,
                                  PRODUCT_DETAIL_DATA, PRODUCT_DETAIL_IDS,
                                  PRODUCTS_TITLE, REMOVE, Z_TO_A, ZERO, SortKey)
