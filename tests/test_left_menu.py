@@ -10,6 +10,7 @@ from po.pages.cart_page import CartPage
 from po.pages.checkout_complete import CheckoutComplete
 from po.pages.checkout_step_1_page import CheckoutStepOnePage
 from po.pages.checkout_step_2_page import CheckoutStepTwoPage
+from po.pages.inventory_item_page import InventoryItemPage
 from po.pages.inventory_page import InventoryPage
 from po.pages.login_page import LoginPage
 
@@ -28,6 +29,7 @@ def test_verify_left_menu_behavior(
 ) -> None:
     page: Union[
         InventoryPage,
+        InventoryItemPage,
         CartPage,
         CheckoutStepOnePage,
         CheckoutStepTwoPage,
@@ -53,6 +55,7 @@ def test_logout_from_all_menu_pages(
 ) -> None:
     page: Union[
         InventoryPage,
+        InventoryItemPage,
         CartPage,
         CheckoutStepOnePage,
         CheckoutStepTwoPage,
@@ -70,6 +73,7 @@ def test_all_items_from_all_menu_pages(
 ) -> None:
     page: Union[
         InventoryPage,
+        InventoryItemPage,
         CartPage,
         CheckoutStepOnePage,
         CheckoutStepTwoPage,

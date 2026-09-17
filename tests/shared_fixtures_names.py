@@ -5,6 +5,7 @@ from data.login_data import ParameterSet
 PAGE_FIXTURE = "page_fixture"
 FIXTURES_WITH_EMPTY_CART: list[str] = [
     "empty_inventory_page",
+    "inventory_item_page",
     "empty_cart_page",
     "empty_checkout_step_1_page",
     "empty_checkout_step_2_page",
