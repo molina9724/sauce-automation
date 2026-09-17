@@ -3,11 +3,11 @@ from typing import TYPE_CHECKING
 from playwright.sync_api import Locator, Page
 
 from data.routes import INVENTORY
+from po.components.inventory_item_details import InventoryItemDetails
 from po.components.left_menu import Menu
 from po.pages.base_page import BasePage
 
 from ..components.cart_component import Cart
-from ..components.inventory_item import InventoryItem
 
 if TYPE_CHECKING:
     from .inventory_page import InventoryPage
@@ -22,7 +22,7 @@ class InventoryItemPage(BasePage):
 
         self.menu: Menu = Menu(self.page)
         self.cart: Cart = Cart(self.page)
-        self.item: InventoryItem = InventoryItem(page)
+        self.item: InventoryItemDetails = InventoryItemDetails(page)
 
     def back_to_products(self) -> "InventoryPage":
         self.back_to_products_button.click()
