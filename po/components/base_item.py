@@ -1,6 +1,6 @@
 from playwright.sync_api import Locator, Page
 
-from data.inventory_data import REMOVE
+from data.item_data import REMOVE
 
 from ..components.base_component import BaseComponent
 

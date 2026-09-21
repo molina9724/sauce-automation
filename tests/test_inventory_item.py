@@ -1,12 +1,6 @@
 from playwright.sync_api import expect
 
-from data.inventory_data import (
-    ADD_TO_CART,
-    INVENTORY_ITEMS_DATA,
-    ITEM_INDEX,
-    ONE,
-    REMOVE,
-)
+from data.item_data import ADD_TO_CART, INVENTORY_ITEMS_DATA, ITEM_INDEX, ONE, REMOVE
 from po.pages.inventory_item_page import InventoryItemPage
 from po.pages.inventory_page import InventoryPage
 from tests.test_image import general_image_assert

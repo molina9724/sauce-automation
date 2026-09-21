@@ -4,7 +4,7 @@ from playwright.sync_api import expect
 from data.cart_data import CART_ITEM_DATA
 from data.checkout_step_2_data import (calculate_subtotal, calculate_taxes,
                                        calculate_total)
-from data.inventory_data import INVENTORY_ITEMS_DATA
+from data.item_data import INVENTORY_ITEMS_DATA
 from data.routes import CHECKOUT_COMPLETE, INVENTORY
 from po.pages.checkout_complete import CheckoutComplete
 from po.pages.checkout_step_2_page import CheckoutStepTwoPage

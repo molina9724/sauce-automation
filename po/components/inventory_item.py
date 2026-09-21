@@ -1,6 +1,6 @@
 from playwright.sync_api import Locator, Page
 
-from data.inventory_data import ADD_TO_CART
+from data.item_data import ADD_TO_CART
 
 from .base_item import BaseItem
 
