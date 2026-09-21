@@ -37,6 +37,15 @@ def test_verify_item_can_be_added_to_cart(
     inventory_item_page: InventoryItemPage,
 ) -> None:
     expect(inventory_item_page.item.button).to_have_text(ADD_TO_CART)
-    inventory_item_page.item.button.click()
+    inventory_item_page.item.add()
     expect(inventory_item_page.cart.counter).to_have_text(str(ONE))
     expect(inventory_item_page.item.button).to_have_text(REMOVE)
+
+
+def test_verify_item_can_be_removed_from_cart(
+    inventory_item_page_with_item: InventoryItemPage,
+) -> None:
+    expect(inventory_item_page_with_item.item.button).to_have_text(REMOVE)
+    inventory_item_page_with_item.item.remove()
+    expect(inventory_item_page_with_item.cart.counter).to_be_hidden()
+    expect(inventory_item_page_with_item.item.button).to_have_text(ADD_TO_CART)

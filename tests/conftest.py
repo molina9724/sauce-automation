@@ -91,7 +91,7 @@ def inventory_item_page_with_item(page: Page) -> InventoryItemPage:
     inventory_item_page: InventoryItemPage = inventory_page.open_item_by_name(
         ITEM_INDEX
     )
-    inventory_item_page.item.button.click()
+    inventory_item_page.item.add()
     return inventory_item_page
 
 

@@ -12,3 +12,9 @@ class InventoryItemDetails(BaseComponent):
         self.description: Locator = self.root.locator(".inventory_details_desc")
         self.button: Locator = self.root.locator(".btn_inventory")
         self.image: Locator = self.root.get_by_role("img")
+
+    def add(self) -> None:
+        self.button.click()
+
+    def remove(self) -> None:
+        self.button.click()
