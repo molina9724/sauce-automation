@@ -36,9 +36,10 @@ def verify_item_can_be_added(
     expect(inventory_page.item.button.nth(index)).to_have_text(ADD_TO_CART)
 
     inventory_page.item.add(index)
-    expected_count += 1
 
     expect(inventory_page.cart.counter).to_have_text(str(expected_count))
+    expected_count += 1
+
     expect(inventory_page.item.button.nth(index)).to_have_text(REMOVE)
 
 
@@ -48,12 +49,12 @@ def verify_item_can_be_removed(
     expect(inventory_page.item.button.nth(index)).to_have_text(REMOVE)
 
     inventory_page.item.remove(index)
-    expected_count -= 1
 
     if expected_count == 0:
         expect(inventory_page.cart.counter).to_be_hidden()
     else:
         expect(inventory_page.cart.counter).to_have_text(str(expected_count))
+    expected_count -= 1
     expect(inventory_page.item.button.nth(index)).to_have_text(ADD_TO_CART)
 
 
@@ -151,7 +152,7 @@ def test_verify_error_when_trying_to_access_inventory_page_without_login(
 def test_verify_user_can_add_item_to_cart(
     empty_inventory_page: InventoryPage, index: int
 ) -> None:
-    verify_item_can_be_added(empty_inventory_page, index, ZERO)
+    verify_item_can_be_added(empty_inventory_page, index, ONE)
 
 
 @pytest.mark.parametrize(
@@ -162,8 +163,8 @@ def test_verify_user_can_add_item_to_cart(
 def test_verify_user_can_remove_item_after_adding_it(
     empty_inventory_page: InventoryPage, index: int
 ) -> None:
-    verify_item_can_be_added(empty_inventory_page, index, ZERO)
-    verify_item_can_be_removed(empty_inventory_page, index, ONE)
+    verify_item_can_be_added(empty_inventory_page, index, ONE)
+    verify_item_can_be_removed(empty_inventory_page, index, ZERO)
 
 
 def test_verify_user_can_add_all_items_to_cart(
