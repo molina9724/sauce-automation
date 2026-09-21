@@ -1,6 +1,12 @@
 from playwright.sync_api import expect
 
-from data.inventory_data import ADD_TO_CART, INVENTORY_ITEMS_DATA, ITEM_INDEX
+from data.inventory_data import (
+    ADD_TO_CART,
+    INVENTORY_ITEMS_DATA,
+    ITEM_INDEX,
+    ONE,
+    REMOVE,
+)
 from po.pages.inventory_item_page import InventoryItemPage
 from po.pages.inventory_page import InventoryPage
 from tests.test_image import general_image_assert
@@ -11,7 +17,7 @@ def test_verify_right_item_is_displayed(empty_inventory_page: InventoryPage) -> 
     description: str = INVENTORY_ITEMS_DATA[name]["description"]
     price: str = INVENTORY_ITEMS_DATA[name]["price"]
     button: str = ADD_TO_CART
-    image: str = name
+    item_image_alt: str = name
 
     inventory_item_page: InventoryItemPage = empty_inventory_page.open_item_by_name(
         ITEM_INDEX
@@ -21,5 +27,16 @@ def test_verify_right_item_is_displayed(empty_inventory_page: InventoryPage) -> 
     expect(inventory_item_page.item.description).to_have_text(description)
     expect(inventory_item_page.item.price).to_have_text(price)
     expect(inventory_item_page.item.button).to_have_text(button)
-    expect(inventory_item_page.item.image).to_have_attribute("alt", value=image)
+    expect(inventory_item_page.item.image).to_have_attribute(
+        "alt", value=item_image_alt
+    )
     general_image_assert(inventory_item_page, inventory_item_page.item.image)
+
+
+def test_verify_item_can_be_added_to_cart(
+    inventory_item_page: InventoryItemPage,
+) -> None:
+    expect(inventory_item_page.item.button).to_have_text(ADD_TO_CART)
+    inventory_item_page.item.button.click()
+    expect(inventory_item_page.cart.counter).to_have_text(str(ONE))
+    expect(inventory_item_page.item.button).to_have_text(REMOVE)
