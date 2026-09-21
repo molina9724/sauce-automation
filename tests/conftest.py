@@ -85,6 +85,17 @@ def inventory_item_page(page: Page) -> InventoryItemPage:
 
 
 @pytest.fixture
+def inventory_item_page_with_item(page: Page) -> InventoryItemPage:
+    inventory_page = InventoryPage(page)
+    inventory_page.page.goto(INVENTORY)
+    inventory_item_page: InventoryItemPage = inventory_page.open_item_by_name(
+        ITEM_INDEX
+    )
+    inventory_item_page.item.button.click()
+    return inventory_item_page
+
+
+@pytest.fixture
 def empty_cart_page(empty_inventory_page: InventoryPage) -> CartPage:
     cart_page: CartPage = empty_inventory_page.cart.get_cart_page()
     return cart_page
