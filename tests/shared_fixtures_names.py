@@ -13,6 +13,7 @@ FIXTURES_WITH_EMPTY_CART: list[str] = [
 ]
 FIXTURES_WITH_ITEM_IN_CART: list[str] = [
     "inventory_page_with_item",
+    "inventory_item_page_with_item",
     "cart_page_with_item",
     "checkout_step_1_page_with_item",
     "checkout_step_2_page_with_item",

@@ -13,10 +13,10 @@
   parametrization, and `pytest_generate_tests`
 * [ ] Add repeated-purchase coverage for one, two, and three completed purchases
   without including login tests in that workflow matrix
-* [ ] Implement the test cases for `test_inventory_item`
 
 ## Done
 
+* [X] Implement the test cases for `test_inventory_item`
 * [X] Make page public
 * [X] All state built through the UI; no `storage_state` reuse
 * [X] Failure artifacts: trace, screenshot, video
