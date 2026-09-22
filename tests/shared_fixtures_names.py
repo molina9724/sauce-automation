@@ -23,6 +23,9 @@ ALL_FIXTURES: list[str] = FIXTURES_WITH_EMPTY_CART + FIXTURES_WITH_ITEM_IN_CART
 MENU_PAGE_FIXTURES: list[ParameterSet] = [
     pytest.param("empty_inventory_page", False, id="empty_inventory_page"),
     pytest.param("inventory_item_page", False, id="inventory_item_page"),
+    pytest.param(
+        "inventory_item_page_with_item", True, id="inventory_item_page_with_item"
+    ),
     pytest.param("empty_cart_page", False, id="empty_cart_page"),
     pytest.param(
         "empty_checkout_step_1_page",
