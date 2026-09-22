@@ -1,4 +1,4 @@
-from data.inventory_data import INVENTORY_ITEMS_DATA
+from data.item_data import INVENTORY_ITEMS_DATA
 
 FIRST_ITEM_KEY: str = next(iter(INVENTORY_ITEMS_DATA))
 

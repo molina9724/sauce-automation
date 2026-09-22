@@ -5,13 +5,15 @@ import pytest
 from playwright.sync_api import Browser, BrowserContext, Page
 
 from data.checkout_step_1_data import FIRST_NAME, LAST_NAME, ZIP_CODE
-from data.inventory_data import ALL_ITEMS_INDEX, ITEM_INDEX
+from data.inventory_data import ALL_ITEMS_INDEX
+from data.item_data import ITEM_INDEX
 from data.login_data import DEFAULT_UNLOCKED_USER, RIGHT_PASSWORD
 from data.routes import INVENTORY, ROOT
 from po.pages.cart_page import CartPage
 from po.pages.checkout_complete import CheckoutComplete
 from po.pages.checkout_step_1_page import CheckoutStepOnePage
 from po.pages.checkout_step_2_page import CheckoutStepTwoPage
+from po.pages.inventory_item_page import InventoryItemPage
 from po.pages.inventory_page import InventoryPage
 from po.pages.login_page import LoginPage
 
@@ -74,15 +76,36 @@ def inventory_page_with_all_items(page: Page) -> InventoryPage:
 
 
 @pytest.fixture
+def inventory_item_page(page: Page) -> InventoryItemPage:
+    inventory_page = InventoryPage(page)
+    inventory_page.page.goto(INVENTORY)
+    inventory_item_page: InventoryItemPage = inventory_page.open_item_by_name(
+        ITEM_INDEX
+    )
+    return inventory_item_page
+
+
+@pytest.fixture
+def inventory_item_page_with_item(page: Page) -> InventoryItemPage:
+    inventory_page = InventoryPage(page)
+    inventory_page.page.goto(INVENTORY)
+    inventory_item_page: InventoryItemPage = inventory_page.open_item_by_name(
+        ITEM_INDEX
+    )
+    inventory_item_page.item.add()
+    return inventory_item_page
+
+
+@pytest.fixture
 def empty_cart_page(empty_inventory_page: InventoryPage) -> CartPage:
-    cart_page: CartPage = empty_inventory_page.cart.get_cart_page()
+    cart_page: CartPage = empty_inventory_page.cart.open()
     return cart_page
 
 
 @pytest.fixture
 def cart_page_with_item(empty_inventory_page: InventoryPage) -> CartPage:
     empty_inventory_page.item.add(ITEM_INDEX)
-    cart_page: CartPage = empty_inventory_page.cart.get_cart_page()
+    cart_page: CartPage = empty_inventory_page.cart.open()
     return cart_page
 
 
@@ -90,7 +113,7 @@ def cart_page_with_item(empty_inventory_page: InventoryPage) -> CartPage:
 def cart_page_with_all_items(empty_inventory_page: InventoryPage) -> CartPage:
     for index in ALL_ITEMS_INDEX:
         empty_inventory_page.item.add(index)
-    cart_page: CartPage = empty_inventory_page.cart.get_cart_page()
+    cart_page: CartPage = empty_inventory_page.cart.open()
     return cart_page
 
 

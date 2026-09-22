@@ -10,7 +10,9 @@ automation. Actively developed — see [Known Limitations](#known-limitations).
 
 ## Highlights
 
-- **80 tests** covering login, inventory, cart, checkout and navigation
+- **141 collected test cases** covering login, inventory, product details, cart,
+  checkout, and navigation. The suite combines focused tests, data-driven
+  parametrization, and fixture-matrix coverage across multiple page states.
 - **Trace, video and screenshot captured on every failure** and uploaded as CI
   artifacts — a CI failure can be replayed locally in the Playwright trace viewer
 - **Parallel execution** with per-worker authentication via `storage_state`

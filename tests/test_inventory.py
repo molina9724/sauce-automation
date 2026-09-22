@@ -5,13 +5,14 @@ from playwright.sync_api import Locator, expect
 
 from data.inventory_data import (A_TO_Z,
                                  ACCESS_INVENTORY_PAGE_ERROR_WITHOUT_LOGIN,
-                                 ADD_TO_CART, ALL_ITEMS_INDEX,
-                                 DEFAULT_FILTER_VALUE, DOCUMENT_TITLE,
-                                 FILTER_ARGS, FILTER_OPTIONS, FILTER_VALUES,
-                                 INDEX, INVENTORY_ITEMS_DATA, ITEM_INDEX,
-                                 LOGO_TEXT, ONE, PRODUCT_DETAIL_ARGS,
-                                 PRODUCT_DETAIL_DATA, PRODUCT_DETAIL_IDS,
-                                 PRODUCTS_TITLE, REMOVE, Z_TO_A, ZERO, SortKey)
+                                 ALL_ITEMS_INDEX, DEFAULT_FILTER_VALUE,
+                                 DOCUMENT_TITLE, FILTER_ARGS, FILTER_OPTIONS,
+                                 FILTER_VALUES, INDEX, LOGO_TEXT,
+                                 PRODUCT_DETAIL_ARGS, PRODUCT_DETAIL_DATA,
+                                 PRODUCT_DETAIL_IDS, PRODUCTS_TITLE, Z_TO_A,
+                                 ZERO, SortKey)
+from data.item_data import (ADD_TO_CART, INVENTORY_ITEMS_DATA, ITEM_INDEX, ONE,
+                            REMOVE)
 from data.routes import CART, INVENTORY, INVENTORY_ITEM, ROOT
 from po.pages.cart_page import CartPage
 from po.pages.checkout_step_2_page import CheckoutStepTwoPage
@@ -36,7 +37,6 @@ def verify_item_can_be_added(
     expect(inventory_page.item.button.nth(index)).to_have_text(ADD_TO_CART)
 
     inventory_page.item.add(index)
-    expected_count += 1
 
     expect(inventory_page.cart.counter).to_have_text(str(expected_count))
     expect(inventory_page.item.button.nth(index)).to_have_text(REMOVE)
@@ -48,7 +48,6 @@ def verify_item_can_be_removed(
     expect(inventory_page.item.button.nth(index)).to_have_text(REMOVE)
 
     inventory_page.item.remove(index)
-    expected_count -= 1
 
     if expected_count == 0:
         expect(inventory_page.cart.counter).to_be_hidden()
@@ -151,7 +150,7 @@ def test_verify_error_when_trying_to_access_inventory_page_without_login(
 def test_verify_user_can_add_item_to_cart(
     empty_inventory_page: InventoryPage, index: int
 ) -> None:
-    verify_item_can_be_added(empty_inventory_page, index, ZERO)
+    verify_item_can_be_added(empty_inventory_page, index, ONE)
 
 
 @pytest.mark.parametrize(
@@ -162,22 +161,22 @@ def test_verify_user_can_add_item_to_cart(
 def test_verify_user_can_remove_item_after_adding_it(
     empty_inventory_page: InventoryPage, index: int
 ) -> None:
-    verify_item_can_be_added(empty_inventory_page, index, ZERO)
-    verify_item_can_be_removed(empty_inventory_page, index, ONE)
+    verify_item_can_be_added(empty_inventory_page, index, ONE)
+    verify_item_can_be_removed(empty_inventory_page, index, ZERO)
 
 
 def test_verify_user_can_add_all_items_to_cart(
     empty_inventory_page: InventoryPage,
 ) -> None:
     for index in ALL_ITEMS_INDEX:
-        verify_item_can_be_added(empty_inventory_page, index, index)
+        verify_item_can_be_added(empty_inventory_page, index, index + 1)
 
 
 def test_verify_user_can_remove_all_items_from_cart(
     inventory_page_with_all_items: InventoryPage,
 ) -> None:
     for index in ALL_ITEMS_INDEX:
-        expected_count: int = len(ALL_ITEMS_INDEX) - index
+        expected_count: int = len(ALL_ITEMS_INDEX) - (index + 1)
         verify_item_can_be_removed(inventory_page_with_all_items, index, expected_count)
 
 
@@ -238,5 +237,5 @@ def test_verify_user_can_open_product_details_from_product_image(
 def test_verify_user_can_navigate_to_cart_from_inventory_page(
     empty_inventory_page: InventoryPage,
 ) -> None:
-    cart_page: CartPage = empty_inventory_page.cart.get_cart_page()
+    cart_page: CartPage = empty_inventory_page.cart.open()
     expect(cart_page.page).to_have_url(CART)
