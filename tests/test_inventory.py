@@ -237,5 +237,5 @@ def test_verify_user_can_open_product_details_from_product_image(
 def test_verify_user_can_navigate_to_cart_from_inventory_page(
     empty_inventory_page: InventoryPage,
 ) -> None:
-    cart_page: CartPage = empty_inventory_page.cart.get_cart_page()
+    cart_page: CartPage = empty_inventory_page.cart.open()
     expect(cart_page.page).to_have_url(CART)

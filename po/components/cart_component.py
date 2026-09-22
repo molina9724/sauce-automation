@@ -15,7 +15,7 @@ class Cart(BaseComponent):
         self.cart_button: Locator = self.page.locator(".shopping_cart_link")
         self.counter: Locator = self.cart_button.locator(".shopping_cart_badge")
 
-    def get_cart_page(self) -> "CartPage":
+    def open(self) -> "CartPage":
         self.cart_button.click()
         from ..pages.cart_page import CartPage
 

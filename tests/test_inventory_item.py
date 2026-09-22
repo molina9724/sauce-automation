@@ -52,6 +52,6 @@ def test_verify_item_can_be_removed_from_cart(
 def test_verify_item_added_from_product_details_is_in_cart(
     inventory_item_page_with_item: InventoryItemPage,
 ) -> None:
-    cart_page: CartPage = inventory_item_page_with_item.cart.get_cart_page()
+    cart_page: CartPage = inventory_item_page_with_item.cart.open()
     expect(cart_page.page).to_have_url(CART)
     verify_items_data(cart_page.item, CART_ITEM_DATA)
