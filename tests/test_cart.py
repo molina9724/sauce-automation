@@ -6,24 +6,12 @@ from data.cart_data import (ACCESS_CART_PAGE_WITHOUT_LOGIN_ERROR,
                             CART_ITEM_DATA, CART_ITEMS_DATA)
 from data.inventory_data import ALL_ITEMS_INDEX
 from data.routes import CART
-from po.components.cart_item import CartItem
 from po.pages.cart_page import CartPage
 from po.pages.checkout_step_1_page import CheckoutStepOnePage
 from po.pages.login_page import LoginPage
+from tests.item_data_helpers import verify_items_data
 
 # fmt: on
-
-
-def verify_items_data(item: CartItem, data: dict[str, dict[str, str]]) -> None:
-    names: list[str] = list(data.keys())
-    descriptions: list[str] = [key["description"] for key in data.values()]
-    prices: list[str] = [key["price"] for key in data.values()]
-    quantities: list[str] = [details["quantity"] for details in data.values()]
-
-    expect(item.name).to_have_text(names)
-    expect(item.description).to_have_text(descriptions)
-    expect(item.price).to_have_text(prices)
-    expect(item.quantity).to_have_text(quantities)
 
 
 def test_verify_cart_url(empty_cart_page: CartPage) -> None:

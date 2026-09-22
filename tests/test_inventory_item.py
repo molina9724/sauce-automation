@@ -1,8 +1,12 @@
 from playwright.sync_api import expect
 
+from data.cart_data import CART_ITEM_DATA
 from data.item_data import ADD_TO_CART, INVENTORY_ITEMS_DATA, ITEM_INDEX, ONE, REMOVE
+from data.routes import CART
+from po.pages.cart_page import CartPage
 from po.pages.inventory_item_page import InventoryItemPage
 from po.pages.inventory_page import InventoryPage
+from tests.item_data_helpers import verify_items_data
 from tests.test_image import general_image_assert
 
 
@@ -43,3 +47,11 @@ def test_verify_item_can_be_removed_from_cart(
     inventory_item_page_with_item.item.remove()
     expect(inventory_item_page_with_item.cart.counter).to_be_hidden()
     expect(inventory_item_page_with_item.item.button).to_have_text(ADD_TO_CART)
+
+
+def test_verify_item_added_from_product_details_is_in_cart(
+    inventory_item_page_with_item: InventoryItemPage,
+) -> None:
+    cart_page: CartPage = inventory_item_page_with_item.cart.get_cart_page()
+    expect(cart_page.page).to_have_url(CART)
+    verify_items_data(cart_page.item, CART_ITEM_DATA)
