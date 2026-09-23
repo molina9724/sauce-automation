@@ -149,11 +149,10 @@ def checkout_step_1_page_with_all_items(
 def empty_checkout_step_2_page(
     empty_checkout_step_1_page: CheckoutStepOnePage,
 ) -> CheckoutStepTwoPage:
-    empty_checkout_step_1_page.checkout(
-        first_name=FIRST_NAME, last_name=LAST_NAME, zip_code=ZIP_CODE
-    )
     empty_checkout_step_2_page: CheckoutStepTwoPage = (
-        empty_checkout_step_1_page.get_checkout_step_two_page()
+        empty_checkout_step_1_page.checkout(
+            first_name=FIRST_NAME, last_name=LAST_NAME, zip_code=ZIP_CODE
+        )
     )
     return empty_checkout_step_2_page
 
@@ -162,11 +161,10 @@ def empty_checkout_step_2_page(
 def checkout_step_2_page_with_item(
     checkout_step_1_page_with_item: CheckoutStepOnePage,
 ) -> CheckoutStepTwoPage:
-    checkout_step_1_page_with_item.checkout(
-        first_name=FIRST_NAME, last_name=LAST_NAME, zip_code=ZIP_CODE
-    )
     checkout_step_2_page_with_item: CheckoutStepTwoPage = (
-        checkout_step_1_page_with_item.get_checkout_step_two_page()
+        checkout_step_1_page_with_item.checkout(
+            first_name=FIRST_NAME, last_name=LAST_NAME, zip_code=ZIP_CODE
+        )
     )
     return checkout_step_2_page_with_item
 
@@ -175,11 +173,10 @@ def checkout_step_2_page_with_item(
 def checkout_step_2_page_with_all_items(
     checkout_step_1_page_with_all_items: CheckoutStepOnePage,
 ) -> CheckoutStepTwoPage:
-    checkout_step_1_page_with_all_items.checkout(
-        first_name=FIRST_NAME, last_name=LAST_NAME, zip_code=ZIP_CODE
-    )
     checkout_step_2_page_with_all_items: CheckoutStepTwoPage = (
-        checkout_step_1_page_with_all_items.get_checkout_step_two_page()
+        checkout_step_1_page_with_all_items.checkout(
+            first_name=FIRST_NAME, last_name=LAST_NAME, zip_code=ZIP_CODE
+        )
     )
     return checkout_step_2_page_with_all_items
 
