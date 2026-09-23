@@ -35,7 +35,7 @@ class CheckoutStepOnePage(BasePage):
             self.get_parent(self.zip_code),
         )
 
-    def fill_in_checkout_information(
+    def _fill_in_checkout_information(
         self,
         first_name: str,
         last_name: str,
@@ -45,23 +45,35 @@ class CheckoutStepOnePage(BasePage):
         self.last_name.fill(last_name)
         self.zip_code.fill(zip_code)
 
-    def click_checkout(
+    def submit(
         self,
         first_name: str,
         last_name: str,
         zip_code: str,
     ) -> None:
-        self.fill_in_checkout_information(first_name, last_name, zip_code)
+        self._fill_in_checkout_information(first_name, last_name, zip_code)
         self.continue_button.click()
 
-    def enter_checkout(
+    def submit_with_enter(
         self,
         first_name: str,
         last_name: str,
         zip_code: str,
     ) -> None:
-        self.fill_in_checkout_information(first_name, last_name, zip_code)
+        self._fill_in_checkout_information(first_name, last_name, zip_code)
         self.page.keyboard.press("Enter")
+
+    def checkout(
+        self, first_name: str, last_name: str, zip_code: str
+    ) -> CheckoutStepTwoPage:
+        self.submit(first_name, last_name, zip_code)
+        return self.get_checkout_step_two_page()
+
+    def enter_checkout(
+        self, first_name: str, last_name: str, zip_code: str
+    ) -> CheckoutStepTwoPage:
+        self.submit_with_enter(first_name, last_name, zip_code)
+        return self.get_checkout_step_two_page()
 
     def get_checkout_step_two_page(self) -> CheckoutStepTwoPage:
         self.page.wait_for_url(CHECKOUT_STEP_2)

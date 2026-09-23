@@ -52,7 +52,7 @@ def test_verify_checkout_error_with_empty_field(
     expected: str,
 ) -> None:
     assert_no_error_decorations(checkout_step_1_page_with_item)
-    checkout_step_1_page_with_item.click_checkout(first_name, last_name, zip_code)
+    checkout_step_1_page_with_item.submit(first_name, last_name, zip_code)
     expect(checkout_step_1_page_with_item.form_validation.error_heading).to_have_text(
         expected
     )
@@ -69,7 +69,7 @@ def test_verify_cancel_button_takes_user_back_to_cart_page(
 def test_verify_user_is_taken_to_checkout_step_2_after_successfully_filling_data_and_pressing_continue_button(
     checkout_step_1_page_with_item: CheckoutStepOnePage,
 ) -> None:
-    checkout_step_1_page_with_item.click_checkout(
+    checkout_step_1_page_with_item.checkout(
         first_name=FIRST_NAME, last_name=LAST_NAME, zip_code=ZIP_CODE
     )
     expect(checkout_step_1_page_with_item.page).to_have_url(CHECKOUT_STEP_2)
@@ -92,9 +92,7 @@ def test_verify_user_is_taken_to_checkout_step_2_after_successfully_filling_data
 def test_verify_error_dismissal_after_incomplete_fill_in(
     checkout_step_1_page_with_item: CheckoutStepOnePage,
 ) -> None:
-    checkout_step_1_page_with_item.click_checkout(
-        first_name="", last_name="", zip_code=""
-    )
+    checkout_step_1_page_with_item.submit(first_name="", last_name="", zip_code="")
     expect(checkout_step_1_page_with_item.form_validation.error_heading).to_have_text(
         EMPTY_FIRST_NAME_ERROR
     )

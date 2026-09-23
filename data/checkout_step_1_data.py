@@ -1,6 +1,5 @@
 import pytest
-
-from data.login_data import ParameterSet
+from _pytest.mark.structures import ParameterSet
 
 FIRST_NAME = "test_name"
 LAST_NAME = "test_last_name"
