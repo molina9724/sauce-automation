@@ -13,6 +13,7 @@ ACCESS_CHECKOUT_STEP_1_PAGE_WITHOUT_LOGIN_ERROR: str = (
 # Checkout test case data
 CHECKOUT_ARGS: str = "first_name, last_name, zip_code, expected"
 CHECKOUT_PARAMS: list[tuple[str, str, str, str]] = [
+    ("", "", "", EMPTY_FIRST_NAME_ERROR),
     ("", LAST_NAME, ZIP_CODE, EMPTY_FIRST_NAME_ERROR),
     (FIRST_NAME, "", ZIP_CODE, EMPTY_LAST_NAME_ERROR),
     (FIRST_NAME, LAST_NAME, "", EMPTY_ZIP_CODE_ERROR),

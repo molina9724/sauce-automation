@@ -17,6 +17,11 @@ class CheckoutStepOnePage(BasePage):
         self.last_name: Locator = page.get_by_role("textbox", name="Last Name")
         self.zip_code: Locator = page.get_by_role("textbox", name="Zip/Postal Code")
 
+        self.error: Locator = self.page.get_by_role("alert")
+        self.close_error_button: Locator = self.error.get_by_role(
+            "button", name="Dismiss error"
+        )
+
         self.cancel_button: Locator = page.get_by_role("button", name="Cancel")
         self.continue_button: Locator = page.get_by_role("button", name="Continue")
 
@@ -44,7 +49,24 @@ class CheckoutStepOnePage(BasePage):
         self.first_name.fill(first_name)
         self.last_name.fill(last_name)
         self.zip_code.fill(zip_code)
+
+    def click_checkout(
+        self,
+        first_name: str,
+        last_name: str,
+        zip_code: str,
+    ) -> None:
+        self.fill_in_checkout_information(first_name, last_name, zip_code)
         self.continue_button.click()
+
+    def enter_checkout(
+        self,
+        first_name: str,
+        last_name: str,
+        zip_code: str,
+    ) -> None:
+        self.fill_in_checkout_information(first_name, last_name, zip_code)
+        self.page.keyboard.press("Enter")
 
     def get_checkout_step_two_page(self) -> CheckoutStepTwoPage:
         self.page.wait_for_url(CHECKOUT_STEP_2)
@@ -53,3 +75,6 @@ class CheckoutStepOnePage(BasePage):
     def cancel(self) -> CartPage:
         self.cancel_button.click()
         return CartPage(self.page)
+
+    def dismiss_error(self) -> None:
+        self.close_error_button.click()

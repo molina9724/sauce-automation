@@ -4,8 +4,9 @@ from playwright.sync_api import expect
 
 from data.checkout_step_1_data import (
     ACCESS_CHECKOUT_STEP_1_PAGE_WITHOUT_LOGIN_ERROR, CHECKOUT_ARGS,
-    CHECKOUT_IDS, CHECKOUT_PARAMS, FIRST_NAME, FIRST_NAME_PLACEHOLDER,
-    LAST_NAME, LAST_NAME_PLACEHOLDER, ZIP_CODE, ZIP_CODE_PLACEHOLDER)
+    CHECKOUT_IDS, CHECKOUT_PARAMS, EMPTY_FIRST_NAME_ERROR, FIRST_NAME,
+    FIRST_NAME_PLACEHOLDER, LAST_NAME, LAST_NAME_PLACEHOLDER, ZIP_CODE,
+    ZIP_CODE_PLACEHOLDER)
 from data.global_data import PLACEHOLDER
 from data.routes import CART, CHECKOUT_STEP_1, CHECKOUT_STEP_2
 from po.pages.cart_page import CartPage
@@ -51,9 +52,7 @@ def test_verify_checkout_error_with_empty_field(
     expected: str,
 ) -> None:
     assert_no_error_decorations(checkout_step_1_page_with_item)
-    checkout_step_1_page_with_item.fill_in_checkout_information(
-        first_name, last_name, zip_code
-    )
+    checkout_step_1_page_with_item.click_checkout(first_name, last_name, zip_code)
     expect(checkout_step_1_page_with_item.form_validation.error_heading).to_have_text(
         expected
     )
@@ -70,10 +69,36 @@ def test_verify_cancel_button_takes_user_back_to_cart_page(
 def test_verify_user_is_taken_to_checkout_step_2_after_successfully_filling_data_and_pressing_continue_button(
     checkout_step_1_page_with_item: CheckoutStepOnePage,
 ) -> None:
-    checkout_step_1_page_with_item.fill_in_checkout_information(
+    checkout_step_1_page_with_item.click_checkout(
         first_name=FIRST_NAME, last_name=LAST_NAME, zip_code=ZIP_CODE
     )
     expect(checkout_step_1_page_with_item.page).to_have_url(CHECKOUT_STEP_2)
+
+
+@pytest.mark.xfail(
+    reason="Pressing Enter takes user back to cart_page, and not forward to checkout_step_two_page",
+    raises=AssertionError,
+    strict=True,
+)
+def test_verify_user_is_taken_to_checkout_step_2_after_successfully_filling_data_and_pressing_enter(
+    checkout_step_1_page_with_item: CheckoutStepOnePage,
+) -> None:
+    checkout_step_1_page_with_item.enter_checkout(
+        first_name=FIRST_NAME, last_name=LAST_NAME, zip_code=ZIP_CODE
+    )
+    expect(checkout_step_1_page_with_item.page).to_have_url(CHECKOUT_STEP_2)
+
+
+def test_verify_error_dismissal_after_incomplete_fill_in(
+    checkout_step_1_page_with_item: CheckoutStepOnePage,
+) -> None:
+    checkout_step_1_page_with_item.click_checkout(
+        first_name="", last_name="", zip_code=""
+    )
+    expect(checkout_step_1_page_with_item.error).to_have_text(EMPTY_FIRST_NAME_ERROR)
+    assert_error_decorations(checkout_step_1_page_with_item)
+    checkout_step_1_page_with_item.dismiss_error()
+    assert_no_error_decorations(checkout_step_1_page_with_item)
 
 
 @pytest.mark.anonymous
