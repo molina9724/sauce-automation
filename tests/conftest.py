@@ -178,10 +178,10 @@ def checkout_step_2_page_with_all_items(
     checkout_step_1_page_with_all_items.click_checkout(
         first_name=FIRST_NAME, last_name=LAST_NAME, zip_code=ZIP_CODE
     )
-    checkout_step_2_with_all_items: CheckoutStepTwoPage = (
+    checkout_step_2_page_with_all_items: CheckoutStepTwoPage = (
         checkout_step_1_page_with_all_items.get_checkout_step_two_page()
     )
-    return checkout_step_2_with_all_items
+    return checkout_step_2_page_with_all_items
 
 
 @pytest.fixture
