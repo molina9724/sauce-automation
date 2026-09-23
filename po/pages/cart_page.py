@@ -2,6 +2,8 @@ from typing import TYPE_CHECKING
 
 from playwright.sync_api import Locator, Page
 
+from data.cart_data import DESCRIPTION, QUANTITY, YOUR_CART
+
 from ..components.cart_component import Cart
 from ..components.cart_item import CartItem
 from ..components.left_menu import Menu
@@ -17,7 +19,11 @@ if TYPE_CHECKING:
 class CartPage(BasePage):
     def __init__(self, page: Page, timeout: int = 10000) -> None:
         super().__init__(page, timeout)
+        self.title: Locator = self.page.get_by_text(YOUR_CART)
+
         self.cart_list: Locator = self.locator(".cart_list")
+        self.quantity: Locator = self.cart_list.get_by_text(QUANTITY)
+        self.description: Locator = self.cart_list.get_by_text(DESCRIPTION)
 
         self.item: CartItem = CartItem(page)
 
