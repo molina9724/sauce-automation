@@ -13,3 +13,7 @@ CART_ITEM_DATA: dict[str, dict[str, str]] = {
 ACCESS_CART_PAGE_WITHOUT_LOGIN_ERROR: str = (
     "Epic sadface: You can only access '/cart.html' when you are logged in."
 )
+
+YOUR_CART: str = "Your Cart"
+QUANTITY: str = "QTY"
+DESCRIPTION: str = "Description"
