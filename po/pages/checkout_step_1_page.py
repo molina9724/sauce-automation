@@ -17,11 +17,6 @@ class CheckoutStepOnePage(BasePage):
         self.last_name: Locator = page.get_by_role("textbox", name="Last Name")
         self.zip_code: Locator = page.get_by_role("textbox", name="Zip/Postal Code")
 
-        self.error: Locator = self.page.get_by_role("alert")
-        self.close_error_button: Locator = self.error.get_by_role(
-            "button", name="Dismiss error"
-        )
-
         self.cancel_button: Locator = page.get_by_role("button", name="Cancel")
         self.continue_button: Locator = page.get_by_role("button", name="Continue")
 
@@ -77,4 +72,4 @@ class CheckoutStepOnePage(BasePage):
         return CartPage(self.page)
 
     def dismiss_error(self) -> None:
-        self.close_error_button.click()
+        self.form_validation.close_error_button.click()

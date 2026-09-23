@@ -95,7 +95,9 @@ def test_verify_error_dismissal_after_incomplete_fill_in(
     checkout_step_1_page_with_item.click_checkout(
         first_name="", last_name="", zip_code=""
     )
-    expect(checkout_step_1_page_with_item.error).to_have_text(EMPTY_FIRST_NAME_ERROR)
+    expect(checkout_step_1_page_with_item.form_validation.error_heading).to_have_text(
+        EMPTY_FIRST_NAME_ERROR
+    )
     assert_error_decorations(checkout_step_1_page_with_item)
     checkout_step_1_page_with_item.dismiss_error()
     assert_no_error_decorations(checkout_step_1_page_with_item)
