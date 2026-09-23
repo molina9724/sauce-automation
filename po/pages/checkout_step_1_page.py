@@ -67,9 +67,6 @@ class CheckoutStepOnePage(BasePage):
         self, first_name: str, last_name: str, zip_code: str
     ) -> CheckoutStepTwoPage:
         self.submit(first_name, last_name, zip_code)
-        return self.get_checkout_step_two_page()
-
-    def get_checkout_step_two_page(self) -> CheckoutStepTwoPage:
         self.page.wait_for_url(CHECKOUT_STEP_2)
         return CheckoutStepTwoPage(self.page)
 
