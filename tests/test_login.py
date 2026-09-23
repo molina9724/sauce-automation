@@ -2,13 +2,14 @@
 import pytest
 from playwright.sync_api import expect
 
+from data.global_data import PLACEHOLDER
 from data.login_data import (DEFAULT_UNLOCKED_USER, DOCUMENT_TITLE,
                              EXPECTED_LOGIN_USERNAMES, LOCKED_ACCOUNT_ERROR,
                              LOCKED_USERS, LOGIN_ARGS, LOGIN_ERROR_ARGS,
                              LOGIN_ERROR_PARAMS, LOGO_TEXT,
                              PASSWORD_INPUT_TYPE, PASSWORD_PLACEHOLDER,
-                             PLACEHOLDER, RIGHT_PASSWORD, SUCCESS_LOGIN_DATA,
-                             TYPE, UNLOCKED_USERS, USERNAME_PLACEHOLDER,
+                             RIGHT_PASSWORD, SUCCESS_LOGIN_DATA, TYPE,
+                             UNLOCKED_USERS, USERNAME_PLACEHOLDER,
                              WRONG_CREDENTIALS_ERROR, WRONG_PASSWORD,
                              WRONG_USERNAME)
 from data.routes import INVENTORY

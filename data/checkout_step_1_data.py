@@ -18,3 +18,7 @@ CHECKOUT_PARAMS: list[tuple[str, str, str, str]] = [
     (FIRST_NAME, LAST_NAME, "", EMPTY_ZIP_CODE_ERROR),
 ]
 CHECKOUT_IDS: tuple[str, ...] = tuple(x[3] for x in CHECKOUT_PARAMS)
+
+FIRST_NAME_PLACEHOLDER: str = "First Name"
+LAST_NAME_PLACEHOLDER: str = "Last Name"
+ZIP_CODE_PLACEHOLDER: str = "Zip/Postal Code"

@@ -82,6 +82,5 @@ LOGIN_ERROR_PARAMS: list[ParameterSet] = [
 USERNAME_PLACEHOLDER: str = "Username"
 PASSWORD_PLACEHOLDER: str = "Password"
 
-PLACEHOLDER: str = "placeholder"
 TYPE: str = "type"
 PASSWORD_INPUT_TYPE = "password"
