@@ -86,7 +86,7 @@ def test_verify_login_form_can_be_submitted_multiple_times(
             WRONG_CREDENTIALS_ERROR
         )
         assert_error_decorations(login_page)
-        login_page.dismiss_error()
+        login_page.form_validation.dismiss_error()
         assert_no_error_decorations(login_page)
 
 
@@ -96,7 +96,7 @@ def test_verify_user_can_login_after_invalid_credentials(login_page: LoginPage) 
         WRONG_CREDENTIALS_ERROR
     )
     assert_error_decorations(login_page)
-    login_page.dismiss_error()
+    login_page.form_validation.dismiss_error()
     assert_no_error_decorations(login_page)
     inventory_page: InventoryPage = login_page.login(
         username=DEFAULT_UNLOCKED_USER, password=RIGHT_PASSWORD
@@ -134,5 +134,5 @@ def test_verify_error_dismissal_after_unsuccessful_login_with_locked_account(
     login_page.submit_credentials(username=LOCKED_USERS[0], password=RIGHT_PASSWORD)
     expect(login_page.form_validation.error_heading).to_have_text(LOCKED_ACCOUNT_ERROR)
     assert_error_decorations(login_page)
-    login_page.dismiss_error()
+    login_page.form_validation.dismiss_error()
     assert_no_error_decorations(login_page)

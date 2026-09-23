@@ -99,7 +99,7 @@ def test_verify_error_dismissal_after_incomplete_fill_in(
         EMPTY_FIRST_NAME_ERROR
     )
     assert_error_decorations(checkout_step_1_page_with_item)
-    checkout_step_1_page_with_item.dismiss_error()
+    checkout_step_1_page_with_item.form_validation.dismiss_error()
     assert_no_error_decorations(checkout_step_1_page_with_item)
 
 

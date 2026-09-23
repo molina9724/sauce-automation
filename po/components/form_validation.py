@@ -23,3 +23,7 @@ class FormValidation(BaseComponent):
         self.close_error_button: Locator = self.page.get_by_role(
             "button", name="Dismiss error"
         )
+
+    def dismiss_error(self) -> None:
+        self.close_error_button.click()
+        self.error_heading.wait_for(state="hidden")

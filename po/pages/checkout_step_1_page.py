@@ -70,6 +70,3 @@ class CheckoutStepOnePage(BasePage):
     def cancel(self) -> CartPage:
         self.cancel_button.click()
         return CartPage(self.page)
-
-    def dismiss_error(self) -> None:
-        self.form_validation.close_error_button.click()
