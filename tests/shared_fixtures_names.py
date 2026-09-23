@@ -1,6 +1,5 @@
 import pytest
-
-from data.login_data import ParameterSet
+from _pytest.mark.structures import ParameterSet
 
 PAGE_FIXTURE = "page_fixture"
 FIXTURES_WITH_EMPTY_CART: list[str] = [
