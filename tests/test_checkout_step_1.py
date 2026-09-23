@@ -4,7 +4,7 @@ from playwright.sync_api import expect
 
 from data.checkout_step_1_data import (
     ACCESS_CHECKOUT_STEP_1_PAGE_WITHOUT_LOGIN_ERROR, CHECKOUT_ARGS,
-    CHECKOUT_IDS, CHECKOUT_PARAMS, EMPTY_FIRST_NAME_ERROR, FIRST_NAME,
+    CHECKOUT_PARAMS, EMPTY_FIRST_NAME_ERROR, FIRST_NAME,
     FIRST_NAME_PLACEHOLDER, LAST_NAME, LAST_NAME_PLACEHOLDER, ZIP_CODE,
     ZIP_CODE_PLACEHOLDER)
 from data.global_data import PLACEHOLDER
@@ -43,7 +43,7 @@ def test_verify_zip_code_textbox_placeholder(
     )
 
 
-@pytest.mark.parametrize(CHECKOUT_ARGS, CHECKOUT_PARAMS, ids=CHECKOUT_IDS)
+@pytest.mark.parametrize(CHECKOUT_ARGS, CHECKOUT_PARAMS)
 def test_verify_checkout_error_with_empty_field(
     checkout_step_1_page_with_item: CheckoutStepOnePage,
     first_name: str,
