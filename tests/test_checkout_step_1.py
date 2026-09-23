@@ -83,7 +83,7 @@ def test_verify_user_is_taken_to_checkout_step_2_after_successfully_filling_data
 def test_verify_user_is_taken_to_checkout_step_2_after_successfully_filling_data_and_pressing_enter(
     checkout_step_1_page_with_item: CheckoutStepOnePage,
 ) -> None:
-    checkout_step_1_page_with_item.enter_checkout(
+    checkout_step_1_page_with_item.submit_with_enter(
         first_name=FIRST_NAME, last_name=LAST_NAME, zip_code=ZIP_CODE
     )
     expect(checkout_step_1_page_with_item.page).to_have_url(CHECKOUT_STEP_2)
