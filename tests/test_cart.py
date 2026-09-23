@@ -27,7 +27,7 @@ def test_verify_correct_items_in_cart(cart_page_with_all_items: CartPage) -> Non
     verify_items_data(cart_page_with_all_items.item, CART_ITEMS_DATA)
 
 
-def test_verify_title(empty_cart_page: CartPage) -> None:
+def test_verify_cart_page_title(empty_cart_page: CartPage) -> None:
     expect(empty_cart_page.title).to_have_text(YOUR_CART)
 
 
