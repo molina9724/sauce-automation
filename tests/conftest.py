@@ -119,10 +119,10 @@ def cart_page_with_all_items(empty_inventory_page: InventoryPage) -> CartPage:
 
 @pytest.fixture
 def empty_checkout_step_1_page(empty_cart_page: CartPage) -> CheckoutStepOnePage:
-    checkout_step_1_page_with_item: CheckoutStepOnePage = (
+    empty_checkout_step_1_page: CheckoutStepOnePage = (
         empty_cart_page.get_checkout_step_1_page()
     )
-    return checkout_step_1_page_with_item
+    return empty_checkout_step_1_page
 
 
 @pytest.fixture
@@ -139,21 +139,20 @@ def checkout_step_1_page_with_item(
 def checkout_step_1_page_with_all_items(
     cart_page_with_all_items: CartPage,
 ) -> CheckoutStepOnePage:
-    checkout_step_1_page_with_item: CheckoutStepOnePage = (
+    checkout_step_1_page_with_all_items: CheckoutStepOnePage = (
         cart_page_with_all_items.get_checkout_step_1_page()
     )
-    return checkout_step_1_page_with_item
+    return checkout_step_1_page_with_all_items
 
 
 @pytest.fixture
 def empty_checkout_step_2_page(
     empty_checkout_step_1_page: CheckoutStepOnePage,
 ) -> CheckoutStepTwoPage:
-    empty_checkout_step_1_page.fill_in_checkout_information(
-        first_name=FIRST_NAME, last_name=LAST_NAME, zip_code=ZIP_CODE
-    )
     empty_checkout_step_2_page: CheckoutStepTwoPage = (
-        empty_checkout_step_1_page.get_checkout_step_two_page()
+        empty_checkout_step_1_page.checkout(
+            first_name=FIRST_NAME, last_name=LAST_NAME, zip_code=ZIP_CODE
+        )
     )
     return empty_checkout_step_2_page
 
@@ -162,11 +161,10 @@ def empty_checkout_step_2_page(
 def checkout_step_2_page_with_item(
     checkout_step_1_page_with_item: CheckoutStepOnePage,
 ) -> CheckoutStepTwoPage:
-    checkout_step_1_page_with_item.fill_in_checkout_information(
-        first_name=FIRST_NAME, last_name=LAST_NAME, zip_code=ZIP_CODE
-    )
     checkout_step_2_page_with_item: CheckoutStepTwoPage = (
-        checkout_step_1_page_with_item.get_checkout_step_two_page()
+        checkout_step_1_page_with_item.checkout(
+            first_name=FIRST_NAME, last_name=LAST_NAME, zip_code=ZIP_CODE
+        )
     )
     return checkout_step_2_page_with_item
 
@@ -175,13 +173,12 @@ def checkout_step_2_page_with_item(
 def checkout_step_2_page_with_all_items(
     checkout_step_1_page_with_all_items: CheckoutStepOnePage,
 ) -> CheckoutStepTwoPage:
-    checkout_step_1_page_with_all_items.fill_in_checkout_information(
-        first_name=FIRST_NAME, last_name=LAST_NAME, zip_code=ZIP_CODE
+    checkout_step_2_page_with_all_items: CheckoutStepTwoPage = (
+        checkout_step_1_page_with_all_items.checkout(
+            first_name=FIRST_NAME, last_name=LAST_NAME, zip_code=ZIP_CODE
+        )
     )
-    checkout_step_2_all_items: CheckoutStepTwoPage = (
-        checkout_step_1_page_with_all_items.get_checkout_step_two_page()
-    )
-    return checkout_step_2_all_items
+    return checkout_step_2_page_with_all_items
 
 
 @pytest.fixture

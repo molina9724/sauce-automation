@@ -18,7 +18,7 @@
 
 * [X] Implement the test cases for `test_inventory_item`
 * [X] Make page public
-* [X] All state built through the UI; no `storage_state` reuse
+* [X] Login once per worker through the UI, reused via `storage_state`
 * [X] Failure artifacts: trace, screenshot, video
 * [X] Allure or HTML reporting (both of them are implemented)
 * [X] GitHub Actions workflow running the suite on push

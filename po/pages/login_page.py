@@ -32,9 +32,6 @@ class LoginPage(BasePage):
         self.username: Locator = self.page.get_by_role("textbox", name="Username")
         self.password: Locator = self.page.get_by_role("textbox", name="Password")
         self.login_button: Locator = self.page.get_by_role("button", name="Login")
-        self.close_error_button: Locator = self.page.get_by_role(
-            "button", name="Dismiss error"
-        )
 
         self.usernames_container: Locator = self.page.locator("#login_credentials")
         self.passwords_container: Locator = self.page.locator(".login_password")
@@ -84,10 +81,6 @@ class LoginPage(BasePage):
     def enter_login(self, username: str, password: str) -> "InventoryPage":
         self.submit_credentials_with_enter(username, password)
         return self._get_inventory_page_after_login(username)
-
-    def dismiss_error(self) -> None:
-        self.close_error_button.click()
-        self.form_validation.error_heading.wait_for(state="hidden")
 
     def get_usernames(self) -> list[str]:
         usernames_container: Locator = self.usernames_container
