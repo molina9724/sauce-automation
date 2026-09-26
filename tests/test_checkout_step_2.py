@@ -1,4 +1,5 @@
 # fmt: off
+import pytest
 from playwright.sync_api import expect
 
 from data.cart_data import CART_ITEM_DATA
@@ -9,24 +10,21 @@ from data.routes import CHECKOUT_COMPLETE, INVENTORY
 from po.pages.checkout_complete import CheckoutComplete
 from po.pages.checkout_step_2_page import CheckoutStepTwoPage
 from po.pages.inventory_page import InventoryPage
+from tests.shared_fixtures_names import (CHECKOUT_STEP_2_FIXTURES,
+                                         CHECKOUT_STEP_2_ORDER_ARGS)
 
 # fmt: on
 
 
-def test_validate_item_subtotal(
-    checkout_step_2_page_with_item: CheckoutStepTwoPage,
+@pytest.mark.parametrize(CHECKOUT_STEP_2_ORDER_ARGS, CHECKOUT_STEP_2_FIXTURES)
+def test_validate_order_subtotal(
+    request: pytest.FixtureRequest,
+    page_fixture: str,
+    items: dict[str, dict[str, str]],
 ) -> None:
-    expected_subtotal: str = calculate_subtotal(CART_ITEM_DATA)
-    expect(checkout_step_2_page_with_item.subtotal).to_contain_text(expected_subtotal)
-
-
-def test_validate_all_items_subtotal(
-    checkout_step_2_page_with_all_items: CheckoutStepTwoPage,
-) -> None:
-    expected_subtotal: str = calculate_subtotal(INVENTORY_ITEMS_DATA)
-    expect(checkout_step_2_page_with_all_items.subtotal).to_contain_text(
-        expected_subtotal
-    )
+    page: CheckoutStepTwoPage = request.getfixturevalue(page_fixture)
+    expected_subtotal: str = calculate_subtotal(items)
+    expect(page.subtotal).to_contain_text(expected_subtotal)
 
 
 def test_validate_item_total(
