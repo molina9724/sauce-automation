@@ -1,7 +1,7 @@
 import pytest
 from _pytest.mark.structures import ParameterSet
 
-from data.cart_data import CART_ITEM_DATA, INVENTORY_ITEMS_DATA
+from data.cart_data import CART_ITEM_DATA, CART_ITEMS_DATA
 
 PAGE_FIXTURE: str = "page_fixture"
 FIXTURES_WITH_EMPTY_CART: list[str] = [
@@ -63,7 +63,7 @@ CART_LIST_FIXTURES: list[str] = [
 ]
 
 CHECKOUT_STEP_2_ORDER_ARGS: str = "page_fixture, items"
-CHECKOUT_STEP_2_FIXTURES: list[ParameterSet] = [
+CHECKOUT_STEP_2_VALUES: list[ParameterSet] = [
     pytest.param(
         "checkout_step_2_page_with_item",
         CART_ITEM_DATA,
@@ -71,7 +71,7 @@ CHECKOUT_STEP_2_FIXTURES: list[ParameterSet] = [
     ),
     pytest.param(
         "checkout_step_2_page_with_all_items",
-        INVENTORY_ITEMS_DATA,
+        CART_ITEMS_DATA,
         id="all_items",
     ),
 ]
