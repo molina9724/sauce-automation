@@ -54,4 +54,4 @@ def test_verify_item_added_from_product_details_is_in_cart(
 ) -> None:
     cart_page: CartPage = inventory_item_page_with_item.cart.open()
     expect(cart_page.page).to_have_url(CART)
-    verify_items_data(cart_page.item, CART_ITEM_DATA)
+    verify_items_data(cart_page.cart_list.item, CART_ITEM_DATA)

@@ -1,16 +1,17 @@
+# fmt: off
 from typing import TYPE_CHECKING
 
 from playwright.sync_api import Locator, Page
 
-from data.cart_data import DESCRIPTION, QUANTITY, YOUR_CART
+from data.cart_data import YOUR_CART
+from po.components.cart_list_component import CartList
 
 from ..components.cart_component import Cart
-from ..components.cart_item import CartItem
 from ..components.left_menu import Menu
-# fmt: off
 from .base_page import BasePage
-# fmt: on
 from .inventory_page import InventoryPage
+
+# fmt: on
 
 if TYPE_CHECKING:
     from .checkout_step_1_page import CheckoutStepOnePage
@@ -21,18 +22,13 @@ class CartPage(BasePage):
         super().__init__(page, timeout)
         self.title: Locator = self.page.get_by_text(YOUR_CART)
 
-        self.cart_list: Locator = self.locator(".cart_list")
-        self.quantity: Locator = self.cart_list.get_by_text(QUANTITY)
-        self.description: Locator = self.cart_list.get_by_text(DESCRIPTION)
-
-        self.item: CartItem = CartItem(page)
-
         self.continue_shopping_button: Locator = self.page.get_by_role(
             "button", name="Continue Shopping"
         )
         self.checkout_button: Locator = self.page.get_by_role("button", name="Checkout")
         self.cart: Cart = Cart(self.page)
         self.menu: Menu = Menu(self.page)
+        self.cart_list: CartList = CartList(page, timeout)
 
     def get_inventory_page(self) -> InventoryPage:
         self.continue_shopping_button.click()

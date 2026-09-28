@@ -16,7 +16,7 @@ def calculate_subtotal(items: dict[str, dict[str, str]]) -> str:
     return f"{CURRENCY}{total:.2f}"
 
 
-def calculate_taxes(items: dict[str, dict[str, str]]) -> str:
+def calculate_tax(items: dict[str, dict[str, str]]) -> str:
     subtotal: str = calculate_subtotal(items)
     total_without_currency = Decimal(subtotal[1:])
 
@@ -26,7 +26,19 @@ def calculate_taxes(items: dict[str, dict[str, str]]) -> str:
 
 def calculate_total(items: dict[str, dict[str, str]]) -> str:
     subtotal = Decimal(calculate_subtotal(items)[1::])
-    taxes = Decimal(calculate_taxes(items)[1::])
+    taxes = Decimal(calculate_tax(items)[1::])
 
     total: Decimal = subtotal + taxes
     return f"{CURRENCY}{total:.2f}"
+
+
+PAYMENT_INFORMATION: str = "Payment Information:"
+PAYMENT_METHOD: str = "SauceCard #31337"
+
+SHIPPING_INFORMATION: str = "Shipping Information:"
+SHIPPING_METHOD: str = "Free Pony Express Delivery!"
+
+PRICE_TOTAL_LABEL: str = "Price Total"
+SUBTOTAL_LABEL: str = "Item total: "
+TAX_LABEL: str = "Tax: "
+TOTAL_LABEL: str = "Total: "
