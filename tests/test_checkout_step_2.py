@@ -3,8 +3,10 @@ import pytest
 from playwright.sync_api import expect
 
 from data.checkout_step_2_data import (PAYMENT_INFORMATION, PAYMENT_METHOD,
-                                       SHIPPING_INFORMATION, SHIPPING_METHOD,
-                                       calculate_subtotal, calculate_taxes,
+                                       PRICE_TOTAL_LABEL, SHIPPING_INFORMATION,
+                                       SHIPPING_METHOD, SUBTOTAL_LABEL,
+                                       TAX_LABEL, TOTAL_LABEL,
+                                       calculate_subtotal, calculate_tax,
                                        calculate_total)
 from data.routes import CHECKOUT_COMPLETE, INVENTORY
 from po.pages.checkout_complete import CheckoutComplete
@@ -41,36 +43,24 @@ def test_verify_shipping_information(
 
 
 @pytest.mark.parametrize(CHECKOUT_STEP_2_ORDER_ARGS, CHECKOUT_STEP_2_VALUES)
-def test_validate_order_subtotal(
+def test_validate_order_pricing(
     request: pytest.FixtureRequest,
     page_fixture: str,
     items: dict[str, dict[str, str]],
 ) -> None:
     page: CheckoutStepTwoPage = request.getfixturevalue(page_fixture)
+
+    expect(page.price_total_label).to_be_visible()
+    expect(page.price_total_label).to_have_text(PRICE_TOTAL_LABEL)
+
     expected_subtotal: str = calculate_subtotal(items)
-    expect(page.subtotal).to_contain_text(expected_subtotal)
+    expect.soft(page.subtotal).to_have_text(f"{SUBTOTAL_LABEL}{expected_subtotal}")
 
+    expected_tax: str = calculate_tax(items)
+    expect.soft(page.tax).to_have_text(f"{TAX_LABEL}{expected_tax}")
 
-@pytest.mark.parametrize(CHECKOUT_STEP_2_ORDER_ARGS, CHECKOUT_STEP_2_VALUES)
-def test_validate_order_total(
-    request: pytest.FixtureRequest,
-    page_fixture: str,
-    items: dict[str, dict[str, str]],
-) -> None:
-    page: CheckoutStepTwoPage = request.getfixturevalue(page_fixture)
     expected_total: str = calculate_total(items)
-    expect(page.total).to_contain_text(expected_total)
-
-
-@pytest.mark.parametrize(CHECKOUT_STEP_2_ORDER_ARGS, CHECKOUT_STEP_2_VALUES)
-def test_validate_order_taxes(
-    request: pytest.FixtureRequest,
-    page_fixture: str,
-    items: dict[str, dict[str, str]],
-) -> None:
-    page: CheckoutStepTwoPage = request.getfixturevalue(page_fixture)
-    expected_taxes: str = calculate_taxes(items)
-    expect(page.tax).to_contain_text(expected_taxes)
+    expect.soft(page.total).to_have_text(f"{TOTAL_LABEL}{expected_total}")
 
 
 def test_verify_cancel_button_takes_user_to_inventory_page(
