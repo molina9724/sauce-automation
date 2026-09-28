@@ -50,8 +50,8 @@ def test_validate_order_pricing(
 ) -> None:
     page: CheckoutStepTwoPage = request.getfixturevalue(page_fixture)
 
-    expect(page.price_total_label).to_be_visible()
-    expect(page.price_total_label).to_have_text(PRICE_TOTAL_LABEL)
+    expect.soft(page.price_total_label).to_be_visible()
+    expect.soft(page.price_total_label).to_have_text(PRICE_TOTAL_LABEL)
 
     expected_subtotal: str = calculate_subtotal(items)
     expect.soft(page.subtotal).to_have_text(f"{SUBTOTAL_LABEL}{expected_subtotal}")
