@@ -6,7 +6,6 @@
 * [ ] Add type hint to all constants and variables
 * [ ] Add return type annotations to all the methods and functions
 * [ ] Add parameter annotations to all the classes, methods and functions
-* [ ] Add test cases to `test_checkout_step_2`
 * [ ] Fixture set grew combinatorially; needs a factory
 * [ ] Investigate centralized fixture parametrization ("fixture matrix") for
   shared test cases across page states; compare parametrized fixtures, indirect
@@ -17,6 +16,7 @@
 
 ## Done
 
+* [X] Add test cases to `test_checkout_step_2`
 * [X] Implement the test cases for `test_inventory_item`
 * [X] Make page public
 * [X] Login once per worker through the UI, reused via `storage_state`
