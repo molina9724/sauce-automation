@@ -2,7 +2,9 @@
 import pytest
 from playwright.sync_api import expect
 
-from data.checkout_step_2_data import (calculate_subtotal, calculate_taxes,
+from data.checkout_step_2_data import (PAYMENT_INFORMATION, PAYMENT_METHOD,
+                                       SHIPPING_INFORMATION, SHIPPING_METHOD,
+                                       calculate_subtotal, calculate_taxes,
                                        calculate_total)
 from data.routes import CHECKOUT_COMPLETE, INVENTORY
 from po.pages.checkout_complete import CheckoutComplete
@@ -12,6 +14,30 @@ from tests.shared_fixtures_names import (CHECKOUT_STEP_2_ORDER_ARGS,
                                          CHECKOUT_STEP_2_VALUES)
 
 # fmt: on
+
+
+def test_verify_payment_information(
+    checkout_step_2_page_with_item: CheckoutStepTwoPage,
+) -> None:
+    expect(checkout_step_2_page_with_item.payment_information).to_be_visible()
+    expect(checkout_step_2_page_with_item.payment_information).to_have_text(
+        PAYMENT_INFORMATION
+    )
+
+    expect(checkout_step_2_page_with_item.payment_method).to_be_visible()
+    expect(checkout_step_2_page_with_item.payment_method).to_have_text(PAYMENT_METHOD)
+
+
+def test_verify_shipping_information(
+    checkout_step_2_page_with_item: CheckoutStepTwoPage,
+) -> None:
+    expect(checkout_step_2_page_with_item.shipping_information).to_be_visible()
+    expect(checkout_step_2_page_with_item.shipping_information).to_have_text(
+        SHIPPING_INFORMATION
+    )
+
+    expect(checkout_step_2_page_with_item.shipping_method).to_be_visible()
+    expect(checkout_step_2_page_with_item.shipping_method).to_have_text(SHIPPING_METHOD)
 
 
 @pytest.mark.parametrize(CHECKOUT_STEP_2_ORDER_ARGS, CHECKOUT_STEP_2_VALUES)

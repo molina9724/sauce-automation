@@ -30,3 +30,10 @@ def calculate_total(items: dict[str, dict[str, str]]) -> str:
 
     total: Decimal = subtotal + taxes
     return f"{CURRENCY}{total:.2f}"
+
+
+PAYMENT_INFORMATION: str = "Payment Information:"
+PAYMENT_METHOD: str = "SauceCard #31337"
+
+SHIPPING_INFORMATION: str = "Shipping Information:"
+SHIPPING_METHOD: str = "Free Pony Express Delivery!"

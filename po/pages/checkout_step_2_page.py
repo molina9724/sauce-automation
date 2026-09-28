@@ -15,9 +15,27 @@ class CheckoutStepTwoPage(BasePage):
         super().__init__(page, timeout)
         self.cart_list: CartList = CartList(page, timeout)
 
-        self.subtotal: Locator = self.locator(".summary_subtotal_label")
-        self.tax: Locator = self.locator(".summary_tax_label")
-        self.total: Locator = self.locator(".summary_total_label")
+        self.summary_info: Locator = self.locator(".summary_info")
+        self.payment_information: Locator = self.summary_info.locator(
+            '[data-test="payment-info-label"]'
+        )
+        self.payment_method: Locator = self.summary_info.locator(
+            '[data-test="payment-info-value"]'
+        )
+
+        self.shipping_information: Locator = self.summary_info.locator(
+            '[data-test="shipping-info-label"]'
+        )
+        self.shipping_method: Locator = self.summary_info.locator(
+            '[data-test="shipping-info-value"]'
+        )
+
+        self.price_total_label: Locator = self.summary_info.locator(
+            '[data-test="total-info-label"]'
+        )
+        self.subtotal: Locator = self.summary_info.locator(".summary_subtotal_label")
+        self.tax: Locator = self.summary_info.locator(".summary_tax_label")
+        self.total: Locator = self.summary_info.locator(".summary_total_label")
 
         self.cancel_button: Locator = self.page.get_by_role("button", name="Cancel")
         self.finish_button: Locator = self.page.get_by_role("button", name="Finish")
