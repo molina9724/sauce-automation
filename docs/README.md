@@ -95,7 +95,7 @@ reproduces on the runner can still be inspected locally.
 
 ```
 po/pages/          Page objects — locators, behaviour, navigation
-po/components/     Shared components composed onto pages (Cart, Menu, FormValidation, BaseItem, InventoryItem, CartItem)
+po/components/     Shared components composed onto pages (Cart, Menu, FormValidation, BaseItem, InventoryItem, CartItem, CartList)
 tests/             Test modules, one per feature area
 tests/conftest.py  Fixtures: authentication, page-object composition
 data/              Expected values and parametrization data

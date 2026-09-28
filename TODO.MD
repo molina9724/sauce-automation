@@ -13,7 +13,7 @@
   parametrization, and `pytest_generate_tests`
 * [ ] Add repeated-purchase coverage for one, two, and three completed purchases
   without including login tests in that workflow matrix
-* [ ] A new "Generate PDF order" button has added to `checkout_complete`. Create the tests for the new scenarios and the file included.
+* [ ] A new "Generate PDF order" button has been added to `checkout_complete`. Create the tests for the new scenarios and the file included.
 
 ## Done
 
