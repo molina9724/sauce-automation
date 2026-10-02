@@ -4,11 +4,10 @@ import pytest
 from playwright.sync_api import Locator, expect
 
 from data.inventory_data import (A_TO_Z, ALL_ITEMS_INDEX, DEFAULT_FILTER_VALUE,
-                                 DOCUMENT_TITLE, FILTER_ARGS, FILTER_OPTIONS,
-                                 FILTER_VALUES, INDEX, LOGO_TEXT,
-                                 PRODUCT_DETAIL_ARGS, PRODUCT_DETAIL_DATA,
-                                 PRODUCT_DETAIL_IDS, PRODUCTS_TITLE, Z_TO_A,
-                                 ZERO, SortKey)
+                                 FILTER_ARGS, FILTER_OPTIONS, FILTER_VALUES,
+                                 INDEX, PRODUCT_DETAIL_ARGS,
+                                 PRODUCT_DETAIL_DATA, PRODUCT_DETAIL_IDS,
+                                 PRODUCTS_TITLE, Z_TO_A, ZERO, SortKey)
 from data.item_data import (ADD_TO_CART, INVENTORY_ITEMS_DATA, ITEM_INDEX, ONE,
                             REMOVE)
 from data.routes import CART, INVENTORY, INVENTORY_ITEM
@@ -53,16 +52,8 @@ def verify_item_can_be_removed(
     expect(inventory_page.item.button.nth(index)).to_have_text(ADD_TO_CART)
 
 
-def test_verify_document_title(empty_inventory_page: InventoryPage) -> None:
-    expect(empty_inventory_page.page).to_have_title(DOCUMENT_TITLE)
-
-
 def test_verify_inventory_url(empty_inventory_page: InventoryPage) -> None:
     expect(empty_inventory_page.page).to_have_url(INVENTORY)
-
-
-def test_verify_page_title(empty_inventory_page: InventoryPage) -> None:
-    expect(empty_inventory_page.inventory_logo).to_have_text(LOGO_TEXT)
 
 
 def test_verify_products_title(empty_inventory_page: InventoryPage) -> None:

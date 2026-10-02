@@ -19,7 +19,6 @@ INCREASED_TIMEOUT: int = 20000
 class LoginPage(BasePage):
     def __init__(self, page: Page, timeout: int = 10000) -> None:
         super().__init__(page=page, timeout=timeout)
-        self.logo_heading: Locator = self.page.locator(".login_logo")
         self.usernames_heading: Locator = self.page.get_by_role(
             "heading", name="Accepted usernames are:"
         )

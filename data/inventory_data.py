@@ -33,9 +33,7 @@ PRODUCT_DETAIL_DATA: list[tuple[int, str]] = [
 ]
 PRODUCT_DETAIL_IDS: list[str] = list(INVENTORY_ITEMS_DATA)
 
-DOCUMENT_TITLE: str = "Swag Labs"
 PRODUCTS_TITLE: str = "Products"
-LOGO_TEXT: str = "Swag Labs"
 
 
 def get_price_value(item: tuple[str, dict[str, str]]) -> float:

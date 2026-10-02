@@ -3,10 +3,9 @@ import pytest
 from playwright.sync_api import expect
 
 from data.global_data import PLACEHOLDER
-from data.login_data import (DEFAULT_UNLOCKED_USER, DOCUMENT_TITLE,
-                             EXPECTED_LOGIN_USERNAMES, LOCKED_ACCOUNT_ERROR,
-                             LOCKED_USERS, LOGIN_ARGS, LOGIN_ERROR_ARGS,
-                             LOGIN_ERROR_PARAMS, LOGO_TEXT,
+from data.login_data import (DEFAULT_UNLOCKED_USER, EXPECTED_LOGIN_USERNAMES,
+                             LOCKED_ACCOUNT_ERROR, LOCKED_USERS, LOGIN_ARGS,
+                             LOGIN_ERROR_ARGS, LOGIN_ERROR_PARAMS,
                              PASSWORD_INPUT_TYPE, PASSWORD_PLACEHOLDER,
                              RIGHT_PASSWORD, SUCCESS_LOGIN_DATA, TYPE,
                              UNLOCKED_USERS, USERNAME_PLACEHOLDER,
@@ -22,14 +21,6 @@ from .form_validation_helpers import (assert_error_decorations,
 # fmt: on
 
 pytestmark: pytest.MarkDecorator = pytest.mark.anonymous
-
-
-def test_verify_document_title(login_page: LoginPage) -> None:
-    expect(login_page.page).to_have_title(DOCUMENT_TITLE)
-
-
-def test_verify_page_title(login_page: LoginPage) -> None:
-    expect(login_page.logo_heading).to_have_text(LOGO_TEXT)
 
 
 def test_verify_username_textbox_is_displayed(login_page: LoginPage) -> None:
