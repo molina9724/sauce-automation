@@ -37,10 +37,6 @@ DOCUMENT_TITLE: str = "Swag Labs"
 PRODUCTS_TITLE: str = "Products"
 LOGO_TEXT: str = "Swag Labs"
 
-ACCESS_INVENTORY_PAGE_ERROR_WITHOUT_LOGIN: str = (
-    "Epic sadface: You can only access '/inventory.html' when you are logged in."
-)
-
 
 def get_price_value(item: tuple[str, dict[str, str]]) -> float:
     _, data = item

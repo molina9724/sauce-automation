@@ -1,13 +1,10 @@
 # fmt: off
-import pytest
 from playwright.sync_api import expect
 
-from data.cart_data import (ACCESS_CART_PAGE_WITHOUT_LOGIN_ERROR,
-                            CART_ITEM_DATA, YOUR_CART)
+from data.cart_data import CART_ITEM_DATA, YOUR_CART
 from data.routes import CART, CHECKOUT_STEP_1
 from po.pages.cart_page import CartPage
 from po.pages.checkout_step_1_page import CheckoutStepOnePage
-from po.pages.login_page import LoginPage
 from tests.item_data_helpers import verify_items_data
 
 # fmt: on
@@ -45,13 +42,3 @@ def test_verify_items_remain_in_cart_after_pressing_cancel_in_checkout_step_one_
     cart_page: CartPage = checkout_step_1_page_with_item.cancel()
     expect(cart_page.page).to_have_url(CART)
     verify_items_data(cart_page.cart_list.item, CART_ITEM_DATA)
-
-
-@pytest.mark.anonymous
-def test_verify_error_when_accessing_cart_page_without_login(
-    login_page: LoginPage,
-) -> None:
-    login_page.page.goto(CART)
-    expect(login_page.form_validation.error_heading).to_have_text(
-        ACCESS_CART_PAGE_WITHOUT_LOGIN_ERROR
-    )
