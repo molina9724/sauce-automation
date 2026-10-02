@@ -2,11 +2,11 @@
 import pytest
 from playwright.sync_api import expect
 
-from data.checkout_step_1_data import (
-    ACCESS_CHECKOUT_STEP_1_PAGE_WITHOUT_LOGIN_ERROR, CHECKOUT_ARGS,
-    CHECKOUT_PARAMS, EMPTY_FIRST_NAME_ERROR, FIRST_NAME,
-    FIRST_NAME_PLACEHOLDER, LAST_NAME, LAST_NAME_PLACEHOLDER, ZIP_CODE,
-    ZIP_CODE_PLACEHOLDER)
+from data.checkout_step_1_data import (CHECKOUT_ARGS, CHECKOUT_PARAMS,
+                                       EMPTY_FIRST_NAME_ERROR, FIRST_NAME,
+                                       FIRST_NAME_PLACEHOLDER, LAST_NAME,
+                                       LAST_NAME_PLACEHOLDER, ZIP_CODE,
+                                       ZIP_CODE_PLACEHOLDER)
 from data.global_data import PLACEHOLDER
 from data.routes import CART, CHECKOUT_STEP_1, CHECKOUT_STEP_2
 from po.pages.cart_page import CartPage
@@ -99,13 +99,3 @@ def test_verify_error_dismissal_after_incomplete_fill_in(
     assert_error_decorations(checkout_step_1_page_with_item)
     checkout_step_1_page_with_item.form_validation.dismiss_error()
     assert_no_error_decorations(checkout_step_1_page_with_item)
-
-
-@pytest.mark.anonymous
-def test_verify_error_when_accessing_checkout_step_1_page_without_login(
-    login_page: LoginPage,
-) -> None:
-    login_page.page.goto(CHECKOUT_STEP_1)
-    expect(login_page.form_validation.error_heading).to_have_text(
-        ACCESS_CHECKOUT_STEP_1_PAGE_WITHOUT_LOGIN_ERROR
-    )

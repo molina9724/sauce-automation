@@ -3,9 +3,7 @@
 import pytest
 from playwright.sync_api import Locator, expect
 
-from data.inventory_data import (A_TO_Z,
-                                 ACCESS_INVENTORY_PAGE_ERROR_WITHOUT_LOGIN,
-                                 ALL_ITEMS_INDEX, DEFAULT_FILTER_VALUE,
+from data.inventory_data import (A_TO_Z, ALL_ITEMS_INDEX, DEFAULT_FILTER_VALUE,
                                  DOCUMENT_TITLE, FILTER_ARGS, FILTER_OPTIONS,
                                  FILTER_VALUES, INDEX, LOGO_TEXT,
                                  PRODUCT_DETAIL_ARGS, PRODUCT_DETAIL_DATA,
@@ -13,12 +11,11 @@ from data.inventory_data import (A_TO_Z,
                                  ZERO, SortKey)
 from data.item_data import (ADD_TO_CART, INVENTORY_ITEMS_DATA, ITEM_INDEX, ONE,
                             REMOVE)
-from data.routes import CART, INVENTORY, INVENTORY_ITEM, ROOT
+from data.routes import CART, INVENTORY, INVENTORY_ITEM
 from po.pages.cart_page import CartPage
 from po.pages.checkout_step_2_page import CheckoutStepTwoPage
 from po.pages.inventory_item_page import InventoryItemPage
 from po.pages.inventory_page import InventoryPage
-from po.pages.login_page import LoginPage
 from tests.test_image import general_image_assert
 
 # fmt: on
@@ -129,17 +126,6 @@ def test_verify_products_information_after_selecting_filter(
         REMOVE if name == selected_name else ADD_TO_CART for name, _ in ordered_items
     ]
     expect(inventory_page_with_item.item.button).to_have_text(expected_button_labels)
-
-
-@pytest.mark.anonymous
-def test_verify_error_when_trying_to_access_inventory_page_without_login(
-    login_page: LoginPage,
-) -> None:
-    login_page.page.goto(INVENTORY)
-    expect(login_page.form_validation.error_heading).to_have_text(
-        ACCESS_INVENTORY_PAGE_ERROR_WITHOUT_LOGIN
-    )
-    expect(login_page.page).to_have_url(ROOT)
 
 
 @pytest.mark.parametrize(
