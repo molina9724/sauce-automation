@@ -14,6 +14,7 @@ from data.routes import (
 )
 
 PAGE_FIXTURE: str = "page_fixture"
+
 FIXTURES_WITH_EMPTY_CART: list[str] = [
     "empty_inventory_page",
     "inventory_item_page",
@@ -29,7 +30,14 @@ FIXTURES_WITH_ITEM_IN_CART: list[str] = [
     "checkout_step_1_page_with_item",
     "checkout_step_2_page_with_item",
 ]
-ALL_FIXTURES: list[str] = FIXTURES_WITH_EMPTY_CART + FIXTURES_WITH_ITEM_IN_CART
+FIXTURES_WITH_AND_WITHOUT_ITEMS: list[str] = (
+    FIXTURES_WITH_EMPTY_CART + FIXTURES_WITH_ITEM_IN_CART
+)
+
+GLOBAL_PAGE_FIXTURES: list[ParameterSet] = [
+    pytest.param("login_page", marks=pytest.mark.anonymous, id="login_page"),
+    *[pytest.param(fixture, id=fixture) for fixture in FIXTURES_WITH_EMPTY_CART],
+]
 
 MENU_PAGE_FIXTURES: list[ParameterSet] = [
     pytest.param("empty_inventory_page", False, id="empty_inventory_page"),

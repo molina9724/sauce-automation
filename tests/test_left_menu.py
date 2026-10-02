@@ -14,15 +14,15 @@ from po.pages.inventory_item_page import InventoryItemPage
 from po.pages.inventory_page import InventoryPage
 from po.pages.login_page import LoginPage
 
-from .shared_fixtures_names import (ALL_FIXTURES, MENU_PAGE_FIXTURES,
-                                    PAGE_FIXTURE)
+from .shared_fixtures_names import (FIXTURES_WITH_AND_WITHOUT_ITEMS,
+                                    MENU_PAGE_FIXTURES, PAGE_FIXTURE)
 
 #fmt:on
 
 
 @pytest.mark.parametrize(
     PAGE_FIXTURE,
-    ALL_FIXTURES,
+    FIXTURES_WITH_AND_WITHOUT_ITEMS,
 )
 def test_verify_left_menu_behavior(
     page_fixture: str, request: pytest.FixtureRequest
@@ -48,7 +48,7 @@ def test_verify_left_menu_behavior(
 
 @pytest.mark.parametrize(
     PAGE_FIXTURE,
-    ALL_FIXTURES,
+    FIXTURES_WITH_AND_WITHOUT_ITEMS,
 )
 def test_logout_from_all_menu_pages(
     page_fixture: str, request: pytest.FixtureRequest
