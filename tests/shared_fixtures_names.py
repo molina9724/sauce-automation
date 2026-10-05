@@ -1,17 +1,15 @@
+# fmt: off
 import pytest
 from _pytest.mark.structures import ParameterSet
 
 from data.access_without_login_data import get_error
 from data.cart_data import CART_ITEM_DATA, CART_ITEMS_DATA
 from data.inventory_data import PRODUCT_DETAIL_DATA
-from data.routes import (
-    CART,
-    CHECKOUT_COMPLETE,
-    CHECKOUT_STEP_1,
-    CHECKOUT_STEP_2,
-    INVENTORY,
-    INVENTORY_ITEM,
-)
+from data.routes import (CART, CHECKOUT_COMPLETE, CHECKOUT_STEP_1,
+                         CHECKOUT_STEP_2, INVENTORY, INVENTORY_ITEM)
+
+# fmt: on
+
 
 PAGE_FIXTURE: str = "page_fixture"
 
@@ -37,6 +35,37 @@ FIXTURES_WITH_AND_WITHOUT_ITEMS: list[str] = (
 GLOBAL_PAGE_FIXTURES: list[ParameterSet] = [
     pytest.param("login_page", marks=pytest.mark.anonymous, id="login_page"),
     *[pytest.param(fixture, id=fixture) for fixture in FIXTURES_WITH_EMPTY_CART],
+]
+
+GLOBAL_SUBTITLE_ARGS: str = "page_fixture, has_subtitle, subtitle"
+GLOBAL_SUBTITLE_VALUES: list[ParameterSet] = [
+    pytest.param("login_page", False, "", marks=pytest.mark.anonymous, id="login_page"),
+    pytest.param("empty_inventory_page", True, "Products", id="inventory_page"),
+    pytest.param(
+        "inventory_item_page",
+        False,
+        "",
+        id="inventory_item_page",
+    ),
+    pytest.param("empty_cart_page", True, "Your Cart", id="cart_page"),
+    pytest.param(
+        "empty_checkout_step_1_page",
+        True,
+        "Checkout: Your Information",
+        id="checkout_step_1_page",
+    ),
+    pytest.param(
+        "empty_checkout_step_2_page",
+        True,
+        "Checkout: Overview",
+        id="checkout_step_2_page",
+    ),
+    pytest.param(
+        "checkout_complete_page",
+        True,
+        "Checkout: Complete!",
+        id="checkout_complete_page",
+    ),
 ]
 
 MENU_PAGE_FIXTURES: list[ParameterSet] = [
