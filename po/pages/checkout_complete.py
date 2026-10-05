@@ -11,8 +11,6 @@ from ..components.left_menu import Menu
 class CheckoutComplete(BasePage):
     def __init__(self, page: Page, timeout: int = 10000) -> None:
         super().__init__(page, timeout)
-        self.title: Locator = self.page.locator(".title")
-
         self.checkout_container: Locator = self.locator("#checkout_complete_container")
         self.heavy_check_mark: Locator = self.checkout_container.locator(
             "img.pony_express"
