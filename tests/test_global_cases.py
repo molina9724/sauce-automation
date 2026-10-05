@@ -2,7 +2,7 @@
 from typing import Union
 
 import pytest
-from playwright.sync_api import Page, expect
+from playwright.sync_api import Locator, Page, expect
 
 from data.global_data import DOCUMENT_TITLE, LOGO_TEXT
 from data.social_component_data import (COPY, FACEBOOK, FACEBOOK_LINK,
@@ -92,25 +92,20 @@ def test_verify_social_footer_links_and_copyright(
     else:
         expect(page.social_footer.root).to_be_visible()
 
-        expect(page.social_footer.x).to_have_text(X)
-        with page.page.context.expect_page() as another_page:
-            page.social_footer.x.click()
-        x_page: Page = another_page.value
-        expect(x_page).to_have_url(X_LINK)
-        x_page.close()
+        social_links: list[tuple[Locator, str, str]] = [
+            (page.social_footer.x, X, X_LINK),
+            (page.social_footer.facebook, FACEBOOK, FACEBOOK_LINK),
+            (page.social_footer.linkedin, LINKEDIN, LINKEDIN_LINK),
+        ]
 
-        expect(page.social_footer.facebook).to_have_text(FACEBOOK)
-        with page.page.context.expect_page() as another_page:
-            page.social_footer.facebook.click()
-        facebook_page: Page = another_page.value
-        expect(facebook_page).to_have_url(FACEBOOK_LINK)
-        facebook_page.close()
+        for locator, expected_text, expected_url in social_links:
+            expect.soft(locator).to_have_text(expected_text)
 
-        expect(page.social_footer.linkedin).to_have_text(LINKEDIN)
-        with page.page.context.expect_page() as another_page:
-            page.social_footer.linkedin.click()
-        linkedin_page: Page = another_page.value
-        expect(linkedin_page).to_have_url(LINKEDIN_LINK)
-        linkedin_page.close()
+            with page.page.context.expect_page() as page_info:
+                locator.click()
 
-        expect(page.social_footer.copy).to_have_text(COPY)
+            new_page: Page = page_info.value
+            expect.soft(new_page).to_have_url(expected_url)
+            new_page.close()
+
+            expect(page.social_footer.copy).to_have_text(COPY)
