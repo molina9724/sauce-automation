@@ -5,6 +5,7 @@ from playwright.sync_api import Locator, Page
 from data.routes import INVENTORY
 from po.components.inventory_item_details import InventoryItemDetails
 from po.components.left_menu import Menu
+from po.components.social_component import SocialFooter
 from po.pages.base_page import BasePage
 
 from ..components.cart_component import Cart
@@ -23,6 +24,7 @@ class InventoryItemPage(BasePage):
         self.menu: Menu = Menu(self.page)
         self.cart: Cart = Cart(self.page)
         self.item: InventoryItemDetails = InventoryItemDetails(page)
+        self.social_footer = SocialFooter(self.page)
 
     def back_to_products(self) -> "InventoryPage":
         self.back_to_products_button.click()

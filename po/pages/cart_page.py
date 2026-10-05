@@ -5,6 +5,7 @@ from playwright.sync_api import Locator, Page
 
 from data.cart_data import YOUR_CART
 from po.components.cart_list_component import CartList
+from po.components.social_component import SocialFooter
 
 from ..components.cart_component import Cart
 from ..components.left_menu import Menu
@@ -29,6 +30,7 @@ class CartPage(BasePage):
         self.cart: Cart = Cart(self.page)
         self.menu: Menu = Menu(self.page)
         self.cart_list: CartList = CartList(page, timeout)
+        self.social_footer = SocialFooter(self.page)
 
     def get_inventory_page(self) -> InventoryPage:
         self.continue_shopping_button.click()

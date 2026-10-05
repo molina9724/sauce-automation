@@ -1,5 +1,6 @@
 from playwright.sync_api import Locator, Page
 
+from po.components.social_component import SocialFooter
 from po.pages.inventory_item_page import InventoryItemPage
 
 from ..components.cart_component import Cart
@@ -44,6 +45,7 @@ class InventoryPage(BasePage):
         self.item: InventoryItem = InventoryItem(page)
         self.menu: Menu = Menu(self.page)
         self.cart: Cart = Cart(self.page)
+        self.social_footer = SocialFooter(self.page)
 
     def set_products_filter(self, option: str) -> None:
         self.products_filter.select_option(option)
