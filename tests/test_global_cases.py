@@ -99,13 +99,13 @@ def test_verify_social_footer_links_and_copyright(
         ]
 
         for locator, expected_text, expected_url in social_links:
-            expect.soft(locator).to_have_text(expected_text)
+            expect(locator).to_have_text(expected_text)
 
             with page.page.context.expect_page() as page_info:
                 locator.click()
 
             new_page: Page = page_info.value
-            expect.soft(new_page).to_have_url(expected_url)
+            expect(new_page).to_have_url(expected_url)
             new_page.close()
 
-            expect(page.social_footer.copy).to_have_text(COPY)
+        expect(page.social_footer.copy).to_have_text(COPY)
