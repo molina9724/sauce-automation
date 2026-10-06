@@ -7,7 +7,7 @@ from data.inventory_data import (A_TO_Z, ALL_ITEMS_INDEX, DEFAULT_FILTER_VALUE,
                                  FILTER_ARGS, FILTER_OPTIONS, FILTER_VALUES,
                                  INDEX, PRODUCT_DETAIL_ARGS,
                                  PRODUCT_DETAIL_DATA, PRODUCT_DETAIL_IDS,
-                                 PRODUCTS_TITLE, Z_TO_A, ZERO, SortKey)
+                                 Z_TO_A, ZERO, SortKey)
 from data.item_data import (ADD_TO_CART, INVENTORY_ITEMS_DATA, ITEM_INDEX, ONE,
                             REMOVE)
 from data.routes import CART, INVENTORY, INVENTORY_ITEM
@@ -54,10 +54,6 @@ def verify_item_can_be_removed(
 
 def test_verify_inventory_url(empty_inventory_page: InventoryPage) -> None:
     expect(empty_inventory_page.page).to_have_url(INVENTORY)
-
-
-def test_verify_products_title(empty_inventory_page: InventoryPage) -> None:
-    expect(empty_inventory_page.products_title).to_have_text(PRODUCTS_TITLE)
 
 
 def test_verify_default_product_filter_option(

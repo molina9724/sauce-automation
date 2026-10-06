@@ -36,8 +36,6 @@ class InventoryPage(BasePage):
         super().__init__(page, timeout)
         self.inventory_logo: Locator = self.page.locator(".app_logo")
 
-        self.products_title: Locator = self.page.locator(".title")
-
         self.products_filter: Locator = self.page.get_by_role("combobox")
         self.all_filter_options: Locator = self.page.locator("option")
         self.selected_filter_option: Locator = self.page.locator(".active_option")

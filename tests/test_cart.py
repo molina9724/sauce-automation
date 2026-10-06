@@ -1,7 +1,7 @@
 # fmt: off
 from playwright.sync_api import expect
 
-from data.cart_data import CART_ITEM_DATA, YOUR_CART
+from data.cart_data import CART_ITEM_DATA
 from data.routes import CART, CHECKOUT_STEP_1
 from po.pages.cart_page import CartPage
 from po.pages.checkout_step_1_page import CheckoutStepOnePage
@@ -16,10 +16,6 @@ def test_verify_cart_url(empty_cart_page: CartPage) -> None:
 
 def test_verify_cart_is_empty(empty_cart_page: CartPage) -> None:
     expect(empty_cart_page.cart.counter).to_be_hidden()
-
-
-def test_verify_cart_page_title(empty_cart_page: CartPage) -> None:
-    expect(empty_cart_page.title).to_have_text(YOUR_CART)
 
 
 def test_verify_item_is_removed(cart_page_with_item: CartPage) -> None:

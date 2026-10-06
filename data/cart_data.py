@@ -11,6 +11,5 @@ CART_ITEM_DATA: dict[str, dict[str, str]] = {
 }
 
 
-YOUR_CART: str = "Your Cart"
 QUANTITY: str = "QTY"
 DESCRIPTION: str = "Description"
