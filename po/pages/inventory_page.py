@@ -34,7 +34,6 @@ class InventoryPage(BasePage):
             timeout (int, optional): Default timeout for actions, in milliseconds. Defaults to 10000.
         """
         super().__init__(page, timeout)
-        self.inventory_logo: Locator = self.page.locator(".app_logo")
 
         self.products_filter: Locator = self.page.get_by_role("combobox")
         self.all_filter_options: Locator = self.page.locator("option")
