@@ -2,6 +2,7 @@ from playwright.sync_api import Locator, Page
 
 from data.routes import CHECKOUT_COMPLETE, INVENTORY
 from po.components.cart_list_component import CartList
+from po.components.social_component import SocialFooter
 from po.pages.checkout_complete import CheckoutComplete
 from po.pages.inventory_page import InventoryPage
 
@@ -42,6 +43,7 @@ class CheckoutStepTwoPage(BasePage):
 
         self.menu: Menu = Menu(self.page)
         self.cart: Cart = Cart(self.page)
+        self.social_footer = SocialFooter(self.page)
 
     def cancel(self) -> InventoryPage:
         self.cancel_button.click()

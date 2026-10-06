@@ -1,9 +1,6 @@
 import pytest
 from _pytest.mark.structures import ParameterSet
 
-DOCUMENT_TITLE: str = "Swag Labs"
-LOGO_TEXT: str = "Swag Labs"
-
 PERFORMANCE_GLITCHED_USER = "performance_glitch_user"
 
 UNLOCKED_USERS = (

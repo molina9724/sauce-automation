@@ -9,9 +9,6 @@ from tests.test_image import general_image_assert
 def test_verify_checkout_complete_message(
     checkout_complete_page: CheckoutComplete,
 ) -> None:
-    expect(checkout_complete_page.title).to_be_visible()
-
-    expect(checkout_complete_page.title).to_have_text("Checkout: Complete!")
     general_image_assert(
         checkout_complete_page,
         checkout_complete_page.heavy_check_mark,

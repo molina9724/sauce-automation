@@ -1,6 +1,7 @@
 from playwright.sync_api import Locator, Page
 
 from data.routes import INVENTORY
+from po.components.social_component import SocialFooter
 from po.pages.base_page import BasePage
 from po.pages.inventory_page import InventoryPage
 
@@ -11,8 +12,6 @@ from ..components.left_menu import Menu
 class CheckoutComplete(BasePage):
     def __init__(self, page: Page, timeout: int = 10000) -> None:
         super().__init__(page, timeout)
-        self.title: Locator = self.page.locator(".title")
-
         self.checkout_container: Locator = self.locator("#checkout_complete_container")
         self.heavy_check_mark: Locator = self.checkout_container.locator(
             "img.pony_express"
@@ -28,6 +27,7 @@ class CheckoutComplete(BasePage):
 
         self.menu: Menu = Menu(self.page)
         self.cart: Cart = Cart(self.page)
+        self.social_footer = SocialFooter(self.page)
 
     def get_inventory_page(self) -> InventoryPage:
         self.back_home_button.click()

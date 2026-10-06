@@ -1,6 +1,7 @@
 from playwright.sync_api import Locator, Page
 
 from data.routes import CHECKOUT_STEP_2
+from po.components.social_component import SocialFooter
 from po.pages.cart_page import CartPage
 from po.pages.checkout_step_2_page import CheckoutStepTwoPage
 
@@ -23,6 +24,7 @@ class CheckoutStepOnePage(BasePage):
         self.menu: Menu = Menu(self.page)
         self.cart: Cart = Cart(self.page)
         self.form_validation: FormValidation = FormValidation(self.page)
+        self.social_footer = SocialFooter(self.page)
 
     def get_fields(self) -> tuple[Locator, Locator, Locator]:
         return self.first_name, self.last_name, self.zip_code

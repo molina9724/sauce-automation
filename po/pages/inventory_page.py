@@ -1,5 +1,6 @@
 from playwright.sync_api import Locator, Page
 
+from po.components.social_component import SocialFooter
 from po.pages.inventory_item_page import InventoryItemPage
 
 from ..components.cart_component import Cart
@@ -33,9 +34,6 @@ class InventoryPage(BasePage):
             timeout (int, optional): Default timeout for actions, in milliseconds. Defaults to 10000.
         """
         super().__init__(page, timeout)
-        self.inventory_logo: Locator = self.page.locator(".app_logo")
-
-        self.products_title: Locator = self.page.locator(".title")
 
         self.products_filter: Locator = self.page.get_by_role("combobox")
         self.all_filter_options: Locator = self.page.locator("option")
@@ -44,6 +42,7 @@ class InventoryPage(BasePage):
         self.item: InventoryItem = InventoryItem(page)
         self.menu: Menu = Menu(self.page)
         self.cart: Cart = Cart(self.page)
+        self.social_footer = SocialFooter(self.page)
 
     def set_products_filter(self, option: str) -> None:
         self.products_filter.select_option(option)
