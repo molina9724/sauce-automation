@@ -16,3 +16,7 @@ class BaseItem(BaseComponent):
     def remove(self, index: int) -> None:
         item: Locator = self.root.nth(index)
         item.get_by_role("button", name=REMOVE).click()
+
+    def remove_by_name(self, name: str) -> None:
+        item: Locator = self.root.filter(has=self.page.get_by_text(name, exact=True))
+        item.get_by_role("button", name=REMOVE).click()
