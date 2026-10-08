@@ -6,7 +6,7 @@ from playwright.sync_api import Browser, BrowserContext, Page
 
 from data.checkout_step_1_data import FIRST_NAME, LAST_NAME, ZIP_CODE
 from data.inventory_data import ALL_ITEMS_INDEX
-from data.item_data import ITEM_INDEX, ITEM_NAME, ITEMS_NAMES
+from data.item_data import ITEM_NAME, ITEMS_NAMES
 from data.login_data import DEFAULT_UNLOCKED_USER, RIGHT_PASSWORD
 from data.routes import INVENTORY, ROOT
 from po.pages.cart_page import CartPage
@@ -79,9 +79,7 @@ def inventory_page_with_all_items(page: Page) -> InventoryPage:
 def inventory_item_page(page: Page) -> InventoryItemPage:
     inventory_page = InventoryPage(page)
     inventory_page.page.goto(INVENTORY)
-    inventory_item_page: InventoryItemPage = inventory_page.open_item_by_name(
-        ITEM_INDEX
-    )
+    inventory_item_page: InventoryItemPage = inventory_page.open_item_by_name(ITEM_NAME)
     return inventory_item_page
 
 
@@ -89,9 +87,7 @@ def inventory_item_page(page: Page) -> InventoryItemPage:
 def inventory_item_page_with_item(page: Page) -> InventoryItemPage:
     inventory_page = InventoryPage(page)
     inventory_page.page.goto(INVENTORY)
-    inventory_item_page: InventoryItemPage = inventory_page.open_item_by_name(
-        ITEM_INDEX
-    )
+    inventory_item_page: InventoryItemPage = inventory_page.open_item_by_name(ITEM_NAME)
     inventory_item_page.item.add()
     return inventory_item_page
 

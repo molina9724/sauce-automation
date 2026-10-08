@@ -193,10 +193,10 @@ def test_verify_cancel_from_checkout_step_two_preserves_cart_item(
     ids=PRODUCT_DETAIL_IDS,
 )
 def test_verify_user_can_open_product_details_from_product_name(
-    empty_inventory_page: InventoryPage, index: int, product_id: str
+    empty_inventory_page: InventoryPage, name: str, product_id: str
 ) -> None:
     inventory_page = empty_inventory_page
-    product_page: InventoryItemPage = inventory_page.open_item_by_name(index)
+    product_page: InventoryItemPage = inventory_page.open_item_by_name(name)
     expect(product_page.page).to_have_url(f"{INVENTORY_ITEM}{product_id}")
     inventory_page: InventoryPage = product_page.back_to_products()
     expect(inventory_page.page).to_have_url(INVENTORY)
@@ -208,10 +208,10 @@ def test_verify_user_can_open_product_details_from_product_name(
     ids=PRODUCT_DETAIL_IDS,
 )
 def test_verify_user_can_open_product_details_from_product_image(
-    empty_inventory_page: InventoryPage, index: int, product_id: str
+    empty_inventory_page: InventoryPage, name: str, product_id: str
 ) -> None:
     inventory_page = empty_inventory_page
-    product_page: InventoryItemPage = inventory_page.open_item_by_image(index)
+    product_page: InventoryItemPage = inventory_page.open_item_by_image(name)
     expect(product_page.page).to_have_url(f"{INVENTORY_ITEM}{product_id}")
     inventory_page: InventoryPage = product_page.back_to_products()
     expect(inventory_page.page).to_have_url(INVENTORY)

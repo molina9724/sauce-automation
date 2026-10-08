@@ -47,10 +47,16 @@ class InventoryPage(BasePage):
     def set_products_filter(self, option: str) -> None:
         self.products_filter.select_option(option)
 
-    def open_item_by_name(self, index: int = 0) -> InventoryItemPage:
-        self.item.name.nth(index).click()
+    def open_item_by_name(self, name: str) -> InventoryItemPage:
+        item: Locator = self.item.root.filter(
+            has=self.page.get_by_text(name, exact=True)
+        )
+        item.locator(".inventory_item_name").click()
         return InventoryItemPage(self.page)
 
-    def open_item_by_image(self, index: int = 0) -> InventoryItemPage:
-        self.item.image.nth(index).click()
+    def open_item_by_image(self, name: str) -> InventoryItemPage:
+        item: Locator = self.item.root.filter(
+            has=self.page.get_by_text(name, exact=True)
+        )
+        item.locator("img[class='inventory_item_img']").click()
         return InventoryItemPage(self.page)
