@@ -25,7 +25,7 @@ FILTER_OPTIONS: List[str] = [
 ]
 DEFAULT_FILTER_VALUE: str = FILTER_OPTIONS[0]
 
-INDEX: str = "index"
+NAME: str = "name"
 
 PRODUCT_DETAIL_ARGS: str = "index, product_id"
 PRODUCT_DETAIL_DATA: list[tuple[int, str]] = [
