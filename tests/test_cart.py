@@ -26,7 +26,7 @@ def test_verify_item_is_removed(cart_page_with_item: CartPage) -> None:
         has=cart_page_with_item.page.get_by_text(ITEM_NAME, exact=True)
     )
     expect(item.get_by_role("button", name=REMOVE)).to_have_text(REMOVE)
-    cart_page_with_item.cart_list.item.remove_by_name(ITEM_NAME)
+    cart_page_with_item.cart_list.item.remove(ITEM_NAME)
 
     expect(cart_page_with_item.cart.counter).to_be_hidden()
     expect(cart_page_with_item.cart_list.item.root).to_have_count(0)

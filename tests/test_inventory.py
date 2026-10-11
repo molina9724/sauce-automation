@@ -35,7 +35,7 @@ def verify_item_can_be_added(
     )
     expect(item.get_by_role("button", name=ADD_TO_CART)).to_have_text(ADD_TO_CART)
 
-    inventory_page.item.add_by_name(name)
+    inventory_page.item.add(name)
 
     expect(inventory_page.cart.counter).to_have_text(str(expected_count))
     expect(item.get_by_role("button", name=REMOVE)).to_have_text(REMOVE)
@@ -49,7 +49,7 @@ def verify_item_can_be_removed(
     )
     expect(item.get_by_role("button", name=REMOVE)).to_have_text(REMOVE)
 
-    inventory_page.item.remove_by_name(name)
+    inventory_page.item.remove(name)
 
     if expected_count == 0:
         expect(inventory_page.cart.counter).to_be_hidden()

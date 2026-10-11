@@ -12,6 +12,6 @@ class InventoryItem(BaseItem):
         # Add to cart and Remove buttons are the same
         self.button: Locator = self.root.locator(".btn_inventory")
 
-    def add_by_name(self, name: str) -> None:
+    def add(self, name: str) -> None:
         item: Locator = self.root.filter(has=self.page.get_by_text(name, exact=True))
         item.get_by_role("button", name=ADD_TO_CART).click()

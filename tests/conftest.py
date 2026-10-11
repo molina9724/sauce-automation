@@ -62,7 +62,7 @@ def empty_inventory_page(page: Page) -> InventoryPage:
 def inventory_page_with_item(page: Page) -> InventoryPage:
     inventory_page = InventoryPage(page)
     inventory_page.page.goto(INVENTORY)
-    inventory_page.item.add_by_name(ITEM_NAME)
+    inventory_page.item.add(ITEM_NAME)
     return inventory_page
 
 
@@ -71,7 +71,7 @@ def inventory_page_with_all_items(page: Page) -> InventoryPage:
     inventory_page = InventoryPage(page)
     inventory_page.page.goto(INVENTORY)
     for item_name in ITEMS_NAMES:
-        inventory_page.item.add_by_name(item_name)
+        inventory_page.item.add(item_name)
     return inventory_page
 
 
@@ -100,7 +100,7 @@ def empty_cart_page(empty_inventory_page: InventoryPage) -> CartPage:
 
 @pytest.fixture
 def cart_page_with_item(empty_inventory_page: InventoryPage) -> CartPage:
-    empty_inventory_page.item.add_by_name(ITEM_NAME)
+    empty_inventory_page.item.add(ITEM_NAME)
     cart_page: CartPage = empty_inventory_page.cart.open()
     return cart_page
 
@@ -108,7 +108,7 @@ def cart_page_with_item(empty_inventory_page: InventoryPage) -> CartPage:
 @pytest.fixture
 def cart_page_with_all_items(empty_inventory_page: InventoryPage) -> CartPage:
     for item_name in ITEMS_NAMES:
-        empty_inventory_page.item.add_by_name(item_name)
+        empty_inventory_page.item.add(item_name)
     cart_page: CartPage = empty_inventory_page.cart.open()
     return cart_page
 
