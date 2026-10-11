@@ -107,8 +107,8 @@ def cart_page_with_item(empty_inventory_page: InventoryPage) -> CartPage:
 
 @pytest.fixture
 def cart_page_with_all_items(empty_inventory_page: InventoryPage) -> CartPage:
-    for index in ALL_ITEMS_INDEX:
-        empty_inventory_page.item.add(index)
+    for item_name in ITEMS_NAMES:
+        empty_inventory_page.item.add_by_name(item_name)
     cart_page: CartPage = empty_inventory_page.cart.open()
     return cart_page
 
