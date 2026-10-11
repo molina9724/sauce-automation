@@ -55,6 +55,4 @@ FILTER_VALUES: list[tuple[str, SortKey, bool]] = [
 
 ZERO: int = 0
 
-
 ITEMS_AMOUNT: int = len(INVENTORY_ITEMS_DATA)
-ALL_ITEMS_INDEX: list[int] = list(range(ITEMS_AMOUNT))

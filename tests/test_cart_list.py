@@ -2,7 +2,7 @@ import pytest
 from playwright.sync_api import expect
 
 from data.cart_data import CART_ITEMS_DATA, DESCRIPTION, QUANTITY
-from data.inventory_data import ALL_ITEMS_INDEX
+from data.inventory_data import ITEMS_AMOUNT
 from po.pages.cart_page import CartPage
 from po.pages.checkout_step_2_page import CheckoutStepTwoPage
 from tests.item_data_helpers import verify_items_data
@@ -31,4 +31,4 @@ def test_verify_several_items_can_be_added(
     page_fixture: str, request: pytest.FixtureRequest
 ) -> None:
     page: CartPage | CheckoutStepTwoPage = request.getfixturevalue(page_fixture)
-    expect(page.cart_list.item.root).to_have_count(len(ALL_ITEMS_INDEX))
+    expect(page.cart_list.item.root).to_have_count(ITEMS_AMOUNT)

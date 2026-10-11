@@ -3,8 +3,8 @@
 import pytest
 from playwright.sync_api import Locator, expect
 
-from data.inventory_data import (A_TO_Z, ALL_ITEMS_INDEX, DEFAULT_FILTER_VALUE,
-                                 FILTER_ARGS, FILTER_OPTIONS, FILTER_VALUES,
+from data.inventory_data import (A_TO_Z, DEFAULT_FILTER_VALUE, FILTER_ARGS,
+                                 FILTER_OPTIONS, FILTER_VALUES, ITEMS_AMOUNT,
                                  NAME, PRODUCT_DETAIL_ARGS,
                                  PRODUCT_DETAIL_DATA, PRODUCT_DETAIL_IDS,
                                  Z_TO_A, ZERO, SortKey)
@@ -153,7 +153,7 @@ def test_verify_user_can_remove_all_items_from_cart(
     inventory_page_with_all_items: InventoryPage,
 ) -> None:
     for index, name in enumerate(ITEMS_NAMES):
-        expected_count: int = len(ALL_ITEMS_INDEX) - (index + 1)
+        expected_count: int = ITEMS_AMOUNT - (index + 1)
         verify_item_can_be_removed(inventory_page_with_all_items, name, expected_count)
 
 
