@@ -31,7 +31,7 @@ INVENTORY_ITEMS_DATA: dict[str, dict[str, str]] = {
         "price": "$15.99",
     },
 }
-ITEM_INDEX: int = 0
+
 ONE: int = 1
 REMOVE: str = "Remove"
 

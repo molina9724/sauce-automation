@@ -8,8 +8,8 @@ from data.inventory_data import (A_TO_Z, DEFAULT_FILTER_VALUE, FILTER_ARGS,
                                  NAME, PRODUCT_DETAIL_ARGS,
                                  PRODUCT_DETAIL_DATA, PRODUCT_DETAIL_IDS,
                                  Z_TO_A, ZERO, SortKey)
-from data.item_data import (ADD_TO_CART, INVENTORY_ITEMS_DATA, ITEM_INDEX,
-                            ITEM_NAME, ITEMS_NAMES, ONE, REMOVE)
+from data.item_data import (ADD_TO_CART, INVENTORY_ITEMS_DATA, ITEM_NAME,
+                            ITEMS_NAMES, ONE, REMOVE)
 from data.routes import CART, INVENTORY, INVENTORY_ITEM
 from po.pages.cart_page import CartPage
 from po.pages.checkout_step_2_page import CheckoutStepTwoPage
@@ -114,7 +114,7 @@ def test_verify_products_information_after_selecting_filter(
     for index, expected_name in enumerate(expected_image_names):
         expect(images.nth(index)).to_have_attribute("alt", expected_name)
 
-    selected_name: str = list(INVENTORY_ITEMS_DATA)[ITEM_INDEX]
+    selected_name: str = ITEM_NAME
     expected_button_labels: list[str] = [
         REMOVE if name == selected_name else ADD_TO_CART for name, _ in ordered_items
     ]
