@@ -58,5 +58,5 @@ class InventoryPage(BasePage):
         item: Locator = self.item.root.filter(
             has=self.page.get_by_text(name, exact=True)
         )
-        item.locator("img[class='inventory_item_img']").click()
+        item.get_by_role("img").click()
         return InventoryItemPage(self.page)
