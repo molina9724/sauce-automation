@@ -8,10 +8,9 @@ from data.checkout_step_1_data import (CHECKOUT_ARGS, CHECKOUT_PARAMS,
                                        LAST_NAME_PLACEHOLDER, ZIP_CODE,
                                        ZIP_CODE_PLACEHOLDER)
 from data.global_data import PLACEHOLDER
-from data.routes import CART, CHECKOUT_STEP_1, CHECKOUT_STEP_2
+from data.routes import CART, CHECKOUT_STEP_2
 from po.pages.cart_page import CartPage
 from po.pages.checkout_step_1_page import CheckoutStepOnePage
-from po.pages.login_page import LoginPage
 
 from .form_validation_helpers import (assert_error_decorations,
                                       assert_no_error_decorations)

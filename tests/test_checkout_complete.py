@@ -1,5 +1,9 @@
 from playwright.sync_api import expect
 
+from data.checkout_complete_data import (
+    ORDER_CONFIRMATION_HEADER,
+    ORDER_DISPATCHED_MESSAGE,
+)
 from data.routes import INVENTORY
 from po.pages.checkout_complete import CheckoutComplete
 from po.pages.inventory_page import InventoryPage
@@ -13,10 +17,8 @@ def test_verify_checkout_complete_message(
         checkout_complete_page,
         checkout_complete_page.heavy_check_mark,
     )
-    expect(checkout_complete_page.header).to_have_text("Thank you for your order!")
-    expect(checkout_complete_page.text).to_have_text(
-        "Your order has been dispatched, and will arrive just as fast as the pony can get there!"
-    )
+    expect(checkout_complete_page.header).to_have_text(ORDER_CONFIRMATION_HEADER)
+    expect(checkout_complete_page.text).to_have_text(ORDER_DISPATCHED_MESSAGE)
 
     expect(checkout_complete_page.back_home_button).to_be_visible()
 
