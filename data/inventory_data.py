@@ -25,11 +25,11 @@ FILTER_OPTIONS: List[str] = [
 ]
 DEFAULT_FILTER_VALUE: str = FILTER_OPTIONS[0]
 
-INDEX: str = "index"
+NAME: str = "name"
 
-PRODUCT_DETAIL_ARGS: str = "index, product_id"
-PRODUCT_DETAIL_DATA: list[tuple[int, str]] = [
-    (index, item["id"]) for index, item in enumerate(INVENTORY_ITEMS_DATA.values())
+PRODUCT_DETAIL_ARGS: str = "name, product_id"
+PRODUCT_DETAIL_DATA: List[tuple[str, str]] = [
+    (name, item["id"]) for name, item in INVENTORY_ITEMS_DATA.items()
 ]
 PRODUCT_DETAIL_IDS: list[str] = list(INVENTORY_ITEMS_DATA)
 
@@ -55,6 +55,4 @@ FILTER_VALUES: list[tuple[str, SortKey, bool]] = [
 
 ZERO: int = 0
 
-
 ITEMS_AMOUNT: int = len(INVENTORY_ITEMS_DATA)
-ALL_ITEMS_INDEX: list[int] = list(range(ITEMS_AMOUNT))

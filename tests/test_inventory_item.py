@@ -1,7 +1,7 @@
 from playwright.sync_api import expect
 
 from data.cart_data import CART_ITEM_DATA
-from data.item_data import ADD_TO_CART, INVENTORY_ITEMS_DATA, ITEM_INDEX, ONE, REMOVE
+from data.item_data import ADD_TO_CART, INVENTORY_ITEMS_DATA, ITEM_NAME, ONE, REMOVE
 from data.routes import CART
 from po.pages.cart_page import CartPage
 from po.pages.inventory_item_page import InventoryItemPage
@@ -11,14 +11,14 @@ from tests.test_image import general_image_assert
 
 
 def test_verify_right_item_is_displayed(empty_inventory_page: InventoryPage) -> None:
-    name: str = list(INVENTORY_ITEMS_DATA.keys())[ITEM_INDEX]
+    name: str = ITEM_NAME
     description: str = INVENTORY_ITEMS_DATA[name]["description"]
     price: str = INVENTORY_ITEMS_DATA[name]["price"]
     button: str = ADD_TO_CART
     item_image_alt: str = name
 
     inventory_item_page: InventoryItemPage = empty_inventory_page.open_item_by_name(
-        ITEM_INDEX
+        ITEM_NAME
     )
 
     expect(inventory_item_page.item.name).to_have_text(name)

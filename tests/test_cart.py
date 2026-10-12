@@ -1,7 +1,8 @@
 # fmt: off
-from playwright.sync_api import expect
+from playwright.sync_api import Locator, expect
 
 from data.cart_data import CART_ITEM_DATA
+from data.item_data import ITEM_NAME, REMOVE
 from data.routes import CART, CHECKOUT_STEP_1
 from po.pages.cart_page import CartPage
 from po.pages.checkout_step_1_page import CheckoutStepOnePage
@@ -20,7 +21,13 @@ def test_verify_cart_is_empty(empty_cart_page: CartPage) -> None:
 
 def test_verify_item_is_removed(cart_page_with_item: CartPage) -> None:
     expect(cart_page_with_item.cart_list.item.root).to_have_count(1)
-    cart_page_with_item.cart_list.item.remove(0)
+
+    item: Locator = cart_page_with_item.cart_list.item.root.filter(
+        has=cart_page_with_item.page.get_by_text(ITEM_NAME, exact=True)
+    )
+    expect(item.get_by_role("button", name=REMOVE)).to_have_text(REMOVE)
+    cart_page_with_item.cart_list.item.remove(ITEM_NAME)
+
     expect(cart_page_with_item.cart.counter).to_be_hidden()
     expect(cart_page_with_item.cart_list.item.root).to_have_count(0)
 
