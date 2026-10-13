@@ -15,7 +15,8 @@ from po.pages.inventory_page import InventoryPage
 from po.pages.login_page import LoginPage
 
 from .shared_fixtures_names import (FIXTURES_WITH_AND_WITHOUT_ITEMS,
-                                    MENU_PAGE_FIXTURES, PAGE_FIXTURE)
+                                    MENU_PAGE_ARGS, MENU_PAGE_VALUES,
+                                    PAGE_FIXTURE)
 
 #fmt:on
 
@@ -65,7 +66,7 @@ def test_logout_from_all_menu_pages(
     expect(login_page.page).to_have_url(ROOT)
 
 
-@pytest.mark.parametrize("page_fixture, cart_has_item", MENU_PAGE_FIXTURES)
+@pytest.mark.parametrize(MENU_PAGE_ARGS, MENU_PAGE_VALUES)
 def test_all_items_from_all_menu_pages(
     page_fixture: str,
     cart_has_item: bool,

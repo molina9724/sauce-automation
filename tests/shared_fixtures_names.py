@@ -68,7 +68,8 @@ GLOBAL_SUBTITLE_VALUES: list[ParameterSet] = [
     ),
 ]
 
-MENU_PAGE_FIXTURES: list[ParameterSet] = [
+MENU_PAGE_ARGS: str = "page_fixture, cart_has_item"
+MENU_PAGE_VALUES: list[ParameterSet] = [
     pytest.param("empty_inventory_page", False, id="empty_inventory_page"),
     pytest.param("inventory_item_page", False, id="inventory_item_page"),
     pytest.param(
