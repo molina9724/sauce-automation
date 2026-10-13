@@ -1,6 +1,5 @@
 ## To Do
 
-* [ ] Implement a web page like documentation
 * [ ] Implement a series of global test cases for left menu and its components in the pages it's displayed
 * [ ] Add Docstrings to every method and function
 * [ ] Add type hint to all constants and variables
@@ -16,6 +15,7 @@
 
 ## Done
 
+* [X] Implement a web page like documentation
 * [X] Add test cases to `test_checkout_step_2`
 * [X] Implement the test cases for `test_inventory_item`
 * [X] Make page public

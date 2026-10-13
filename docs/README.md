@@ -50,6 +50,8 @@ pytest
 
 ## Usage
 
+The following commands cover the most common test and debugging workflows:
+
 ```bash
 pytest                       # full suite (parallel by default)
 pytest -n 0                  # serial — use this when debugging
@@ -61,6 +63,26 @@ pytest -k "cart"             # by keyword
 
 Cross-browser runs are configured but disabled by default. See the commented
 `--browser` line in `pytest.ini`.
+
+### API documentation
+
+Generate the API documentation locally with [pdoc](https://pdoc.dev/).
+
+pdoc documents the Python packages that contain the project code:
+
+- `po/` — page objects and shared components
+- `data/` — test data and expected values
+- `tests/` — test modules and fixtures
+
+The Markdown documentation remains in:
+
+- `docs/README.md`
+- `docs/LEARNING_APPROACH.md`
+
+```bash
+PYTHONPATH=. pdoc po data tests -o ./docs/api
+open ./docs/api/index.html
+```
 
 ### Allure report
 
@@ -164,7 +186,7 @@ This suite does **not** currently do:
 - **No linter or type checker in CI** — static analysis is editor-only
 - **CI runs macOS and Chromium only**
 - **The left-menu About item** is verified as present, but its external navigation
- is out of scope because it leaves SauceDemo and opens the Sauce Labs site.
+  is out of scope because it leaves SauceDemo and opens the Sauce Labs site.
 
 ## Roadmap
 
