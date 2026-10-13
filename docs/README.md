@@ -185,8 +185,9 @@ This suite does **not** currently do:
 - **Base URL is hardcoded**; no environment configuration layer
 - **No linter or type checker in CI** — static analysis is editor-only
 - **CI runs macOS and Chromium only**
-- **The left-menu About item** is verified as present, but its external navigation
-  is out of scope because it leaves SauceDemo and opens the Sauce Labs site.
+- **Left-menu coverage is limited.** All five menu entries are verified as
+  present. `Logout` and `All Items` have behavior coverage. `About`, `Reset App State`,
+  and `Dynamic Catalog` are verified only as entries; their behavior is out of scope.
 
 ## Roadmap
 
