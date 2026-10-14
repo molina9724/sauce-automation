@@ -8,3 +8,4 @@ pytest-timeout>=2.4
 allure-pytest>=2.16
 black>=25
 pdoc==16.0.0
+python-dotenv>=1.2

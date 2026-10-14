@@ -14,3 +14,4 @@ html-report/
 test-results/
 html/
 docs/api
+.env
