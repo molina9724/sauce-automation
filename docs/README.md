@@ -194,7 +194,6 @@ This suite does **not** currently do:
 - [ ] Parametrise authentication by user to cover `problem_user` and friends
 - [ ] Replace CSS locators for interactive elements with Playwright's recommended
   locators where accessible roles, labels, or text are available
-- [ ] Environment configuration for base URL
 - [ ] Add static analysis to CI
 - [ ] Publish the Allure report
 
