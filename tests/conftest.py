@@ -6,7 +6,7 @@ from playwright.sync_api import Browser, BrowserContext, Page
 
 from data.checkout_step_1_data import FIRST_NAME, LAST_NAME, ZIP_CODE
 from data.item_data import ITEM_NAME, ITEMS_NAMES
-from data.login_data import DEFAULT_UNLOCKED_USER, RIGHT_PASSWORD
+from data.login_data import DEFAULT_UNLOCKED_USER, PASSWORD
 from data.routes import INVENTORY, ROOT
 from po.pages.cart_page import CartPage
 from po.pages.checkout_complete import CheckoutComplete
@@ -27,7 +27,7 @@ def auth_state_path(browser: Browser, base_url: str):
     context: BrowserContext = browser.new_context(base_url=base_url)
     login_page: LoginPage = LoginPage(context.new_page())
     login_page.page.goto(ROOT)
-    login_page.login(DEFAULT_UNLOCKED_USER, RIGHT_PASSWORD)
+    login_page.login(DEFAULT_UNLOCKED_USER, PASSWORD)
     context.storage_state(path=path)
     context.close()
 
